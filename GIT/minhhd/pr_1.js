@@ -27,4 +27,31 @@ function palindromeRearranging(inputString) {
 
 }
 
-console.log(palindromeRearranging('xxeexx'));
+// console.log(palindromeRearranging('xxeexx'));
+
+//bai tap 2
+
+
+function sortByHeight(arr) {
+
+    var temp = [];
+    arr.map((i) => {
+        if (i !== -1) {
+            temp.push(i);
+        }
+    });
+
+    temp.sort();
+
+    var index = 0;
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i] !== -1) {
+            arr[i] = temp[index];
+            index++;
+        }
+    }
+
+    return arr;
+}
+
+console.log(sortByHeight([-1, 150, 190, 170, -1, -1, 160, 170, -1, 180]));
