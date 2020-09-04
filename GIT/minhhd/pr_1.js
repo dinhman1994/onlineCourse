@@ -1,4 +1,8 @@
-//bai tap 1
+/**
+ * Exercise 1
+ * 
+ * @param {string} inputString 
+ */
 
 function palindromeRearranging(inputString) {
     var inputStrArr = inputString.split('');
@@ -22,17 +26,16 @@ function palindromeRearranging(inputString) {
 
     }
 
-    if (temp === half) {
-        return true;
-    }
-    
-    return false;
+    return temp === half;
 
 }
 
 
-//bai tap 2
-
+/**
+ * Exercise 2
+ * 
+ * @param {Array} arr 
+ */
 
 function sortByHeight(arr) {
 
@@ -56,8 +59,11 @@ function sortByHeight(arr) {
     return arr;
 }
 
-
-//bai tap 3
+/**
+ * Exercise 3
+ * 
+ * @param {string} inputString 
+ */
 
 function reverseInParentheses(inputString) {
     var stack = [];
