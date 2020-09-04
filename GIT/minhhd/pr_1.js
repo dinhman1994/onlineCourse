@@ -5,6 +5,7 @@ function palindromeRearranging(inputString) {
     var firstHalf;
     var secondHalf;
     const half = Math.ceil(inputStrArr.length / 2);
+
     if (inputString.length % 2 === 0) {
         firstHalf = inputStrArr.splice(0, half).reverse();
         secondHalf = inputStrArr.splice(-half);
@@ -13,12 +14,15 @@ function palindromeRearranging(inputString) {
         secondHalf = inputStrArr.splice(-half+1);
     }
     var temp = 0;
+
+    //so sanh 2 chuoi xem co bang nhau ko
     for (let i = 0; i < half; i++) {
         if (firstHalf[i] === secondHalf[i]) {
             temp++;
         }
 
     }
+
     if (temp === half) {
         return true;
     } else {
@@ -54,4 +58,34 @@ function sortByHeight(arr) {
     return arr;
 }
 
-console.log(sortByHeight([-1, 150, 190, 170, -1, -1, 160, 170, -1, 180]));
+// console.log(sortByHeight([-1, 150, 190, 170, -1, -1, 160, 170, -1, 180]));
+
+//bai tap 3
+
+function reverseInParentheses(inputString) {
+    var stack = [];
+
+    for (var char of inputString) {
+
+        if (char !== ')') {
+            stack.push(char);
+            continue;
+        }
+        let c = stack.pop();
+        let queue = [];
+        
+        while (c !== '(') {
+            queue.push(c);
+            c = stack.pop();
+        }
+
+        while (queue.length) {
+            stack.push(queue.shift());
+        }
+    }
+
+    return stack.join('');
+}
+
+
+// console.log(reverseInParentheses("foo(bar(baz))blim"));
