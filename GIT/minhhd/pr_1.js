@@ -15,7 +15,6 @@ function palindromeRearranging(inputString) {
     }
     var temp = 0;
 
-    //so sanh 2 chuoi xem co bang nhau ko
     for (let i = 0; i < half; i++) {
         if (firstHalf[i] === secondHalf[i]) {
             temp++;
