@@ -3,9 +3,7 @@ var employeeController = require('../controller/employeeController');
 var router = express.Router();
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.get('/', employeeController.getEmployees);
 
 router.get('/add-employee', employeeController.displayForm);
 router.post('/add-employee', employeeController.addEmployee);

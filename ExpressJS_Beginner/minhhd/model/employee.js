@@ -16,16 +16,13 @@ module.exports = class Employee {
         this.age = employee.age;
         this.company = employee.company;
     }
-}
+};
 
 var Employee = mongoose.model('Employee', EmployeeSchema);
 
-module.exports.insertEmployee = function (employee) {
-    Employee.create(employee, (err, Employee) => {
-        if (err) {
-            throw err;
-        } else {    
-            console.log(`Added ${employee.first_name}`);
-        }
-    });
-};
+// module.exports.insertEmployee = function (employee) {
+//     Employee.
+// };
+
+
+module.exports.EmployeeModel = Employee;

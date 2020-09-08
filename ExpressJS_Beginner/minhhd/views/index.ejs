@@ -5,7 +5,31 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <h1>List of <%= obj %></h1>
+    <table>
+      <th>
+        <td>First Name</td>
+        <td>Last Name</td>
+        <td>Age</td>
+        <td>Company</td>
+      </th>
+      <% for( let index = 0; index < employees.length; index++ ) { %>
+      <tr>
+        <td></td>
+        <td>
+          <%= employees[index].first_name %> 
+        </td>
+        <td>
+          <%= employees[index].last_name %> 
+        </td>
+        <td>
+          <%= employees[index].age %> 
+        </td>
+        <td>
+          <%= employees[index].company %> 
+        </td>
+      </tr>
+      <% } %>
+    </table>
   </body>
 </html>

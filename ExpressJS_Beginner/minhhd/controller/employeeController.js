@@ -1,5 +1,5 @@
 const Employee = require('../model/employee');
-
+const employeeModel = Employee.EmployeeModel;
 
 exports.addEmployee = (req, res, next) => {
     var employee = new Employee({
@@ -11,16 +11,29 @@ exports.addEmployee = (req, res, next) => {
     var msg = '';
     if ((employee.age < 18 || employee.age > 60) 
     && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
-        console.log('Invalid input');
+        msg = 'Invalid input';
     } else {
-        Employee.insertEmployee(employee);
-        var msg = `Added ${employee.first_name}`;
-        console.log(msg);
+        employeeModel.create(employee, (err, Employee) => {
+            if (err) {
+                throw err;
+            } else {    
+                console.log(`Added ${employee.first_name}`);
+            }
+        });
+        msg = `Added ${employee.first_name}`;
     }
-    res.render('add-employee');
+
+    res.render('add-employee', {msg: msg});
 
 };
 
 exports.displayForm = (req, res, next) => {
-    res.render('add-employee');
+    var msg = '';
+    res.render('add-employee', {msg: msg});
+};
+
+exports.getEmployees = (req, res, next) => {
+    employeeModel.find().then(employees => {
+        res.render('index', {obj: 'Employees', title: 'Hello', employees: employees});
+    });
 };
