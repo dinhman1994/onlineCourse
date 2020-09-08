@@ -1,35 +1,64 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1>List of <%= obj %></h1>
-    <table>
-      <th>
-        <td>First Name</td>
-        <td>Last Name</td>
-        <td>Age</td>
-        <td>Company</td>
-      </th>
-      <% for( let index = 0; index < employees.length; index++ ) { %>
-      <tr>
-        <td></td>
-        <td>
-          <%= employees[index].first_name %> 
-        </td>
-        <td>
-          <%= employees[index].last_name %> 
-        </td>
-        <td>
-          <%= employees[index].age %> 
-        </td>
-        <td>
-          <%= employees[index].company %> 
-        </td>
-      </tr>
-      <% } %>
-    </table>
-  </body>
+
+<head>
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <style>
+    form:first-child {
+      margin-right: 5px;
+    }
+    form a {
+      text-decoration: underline;
+    }
+
+    form a:hover {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <h1><%= msg %> </h1>
+  <h1>List of <%= obj %></h1>
+  <table>
+    <th>
+    <td>First Name</td>
+    <td>Last Name</td>
+    <td>Age</td>
+    <td>Company</td>
+    <td></td>
+    </th>
+    <% for( let index = 0; index < employees.length; index++ ) { %>
+    <tr>
+      <td></td>
+      <td>
+        <%= employees[index].first_name %>
+      </td>
+      <td>
+        <%= employees[index].last_name %>
+      </td>
+      <td>
+        <%= employees[index].age %>
+      </td>
+      <td>
+        <%= employees[index].company %>
+      </td>
+      <td style="display: flex;">
+        <form method="post" action="/delete">
+          <input type="hidden" name="id" value="<%=employees[index]._id%> " />
+          <a onclick="this.parentNode.submit();">Delete</a>
+        </form>
+        <form method="post" action="/edit">
+          <input type="hidden" name="id" value="<%=employees[index]._id%> " />
+          <a onclick="this.parentNode.submit();">Edit</a>
+        </form>
+      </td>
+    </tr>
+    <% } %>
+  </table>
+  <a href="add-employee">Add employee hereeeee!</a>
+  
+</body>
+
 </html>

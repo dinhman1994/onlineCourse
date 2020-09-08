@@ -20,9 +20,4 @@ module.exports = class Employee {
 
 var Employee = mongoose.model('Employee', EmployeeSchema);
 
-// module.exports.insertEmployee = function (employee) {
-//     Employee.
-// };
-
-
 module.exports.EmployeeModel = Employee;
