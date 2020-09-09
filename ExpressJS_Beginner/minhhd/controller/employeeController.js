@@ -1,5 +1,9 @@
 const Employee = require('../model/employee');
 const employeeModel = Employee.EmployeeModel;
+const Company = require('../model/company');
+const companyModel = Company.CompanyModel;
+
+var async = require('async');
 
 exports.addEmployee = (req, res, next) => {
     var employee = new Employee({
@@ -13,7 +17,7 @@ exports.addEmployee = (req, res, next) => {
         || (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
         msg = 'Invalid input';
     } else {
-        employeeModel.create(employee, (err, Employee) => {
+        employeeModel.create(employee, (err) => {
             if (err) {
                 throw err;
             } else {
@@ -33,8 +37,25 @@ exports.displayForm = (req, res, next) => {
 };
 
 exports.getEmployees = (req, res, next) => {
-    employeeModel.find().then(employees => {
-        res.render('index', { obj: 'Employees', title: 'Hello', employees: employees, msg: ''});
+
+    async.parallel({
+        employees: (callback) => {
+            employeeModel.find().exec(callback);
+        },
+        totalEmployees: (callback) => {
+            employeeModel.countDocuments().exec(callback);
+        },
+        totalCompanies: (callback) => {
+            companyModel.countDocuments().exec(callback);
+        }
+    }, function (err, results) {
+        if (err) {
+            console.log(err);
+            next(err);
+        } else {
+            res.render('index', { obj: 'Employees', title: 'Hello', employees: results.employees,
+             totalEmployees: results.totalEmployees, totalCompanies: results.totalCompanies});
+        }
     });
 };
 

@@ -19,8 +19,9 @@
 </head>
 
 <body>
-  <h1><%= msg %> </h1>
   <h1>List of <%= obj %></h1>
+  <h2>Total employees: <%= totalEmployees %></h2>
+  <h2>Total companies (in collection): <%= totalCompanies %></h2>
   <table>
     <th>
     <td>First Name</td>
@@ -46,11 +47,11 @@
       </td>
       <td style="display: flex;">
         <form method="post" action="/delete">
-          <input type="hidden" name="id" value="<%=employees[index]._id%> " />
+          <input type="hidden" name="id" value="<%= employees[index]._id %> " />
           <a onclick="this.parentNode.submit();">Delete</a>
         </form>
         <form method="post" action="/edit">
-          <input type="hidden" name="id" value="<%=employees[index]._id%> " />
+          <input type="hidden" name="id" value="<%= employees[index]._id %> " />
           <a onclick="this.parentNode.submit();">Edit</a>
         </form>
       </td>

@@ -13,6 +13,4 @@ router.post('/edit', employeeController.editAnEmployee);
 router.get('/add-employee', employeeController.displayForm);
 router.post('/add-employee', employeeController.addEmployee);
 
-
-
 module.exports = router;

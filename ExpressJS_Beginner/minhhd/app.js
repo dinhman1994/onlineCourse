@@ -1,10 +1,11 @@
-
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+require('dotenv').config();
 
 var indexRouter = require('./routes/index');
+var companyRouter = require('./routes/company');
 var errorController =  require('./controller/errorController');
 
 var app = express();
@@ -20,13 +21,14 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/company',companyRouter);
 
 // setup mongoose connection
 var mongoose = require('mongoose');
-var url = 'mongodb://localhost:27017/employee_db';
+var url = process.env.MONGODB_URI || 'mongodb://localhost:27017/employee_db';
 mongoose.connect(url, {useNewUrlParser: true},(err) => {
   if (!err) {
-    console.log('Connected');
+    console.log('Connected to database');
   } else{
     console.error(err.stack);
   }
