@@ -27,13 +27,18 @@ exports.addEmployee = (req, res, next) => {
         msg = `Added ${employee.first_name}`;
     }
 
-    res.render('add-employee', { msg: msg });
+    companyModel.find().then(companies => {
+        res.render('add-employee', { msg: msg, companies: companies });
+    })
 
 };
 
 exports.displayForm = (req, res, next) => {
     var msg = '';
-    res.render('add-employee', { msg: msg });
+    companyModel.find().then(companies => {
+        res.render('add-employee', { msg: msg, companies: companies });
+    });
+    
 };
 
 exports.getEmployees = (req, res, next) => {
@@ -73,10 +78,17 @@ exports.deleteAnEmployee = (req, res, next) => {
 exports.editAnEmployee = (req, res, next) => {
     const id = req.body.id.trim();
     console.log(id);
-    employeeModel.findOne({_id: id}).then(employee => {
-        console.log(employee);
-        res.render('edit-employee', {employee: employee});
+    async.parallel({
+        employee: (callback) => {
+            employeeModel.findOne({_id: id}).exec(callback);
+        },
+        companies: (callback) => {
+            companyModel.find().exec(callback);
+        }
+    }, function (eer, results) {
+        res.render('edit-employee', {employee: results.employee, companies: results.companies});
     });
+    
 };
 
 exports.updateAnEmployee = (req, res, next) => {

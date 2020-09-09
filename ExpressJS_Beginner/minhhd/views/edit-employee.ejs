@@ -22,7 +22,13 @@
             </tr>
             <tr>
                 <td>Company:</td>
-                <td><input type="text" name="company" id="" value="<%= employee.company %>"/> </td>
+                <td>
+                    <select name="company" id="">
+                        <% companies.forEach(company => { %>
+                         <option value="<%= company.name %> "><%= company.name %> </option>
+                        <% }) %>
+                    </select>
+                </td>
             </tr>
             <tr>
                 <td><input type="reset" value="Reset"></td>
