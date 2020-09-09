@@ -23,16 +23,15 @@
   <h2>Total employees: <%= totalEmployees %></h2>
   <h2>Total companies (in collection): <%= totalCompanies %></h2>
   <table>
-    <th>
-    <td>First Name</td>
-    <td>Last Name</td>
-    <td>Age</td>
-    <td>Company</td>
-    <td></td>
-    </th>
+    <tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Age</td>
+    <th>Company</th>
+    <th></th>
+    </tr>
     <% for( let index = 0; index < employees.length; index++ ) { %>
     <tr>
-      <td></td>
       <td>
         <%= employees[index].first_name %>
       </td>
