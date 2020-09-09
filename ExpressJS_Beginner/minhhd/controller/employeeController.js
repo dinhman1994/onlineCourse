@@ -1,5 +1,4 @@
 const Employee = require('../model/employee');
-const { isValidObjectId } = require('mongoose');
 const employeeModel = Employee.EmployeeModel;
 
 exports.addEmployee = (req, res, next) => {
@@ -11,7 +10,7 @@ exports.addEmployee = (req, res, next) => {
     });
     var msg = '';
     if ((employee.age < 18 || employee.age > 60)
-        && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
+        || (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
         msg = 'Invalid input';
     } else {
         employeeModel.create(employee, (err, Employee) => {
@@ -76,7 +75,7 @@ exports.updateAnEmployee = (req, res, next) => {
             console.log('Updated');
         });
         employeeModel.find().then(employees => {
-            msg = 'Updated successfully!'
+            msg = 'Updated successfully!';
             res.render('index', { obj: 'Employees', title: 'Hello', employees: employees, msg: ''});
         });
     }
