@@ -13,7 +13,7 @@ module.exports.isValidString = function (input) {
  */
 module.exports.isValidNumber = function (input, min, max) {
         input = Number(input);
-        if (input !== '' && !isNaN(input)) {
+        if (input !== '' && !isNaN(input) && Number.isInteger(input)) {
             return (input < min || input > max) ? false : true;
         }
     
