@@ -2,50 +2,58 @@ const Employee = require('../model/employee');
 const employeeModel = Employee.EmployeeModel;
 const Company = require('../model/company');
 const companyModel = Company.CompanyModel;
-const validator = require('../model/validator');
+
+const {body, validationResult} = require('express-validator/check');
+const {sanitizeBody} = require('express-validator/filter');
 
 var async = require('async');
 
-exports.addEmployee = (req, res, next) => {
-    var employee = new Employee({
-        first_name: req.body.first_name.trim(),
-        last_name: req.body.last_name.trim(),
-        age:  req.body.age.trim(),
-        company: req.body.company.trim()
-    });
-    var msg = '';
-    if (validator.isValidString(employee.first_name) && validator.isValidString(employee.last_name) && validator.isValidNumber(employee.age, 18, 60)) {
-        employeeModel.create(employee, (err) => {
-            if (err) {
-                throw err;
-            } else {
-                console.log(`Added ${employee.first_name}`);
-            }
+exports.addEmployee = [
+
+    body('first_name').isLength({min: 1, max: 100}).trim().withMessage('First name cannot be string or longer than 100 characters.')
+    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('last_name').isLength({min: 1, max: 100}).trim().withMessage('First name cannot be string or longer than 100 characters.')
+    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('age').isInt({min:18, max: 60}).trim().withMessage('Age can not be greater than 60 or less than 18'),
+
+
+    sanitizeBody('first_name').escape(),
+    sanitizeBody('last_name').escape(),
+    sanitizeBody('age').escape(),
+
+    (req, res, next) => {
+        const errors = validationResult(req);
+
+        var employee = new Employee({
+            first_name: req.body.first_name.trim(),
+            last_name: req.body.last_name.trim(),
+            age:  req.body.age.trim(),
+            company: req.body.company.trim()
         });
-        msg = `Added ${employee.first_name}`;
-    } else {
-        if (!validator.isValidString(employee.first_name)) {
-            msg = 'First name is empty!';
-        } else if (!validator.isValidString(employee.last_name)) {
-            msg = 'Last name is empty!';
-        } else if (!validator.isValidString(employee.age)) {
-            msg = 'Age is empty';
-
-        } else if (!validator.isValidNumber(employee.age, 18, 60)) {
-            msg = 'Age cannot be greater than 60 or less than 18 or be a string';
+        var msg = '';
+        var err = null;
+        if (!errors.isEmpty()) {
+            err = errors.array();
+        } else {
+            employeeModel.create(employee, (err) => {
+                if (err) {
+                    throw err;
+                } else {
+                    console.log(`Added ${employee.first_name}`);
+                    msg = `Added ${employee.first_name}`;
+                }
+            });
         }
+        companyModel.find().then(companies => {
+            res.render('add-employee', { msg: msg, companies: companies, errors: err });
+        });
     }
-
-    companyModel.find().then(companies => {
-        res.render('add-employee', { msg: msg, companies: companies });
-    });
-
-};
+];
 
 exports.displayForm = (req, res, next) => {
     var msg = '';
     companyModel.find().then(companies => {
-        res.render('add-employee', { msg: msg, companies: companies });
+        res.render('add-employee', { msg: msg, companies: companies, errors: null});
     });
 
 };
@@ -100,57 +108,63 @@ exports.editAnEmployee = (req, res, next) => {
         if (err) {
             throw err;
         } else {
-            res.render('edit-employee', {msg: '', employee: results.employee, companies: results.companies });
+            res.render('edit-employee', {msg: '', employee: results.employee, companies: results.companies, errors: null });
         }
     });
 
 };
 
-exports.updateAnEmployee = (req, res, next) => {
-    const id = req.body.id.trim();
-    var employee = new Employee({
-        first_name: req.body.first_name.trim(),
-        last_name: req.body.last_name.trim(),
-        age: req.body.age.trim(),
-        company: req.body.company.trim()
-    });
+exports.updateAnEmployee = [
+    body('first_name').isLength({min: 1, max: 100}).trim().withMessage('First name cannot be string or longer than 100 characters.')
+    .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('last_name').isLength({min: 1, max: 100}).trim().withMessage('Last name cannot be string or longer than 100 characters.')
+    .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
+    body('age').isInt({min:18, max: 60}).trim().withMessage('Age can not be greater than 60 or less than 18 or must be changed to update.'),
 
+    sanitizeBody('first_name').escape(),
+    sanitizeBody('last_name').escape(),
+    sanitizeBody('age').escape(),
 
-    var msg = '';
-    if (validator.isValidString(employee.first_name) && validator.isValidString(employee.last_name) && validator.isValidNumber(employee.age, 18, 60)) {
-        employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((err, results) => {
-            if (err) {
-                throw err;
+    (req, res, next) => {
+        const id = req.body.id.trim();
+        const errors = validationResult(req);
+
+        var employee = new Employee({
+            first_name: req.body.first_name.trim(),
+            last_name: req.body.last_name.trim(),
+            age:  req.body.age.trim(),
+            company: req.body.company.trim()
+        });
+        var msg = '';
+        var err = null;
+        if (!errors.isEmpty()) {
+            err = errors.array();
+        } else {
+            employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((error,result) => {
+                if (error) {
+                    throw error;
+                } else {
+                    console.log(`Updated ${employee.first_name}`);
+                    msg = `Updated ${employee.first_name}`;
+                }
+            });
+        }
+
+        async.parallel({
+            companies: (callback) => {
+                companyModel.find().exec(callback);
+            },
+            employee: (callback) => {
+                employeeModel.findOne({ _id: id }).exec(callback);
+            }
+        }, function (error, results) {
+            if (error) {
+                throw error;
+            } else {
+                res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee, errors: err});
             }
         });
-        console.log(`Updated ${employee.first_name} ${employee.last_name}`);
-        msg = 'Updated successfully!';
-    } else {
-        if (!validator.isValidString(employee.first_name)) {
-            msg = 'First name is empty!';
-        } else if (!validator.isValidString(employee.last_name)) {
-            msg = 'Last name is empty!';
-        } else if (!validator.isValidString(employee.age)) {
-            msg = 'Age is empty';
 
-        } else if (!validator.isValidNumber(employee.age, 18, 60)) {
-            msg = 'Age cannot be greater than 60 or less than 18 or be a string';
-        }
         
     }
-    async.parallel({
-        employee: (callback) => {
-            employeeModel.findOne({ _id: id }).exec(callback);
-        },
-        companies: (callback) => {
-            companyModel.find().exec(callback);
-        }
-    }, function (err, results) {
-        if (err) {
-            throw err;
-        }
-        res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee });
-    })
-    
-
-};
+];

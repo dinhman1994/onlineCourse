@@ -39,6 +39,13 @@
         <input type="hidden" name="id" value="<%= employee._id %> ">
     </form>
     <br>
+    <ul>
+        <% if (errors) { %>
+            <% errors.forEach(error => { %>
+             <li><%= error.msg %> </li>
+            <% }) %>
+        <% } %>
+    </ul>
     <a href="/">Back to home page</a>
 </body>
 </html>

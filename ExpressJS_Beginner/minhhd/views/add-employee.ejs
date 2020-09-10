@@ -40,6 +40,13 @@
         </table>
     </form>
     <br>
+    <ul>
+        <% if (errors) { %>
+            <% errors.forEach(error => { %>
+             <li><%= error.msg %> </li>
+            <% }) %>
+        <% } %>
+    </ul>
     <a href="/">Back to Home page</a>
 </body>
 
