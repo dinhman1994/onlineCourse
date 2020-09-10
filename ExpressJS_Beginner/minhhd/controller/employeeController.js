@@ -2,6 +2,7 @@ const Employee = require('../model/employee');
 const employeeModel = Employee.EmployeeModel;
 const Company = require('../model/company');
 const companyModel = Company.CompanyModel;
+const validator = require('../model/validator');
 
 var async = require('async');
 
@@ -13,10 +14,7 @@ exports.addEmployee = (req, res, next) => {
         company: req.body.company.trim()
     });
     var msg = '';
-    if ((employee.age < 18 || employee.age > 60)
-        || (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
-        msg = 'Invalid input';
-    } else {
+    if (validator.isValidString(employee.first_name) && validator.isValidString(employee.last_name) && validator.isValidNumber(employee.age, 18, 60)) {
         employeeModel.create(employee, (err) => {
             if (err) {
                 throw err;
@@ -25,11 +23,22 @@ exports.addEmployee = (req, res, next) => {
             }
         });
         msg = `Added ${employee.first_name}`;
+    } else {
+        if (!validator.isValidString(employee.first_name)) {
+            msg = 'First name is empty!';
+        } else if (!validator.isValidString(employee.last_name)) {
+            msg = 'Last name is empty!';
+        } else if (!validator.isValidString(employee.age)) {
+            msg = 'Age is empty';
+
+        } else if (!validator.isValidNumber(employee.age, 18, 60)) {
+            msg = 'Age cannot be greater than 60 or less than 18';
+        }
     }
 
     companyModel.find().then(companies => {
         res.render('add-employee', { msg: msg, companies: companies });
-    })
+    });
 
 };
 
@@ -105,33 +114,43 @@ exports.updateAnEmployee = (req, res, next) => {
         age: req.body.age.trim(),
         company: req.body.company.trim()
     });
+
+
     var msg = '';
-    async.parallel({
-        totalEmployees: (callback) => {
-            employeeModel.countDocuments().exec(callback);
-        },
-        totalCompanies: (callback) => {
-            companyModel.countDocuments().exec(callback);
-        },
-        update: (callback) => {
-            if ((employee.age < 18 || employee.age > 60)
-                && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
-                msg = 'Invalid input';
-            } else {
-                employeeModel.findByIdAndUpdate({ _id: id }, employee).exec(callback);
-                console.log(`Updated ${employee.first_name} ${employee.last_name}`);
-                msg = 'Updated successfully!';
+    if (validator.isValidString(employee.first_name) && validator.isValidString(employee.last_name) && validator.isValidNumber(employee.age, 18, 60)) {
+        employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((err, results) => {
+            if (err) {
+                throw err;
             }
+        });
+        console.log(`Updated ${employee.first_name} ${employee.last_name}`);
+        msg = 'Updated successfully!';
+    } else {
+        if (!validator.isValidString(employee.first_name)) {
+            msg = 'First name is empty!';
+        } else if (!validator.isValidString(employee.last_name)) {
+            msg = 'Last name is empty!';
+        } else if (!validator.isValidString(employee.age)) {
+            msg = 'Age is empty';
+
+        } else if (!validator.isValidNumber(employee.age, 18, 60)) {
+            msg = 'Age cannot be greater than 60 or less than 18';
+        }
+        
+    }
+    async.parallel({
+        employee: (callback) => {
+            employeeModel.findOne({ _id: id }).exec(callback);
         },
-        employees: (callback) => {
-            employeeModel.find().exec(callback);
+        companies: (callback) => {
+            companyModel.find().exec(callback);
         }
     }, function (err, results) {
         if (err) {
             throw err;
-        } else {
-            res.render('index', { obj: 'Employees', title: 'Hello', employees: results.employees, msg: msg, totalEmployees: results.totalEmployees, totalCompanies: results.totalCompanies });
         }
-    });
+        res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee });
+    })
+    
 
 };
