@@ -7,10 +7,10 @@ var async = require('async');
 
 exports.addEmployee = (req, res, next) => {
     var employee = new Employee({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        age: req.body.age,
-        company: req.body.company
+        first_name: req.body.first_name.trim(),
+        last_name: req.body.last_name.trim(),
+        age: req.body.age.trim(),
+        company: req.body.company.trim()
     });
     var msg = '';
     if ((employee.age < 18 || employee.age > 60)
@@ -38,7 +38,7 @@ exports.displayForm = (req, res, next) => {
     companyModel.find().then(companies => {
         res.render('add-employee', { msg: msg, companies: companies });
     });
-    
+
 };
 
 exports.getEmployees = (req, res, next) => {
@@ -58,8 +58,10 @@ exports.getEmployees = (req, res, next) => {
             console.log(err);
             next(err);
         } else {
-            res.render('index', { obj: 'Employees', title: 'Hello', employees: results.employees,
-             totalEmployees: results.totalEmployees, totalCompanies: results.totalCompanies});
+            res.render('index', {
+                obj: 'Employees', title: 'Hello', employees: results.employees,
+                totalEmployees: results.totalEmployees, totalCompanies: results.totalCompanies
+            });
         }
     });
 };
@@ -80,37 +82,56 @@ exports.editAnEmployee = (req, res, next) => {
     console.log(id);
     async.parallel({
         employee: (callback) => {
-            employeeModel.findOne({_id: id}).exec(callback);
+            employeeModel.findOne({ _id: id }).exec(callback);
         },
         companies: (callback) => {
             companyModel.find().exec(callback);
         }
-    }, function (eer, results) {
-        res.render('edit-employee', {employee: results.employee, companies: results.companies});
+    }, function (err, results) {
+        if (err) {
+            throw err;
+        } else {
+            res.render('edit-employee', { employee: results.employee, companies: results.companies });
+        }
     });
-    
+
 };
 
 exports.updateAnEmployee = (req, res, next) => {
     const id = req.body.id.trim();
     var employee = new Employee({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        age: req.body.age,
-        company: req.body.company
+        first_name: req.body.first_name.trim(),
+        last_name: req.body.last_name.trim(),
+        age: req.body.age.trim(),
+        company: req.body.company.trim()
     });
     var msg = '';
-    if ((employee.age < 18 || employee.age > 60)
-        && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
-        msg = 'Invalid input';
-    } else {
-        employeeModel.findByIdAndUpdate({_id: id}, employee).then(() => {
-            console.log('Updated');
-        });
-        employeeModel.find().then(employees => {
-            msg = 'Updated successfully!';
-            res.render('index', { obj: 'Employees', title: 'Hello', employees: employees, msg: ''});
-        });
-    }
+    async.parallel({
+        totalEmployees: (callback) => {
+            employeeModel.countDocuments().exec(callback);
+        },
+        totalCompanies: (callback) => {
+            companyModel.countDocuments().exec(callback);
+        },
+        update: (callback) => {
+            if ((employee.age < 18 || employee.age > 60)
+                && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
+                msg = 'Invalid input';
+            } else {
+                employeeModel.findByIdAndUpdate({ _id: id }, employee).exec(callback);
+                console.log(`Updated ${employee.first_name} ${employee.last_name}`);
+                msg = 'Updated successfully!';
+            }
+        },
+        employees: (callback) => {
+            employeeModel.find().exec(callback);
+        }
+    }, function (err, results) {
+        if (err) {
+            throw err;
+        } else {
+            res.render('index', { obj: 'Employees', title: 'Hello', employees: results.employees, msg: msg, totalEmployees: results.totalEmployees, totalCompanies: results.totalCompanies });
+        }
+    });
 
 };
