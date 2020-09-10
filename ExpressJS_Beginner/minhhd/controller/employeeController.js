@@ -10,7 +10,7 @@ exports.addEmployee = (req, res, next) => {
     var employee = new Employee({
         first_name: req.body.first_name.trim(),
         last_name: req.body.last_name.trim(),
-        age: req.body.age.trim(),
+        age:  req.body.age.trim(),
         company: req.body.company.trim()
     });
     var msg = '';
@@ -32,7 +32,7 @@ exports.addEmployee = (req, res, next) => {
             msg = 'Age is empty';
 
         } else if (!validator.isValidNumber(employee.age, 18, 60)) {
-            msg = 'Age cannot be greater than 60 or less than 18';
+            msg = 'Age cannot be greater than 60 or less than 18 or be a string';
         }
     }
 
@@ -100,7 +100,7 @@ exports.editAnEmployee = (req, res, next) => {
         if (err) {
             throw err;
         } else {
-            res.render('edit-employee', { employee: results.employee, companies: results.companies });
+            res.render('edit-employee', {msg: '', employee: results.employee, companies: results.companies });
         }
     });
 
@@ -134,7 +134,7 @@ exports.updateAnEmployee = (req, res, next) => {
             msg = 'Age is empty';
 
         } else if (!validator.isValidNumber(employee.age, 18, 60)) {
-            msg = 'Age cannot be greater than 60 or less than 18';
+            msg = 'Age cannot be greater than 60 or less than 18 or be a string';
         }
         
     }
