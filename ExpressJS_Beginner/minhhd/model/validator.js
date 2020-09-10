@@ -12,7 +12,7 @@ module.exports.isValidString = function (input) {
  * @param {Number} input 
  */
 module.exports.isValidNumber = function (input, min, max) {
-    if (input !== '') {
+    if (input !== '' || input != NaN) {
         return (input < min || input > max) ? false : true;
     }
     return false;
