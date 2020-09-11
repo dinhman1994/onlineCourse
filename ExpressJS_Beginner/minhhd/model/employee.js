@@ -18,6 +18,5 @@ module.exports = class Employee {
     }
 };
 
-var Employee = mongoose.model('Employee', EmployeeSchema);
+module.exports.EmployeeModel = mongoose.model('Employee', EmployeeSchema);
 
-module.exports.EmployeeModel = Employee;

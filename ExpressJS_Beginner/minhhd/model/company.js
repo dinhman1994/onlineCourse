@@ -8,7 +8,7 @@ var CompanySchema = new Schema({
     phoneNumber: {type: String}
 });
 
-var Company = mongoose.model('Company', CompanySchema);
+module.exports.CompanyModel = mongoose.model('Company', CompanySchema);
 
 module.exports = class Company {
     constructor(name, address, phoneNumber){
@@ -18,4 +18,3 @@ module.exports = class Company {
     }
 };
 
-module.exports.CompanyModel = Company;

@@ -25,9 +25,9 @@ exports.addEmployee = [
         const errors = validationResult(req);
 
         var employee = new Employee({
-            first_name: req.body.first_name.trim(),
-            last_name: req.body.last_name.trim(),
-            age:  req.body.age.trim(),
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            age:  req.body.age,
             company: req.body.company.trim()
         });
         var msg = '';

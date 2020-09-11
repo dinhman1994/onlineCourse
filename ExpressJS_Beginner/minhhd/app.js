@@ -6,6 +6,7 @@ require('dotenv').config();
 
 var indexRouter = require('./routes/index');
 var companyRouter = require('./routes/company');
+var userRouter = require('./routes/user');
 var errorController =  require('./controller/errorController');
 
 var app = express();
@@ -22,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/company',companyRouter);
+app.use(userRouter);
 
 // setup mongoose connection
 var mongoose = require('mongoose');
