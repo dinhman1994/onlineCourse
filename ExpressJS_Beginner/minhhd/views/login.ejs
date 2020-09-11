@@ -23,5 +23,15 @@
             </tr>
         </table>
     </form>
+    <% if (typeof(errors) != 'undefined') { %>
+        <ul>
+            <% errors.forEach(error => { %>
+                <li><%= error.msg %> </li>
+            <% }) %>
+        </ul>
+    <% } %>
+    <% if (typeof(msg) != "undefined") { %>
+        <p><%= msg %> </p>
+    <% } %>
 </body>
 </html>

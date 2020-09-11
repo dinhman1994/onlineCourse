@@ -19,9 +19,12 @@
 </head>
 
 <body>
+  <% if (user) { %>
+   <h1><%= msg %> </h1>
+   <a href="/logout">Log out</a>
+  <% } %>
   <h1>List of <%= obj %></h1>
   <h2>Total employees: <%= totalEmployees %></h2>
-  <h2>Total companies: <%= totalCompanies %></h2>
   <table>
     <tr>
     <th>First Name</th>

@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('cookie-session');
 require('dotenv').config();
 
 var indexRouter = require('./routes/index');
@@ -14,6 +15,17 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(session({
+  secret: 'session secret',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(function(req, res, next) {
+  res.locals.user = req.session.user;
+  next();
+  });
 
 app.use(logger('dev'));
 app.use(express.json());
