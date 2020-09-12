@@ -6,8 +6,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Login</h1>
-    <form action="/login" method="post">
+    <h1>Register</h1>
+    <form action="/register" method="post">
         <table>
             <tr>
                 <td>Username:</td>
@@ -16,6 +16,10 @@
             <tr>
                 <td>Password:</td>
                 <td><input type="password" name="password" id=""></td>
+            </tr>
+            <tr>
+                <td>Re-Password:</td>
+                <td><input type="password" name="repass" id=""></td>
             </tr>
             <tr>
                 <td><input type="reset" value="Reset"></td>
@@ -29,8 +33,8 @@
             <% }) %>
     <% } %>
     <% if (typeof(msg) != "undefined") { %>
-        <p> <%= msg %> </p>
+        <p><%= msg %> </p>
     <% } %>
-    <p>Don't have an account? <a href="/register">Register now!</a></p>
+    <p>Already have an account? Login <a href="/login">here</a></p>
 </body>
 </html>
