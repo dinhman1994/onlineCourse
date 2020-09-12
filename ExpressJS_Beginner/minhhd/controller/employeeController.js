@@ -1,12 +1,12 @@
-var Employee = require('../model/employee');
-var employeeModel = Employee.EmployeeModel;
-var Company = require('../model/company');
-var companyModel = Company.CompanyModel;
+const Employee = require('../model/employee');
+const employeeModel = Employee.EmployeeModel;
+const Company = require('../model/company');
+const companyModel = Company.CompanyModel;
 
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
-var async = require('async');
+const async = require('async');
 
 exports.addEmployee = [
 

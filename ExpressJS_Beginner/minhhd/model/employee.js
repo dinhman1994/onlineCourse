@@ -9,7 +9,7 @@ var EmployeeSchema = new Schema({
     company: {type: String}
 });
 
-module.exports = class Employee {
+module.exports.Employee = class Employee {
     constructor(employee) {
         this.first_name = employee.first_name;
         this.last_name = employee.last_name;

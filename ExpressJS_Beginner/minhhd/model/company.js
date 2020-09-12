@@ -10,11 +10,10 @@ var CompanySchema = new Schema({
 
 module.exports.CompanyModel = mongoose.model('Company', CompanySchema);
 
-module.exports = class Company {
+module.exports.Company = class Company {
     constructor(name, address, phoneNumber){
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
 };
-
