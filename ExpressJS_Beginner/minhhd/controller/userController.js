@@ -21,7 +21,7 @@ exports.login = [
     (req, res, next) => {
         const errors = validationResult(req);
         if (errors.array().length !== 0) {
-            res.render('login', {errors: errors.array()});
+            res.render('login', { errors: errors.array() });
         } else {
             userModel.findOne({ username: req.body.username }).then(user => {
                 if (user) {
@@ -45,10 +45,10 @@ exports.login = [
                             }
                         });
                     } else {
-                        res.render('login', {msg: 'Wrong password'});
+                        res.render('login', { msg: 'Wrong password' });
                     }
                 } else {
-                    res.render('login', {msg: 'User does not exist!'});
+                    res.render('login', { msg: 'User does not exist!' });
                 }
             });
         }
@@ -71,7 +71,7 @@ exports.register = [
     body('password').isLength({ min: 8, max: 60 }).trim().withMessage('Password must be longer than 8 or shorter than 72 characters.')
         .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must contain alphabet and number.'),
     body('repass').isLength({ min: 8, max: 60 }).trim().withMessage('Password must be longer than 8 or shorter than 72 characters.')
-    .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must contain alphabet and number.'),
+        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must contain alphabet and number.'),
 
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape(),
@@ -82,7 +82,7 @@ exports.register = [
 
         var password = req.body.password;
         var repass = req.body.repass;
-        
+
         var salt = bcrypt.genSaltSync();
         hashedPass = bcrypt.hashSync(password, salt);
 
@@ -93,24 +93,29 @@ exports.register = [
             if (repass !== password) {
                 msg = 'Re-password does not match!';
             }
-            res.render('register', {errors: errors.array(), msg: msg});
+            res.render('register', { errors: errors.array(), msg: msg });
         } else {
-            userModel.findOne({ username: user.username }).then(u => {
-                if (!u) {
-                    userModel.create(user, (err) => {
-                        if (err) {
-                            throw err;
-                        } else {
-                            console.log(`Added user ${user.username}`);
-                            res.render('login', {msg: 'Registered successfully! Please login!'});
-                        }
-                    });
-                } else {
-                    console.log('exist');
-                    res.render('register', {msg: 'Username already exists!'});
-                    Promise.reject(`${user.username} exists!`);
-                }
-            });
+            if (repass !== password) {
+                msg = 'Re-password does not match!';
+                res.render('register', { msg: msg });
+            } else {
+                userModel.findOne({ username: user.username }).then(u => {
+                    if (!u) {
+                        userModel.create(user, (err) => {
+                            if (err) {
+                                throw err;
+                            } else {
+                                console.log(`Added user ${user.username}`);
+                                res.render('login', { msg: 'Registered successfully! Please login!' });
+                            }
+                        });
+                    } else {
+                        console.log('exist');
+                        res.render('register', { msg: 'Username already exists!' });
+                        Promise.reject(`${user.username} exists!`);
+                    }
+                });
+            }
         }
     }
 ];
