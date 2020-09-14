@@ -56,7 +56,7 @@ exports.addEmployee = [
 exports.displayForm = (req, res, next) => {
     if (req.session.user) {
         companyModel.find().then(companies => {
-            res.render('add-employee', {companies: companies});
+            res.render('add-employee', { companies: companies });
         });
     } else {
         res.redirect('/login');
@@ -114,7 +114,7 @@ exports.editAnEmployee = (req, res, next) => {
             if (err) {
                 throw err;
             } else {
-                res.render('edit-employee', {employee: results.employee, companies: results.companies});
+                res.render('edit-employee', { employee: results.employee, companies: results.companies });
             }
         });
     } else {

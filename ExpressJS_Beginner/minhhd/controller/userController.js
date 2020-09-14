@@ -94,7 +94,7 @@ exports.register = [
         var user = new User(req.body.username, hashedPass);
         var msg = '';
         if (errors.array().length !== 0) {
-            
+
             if (repass !== password) {
                 msg = 'Re-password does not match!';
             }
@@ -124,12 +124,6 @@ exports.register = [
     }
 ];
 
-/**
- * 
- * @param {Request} req 
- * @param {Response} res 
- * @param {import('express-validator/src/base').Middleware} next 
- */
 exports.logout = (req, res, next) => {
     if (req.session.user) {
         req.session.user = null;

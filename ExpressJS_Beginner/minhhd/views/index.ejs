@@ -18,11 +18,22 @@
 </head>
 
 <body>
-  <% if (user) { %>
-  <h1><%= msg %> </h1>
-  <a href="/logout">Log out</a>
-  <% } %>
-  <h1>List of <%= obj %></h1>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <h1 >List of <%= obj %></h1>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+      </ul>
+      <span class="navbar-text">
+        <% if (user) { %>
+          <h1><%= msg %> </h1>
+          <a href="/logout">Log out</a>
+          <% } %>
+      </span>
+    </div>
+  </nav>
+  
+  
   <h2>Total employees: <%= totalEmployees %></h2>
   <table>
     <tr>
@@ -47,9 +58,9 @@
         <%= employees[index].company %>
       </td>
       <td style="display: flex;">
-        <form method="post" action="/delete">
+        <form method="post" action="/delete" id="delete">
           <input type="hidden" name="id" value="<%= employees[index]._id %> " />
-          <a onclick="this.parentNode.submit();" href="#">Delete</a>
+          <a href="#" data-toggle="modal" data-target="#exampleModalCenter">Delete</a>
         </form>
         |
         <form method="post" action="/edit">
@@ -60,7 +71,29 @@
     </tr>
     <% } %>
   </table>
+  <br>
   <a href="add-employee">Add employee hereeeee!</a>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Delete employee</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Are you sure to delete this employee?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" form="delete">OK</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 
