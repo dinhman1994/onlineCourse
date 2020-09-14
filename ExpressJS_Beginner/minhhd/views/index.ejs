@@ -60,7 +60,7 @@
       <td style="display: flex;">
         <form method="post" action="/delete" id="delete">
           <input type="hidden" name="id" value="<%= employees[index]._id %> " />
-          <a href="#" data-toggle="modal" data-target="#exampleModalCenter">Delete</a>
+          <a onclick="this.parentNode.submit();" href="#" data-toggle="modal" data-target="#exampleModalCenter" id="delete-link">Delete</a>
         </form>
         |
         <form method="post" action="/edit">
@@ -73,27 +73,6 @@
   </table>
   <br>
   <a href="add-employee">Add employee hereeeee!</a>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Delete employee</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure to delete this employee?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="submit" class="btn btn-primary" form="delete">OK</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 </body>
 

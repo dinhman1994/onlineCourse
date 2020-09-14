@@ -22,7 +22,7 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <h1 >Update employee</h1>
+        <h1>Update employee</h1>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
             </ul>
@@ -50,9 +50,11 @@
                 <td>Company:</td>
                 <td>
                     <select name="company" id="">
+                        <% if (typeof(companies) != 'undefined' && companies !== null) { %>
                         <% companies.forEach(company => { %>
                         <option value="<%= company.name %> "><%= company.name %> </option>
-                        <% }) %>
+                        <% }); %>
+                        <% } %>
                     </select>
                 </td>
             </tr>

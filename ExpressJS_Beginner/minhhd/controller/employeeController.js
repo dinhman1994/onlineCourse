@@ -12,9 +12,9 @@ exports.addEmployee = [
 
     body('first_name').isLength({ min: 1, max: 100 }).trim().withMessage('First name cannot be string or longer than 100 characters.')
         .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-    body('last_name').isLength({ min: 1, max: 100 }).trim().withMessage('First name cannot be string or longer than 100 characters.')
-        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-    body('age').isInt({ min: 18, max: 60 }).trim().withMessage('Age can not be greater than 60 or less than 18'),
+    body('last_name').isLength({ min: 1, max: 100 }).trim().withMessage('Last name cannot be string or longer than 100 characters.')
+        .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
+    body('age').isInt({ min: 18, max: 60 }).trim().withMessage('Age can not be greater than 60 or less than 18 and can not be decimal.'),
 
 
     sanitizeBody('first_name').escape(),
@@ -33,19 +33,22 @@ exports.addEmployee = [
             );
             var msg = '';
             var err = null;
-            if (errors.array().length !== 0) {
-                err = errors.array();
-            } else {
-                employeeModel.create(employee, (error) => {
-                    if (error) {
-                        throw error;
-                    } else {
-                        console.log(`Added ${employee.first_name}`);
-                        msg = `Added ${employee.first_name}`;
-                    }
-                });
-            }
-            res.render('add-employee', { msg: msg, errors: err });
+            companyModel.find().then(companies => {
+                if (errors.array().length !== 0) {
+                    err = errors.array();
+                    res.render('add-employee', { errors: err, companies: companies });
+                } else {
+                    employeeModel.create(employee, (error, result) => {
+                        if (error) {
+                            throw error;
+                        } else {
+                            console.log(`Added ${employee.first_name}!`);
+                            msg = `Added ${employee.first_name}`;
+                            res.render('add-employee', { msg: msg, companies: companies });
+                        }
+                    });
+                }
+            });
         } else {
             res.redirect('/login');
         }
@@ -87,8 +90,8 @@ exports.getEmployees = (req, res, next) => {
 exports.deleteAnEmployee = (req, res, next) => {
     if (req.session.user) {
         const id = req.body.id.trim();
-        employeeModel.findOneAndDelete({ _id: id }).then(() => {
-            console.log(`Deleted id ${id}`);
+        employeeModel.findOneAndDelete({ _id: id }).then((employee) => {
+            console.log(`Deleted ${employee.first_name}`);
             res.redirect('/');
         }).catch(err => {
             throw err;
@@ -128,7 +131,7 @@ exports.updateAnEmployee = [
         .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
     body('last_name').isLength({ min: 1, max: 100 }).trim().withMessage('Last name cannot be string or longer than 100 characters.')
         .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
-    body('age').isInt({ min: 18, max: 60 }).trim().withMessage('Age can not be greater than 60 or less than 18 or must be changed to update.'),
+    body('age').isInt({ min: 18, max: 60 }).trim().withMessage('Age can not be greater than 60 or less than 18 and can not be decimal, or must be changed to update.'),
 
     sanitizeBody('first_name').escape(),
     sanitizeBody('last_name').escape(),
