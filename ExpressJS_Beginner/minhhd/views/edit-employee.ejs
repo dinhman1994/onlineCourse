@@ -22,58 +22,64 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <h1>Update employee</h1>
+        <h1>Employee Management System</h1>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
             </ul>
         </div>
     </nav>
 
-    <% if (typeof(msg) != 'undefined' && msg !== '') { %>
-    <h1><%= msg %></h1>
-    <% } %>
-    <form action="/update" method="post">
-        <table>
-            <tr>
-                <td>First Name:</td>
-                <td><input type="text" name="first_name" id="" value="<%= employee.first_name %> "></td>
-            </tr>
-            <tr>
-                <td>Last Name:</td>
-                <td><input type="text" name="last_name" id="" value="<%= employee.last_name %> "></td>
-            </tr>
-            <tr>
-                <td>Age:</td>
-                <td><input type="text" name="age" id="" value="<%= employee.age %> "></td>
-            </tr>
-            <tr>
-                <td>Company:</td>
-                <td>
-                    <select name="company" id="">
-                        <% if (typeof(companies) != 'undefined' && companies !== null) { %>
-                        <% companies.forEach(company => { %>
-                        <option value="<%= company.name %> "><%= company.name %> </option>
-                        <% }); %>
-                        <% } %>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="reset" value="Reset"></td>
-                <td><input type="submit" value="Update"></td>
-            </tr>
-        </table>
-        <input type="hidden" name="id" value="<%= employee._id %> ">
-    </form>
-    <br>
-    <ul>
-        <% if (typeof(errors) != 'undefined' && errors !== null) { %>
-        <% errors.forEach(error => { %>
-        <li><%= error.msg %> </li>
-        <% }) %>
-        <% } %>
-    </ul>
-    <a href="/">Back to home page</a>
+    <section>
+        <h1>Update employee</h1>
+        <div class="form-container">
+            <% if (typeof(msg) != 'undefined' && msg !== '') { %>
+            <h3><%= msg %></h3>
+            <% } %>
+            <form action="/update" method="post">
+                <table class="table">
+                    <tr>
+                        <td>First Name:</td>
+                        <td><input type="text" name="first_name" id="" value="<%= employee.first_name %> "></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td><input type="text" name="last_name" id="" value="<%= employee.last_name %> "></td>
+                    </tr>
+                    <tr>
+                        <td>Age:</td>
+                        <td><input type="text" name="age" id="" value="<%= employee.age %> "></td>
+                    </tr>
+                    <tr>
+                        <td>Company:</td>
+                        <td>
+                            <select name="company" id="">
+                                <% if (typeof(companies) != 'undefined' && companies !== null) { %>
+                                <% companies.forEach(company => { %>
+                                <option value="<%= company.name %> "><%= company.name %> </option>
+                                <% }); %>
+                                <% } %>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="reset" class="btn btn-secondary">Reset</button> <button type="submit"
+                                class="btn btn-primary">Update</button></td>
+                    </tr>
+                </table>
+                <input type="hidden" name="id" value="<%= employee._id %> ">
+            </form>
+            <br>
+            <ul>
+                <% if (typeof(errors) != 'undefined' && errors !== null) { %>
+                <% errors.forEach(error => { %>
+                <li><%= error.msg %> </li>
+                <% }) %>
+                <% } %>
+            </ul>
+            <a href="/">Back to home page</a>
+        </div>
+    </section>
 </body>
 
 </html>

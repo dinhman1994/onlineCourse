@@ -20,29 +20,45 @@
 <body>
 
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <h1 >List of <%= obj %></h1>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <h1>Employee Management System</h1>
     <div class="collapse navbar-collapse" id="navbarText">
       <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add-employee">Add employee</a>
+        </li>
       </ul>
       <span class="navbar-text">
         <% if (user) { %>
-          <h1><%= msg %> </h1>
-          <a href="/logout">Log out</a>
-          <% } %>
+        <p><u><%= msg %></u></p>
+        <a href="/logout">Log out</a>
+        <% } else {%>
+        <a href="/login">Log in</a>
+        <a href="/register">Register</a>
+        <% } %>
       </span>
     </div>
   </nav>
-  
-  
+
+
   <h2>Total employees: <%= totalEmployees %></h2>
-  <table>
-    <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Age</td>
-      <th>Company</th>
-      <th></th>
-    </tr>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Age</td>
+        <th>Company</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
     <% for( let index = 0; index < employees.length; index++ ) { %>
     <tr>
       <td>
@@ -57,12 +73,14 @@
       <td>
         <%= employees[index].company %>
       </td>
-      <td style="display: flex;">
+      <td>
         <form method="post" action="/delete" id="delete">
           <input type="hidden" name="id" value="<%= employees[index]._id %> " />
-          <a onclick="this.parentNode.submit();" href="#" data-toggle="modal" data-target="#exampleModalCenter" id="delete-link">Delete</a>
+          <a onclick="this.parentNode.submit();" href="#" data-toggle="modal" data-target="#exampleModalCenter"
+            id="delete-link">Delete</a>
         </form>
-        |
+      </td>
+      <td>
         <form method="post" action="/edit">
           <input type="hidden" name="id" value="<%= employees[index]._id %> " />
           <a onclick="this.parentNode.submit();" href="#">Edit</a>
@@ -71,8 +89,6 @@
     </tr>
     <% } %>
   </table>
-  <br>
-  <a href="add-employee">Add employee hereeeee!</a>
 
 </body>
 

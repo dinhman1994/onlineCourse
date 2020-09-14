@@ -39,7 +39,7 @@ exports.login = [
                             } else {
                                 res.render('index', {
                                     obj: 'Employees', title: 'Hello', employees: results.employees,
-                                    totalEmployees: results.totalEmployees, msg: `Welcome ${req.body.username}`
+                                    totalEmployees: results.totalEmployees, msg: `Welcome, ${req.body.username}`
                                 });
                             }
                         });
@@ -94,7 +94,6 @@ exports.register = [
         var user = new User(req.body.username, hashedPass);
         var msg = '';
         if (errors.array().length !== 0) {
-
             if (repass !== password) {
                 msg = 'Re-password does not match!';
             }

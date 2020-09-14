@@ -79,8 +79,7 @@ exports.getEmployees = (req, res, next) => {
             throw err;
         } else {
             var username = req.session.user;
-            res.render('index', {
-                obj: 'Employees', title: 'Hello', employees: results.employees,
+            res.render('index', {title: 'Hello', employees: results.employees,
                 totalEmployees: results.totalEmployees, msg: `Welcome, ${username}`
             });
         }
@@ -149,18 +148,6 @@ exports.updateAnEmployee = [
             );
             var msg = '';
             var err = null;
-            if (errors.array().length !== 0) {
-                err = errors.array();
-            } else {
-                employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((error, result) => {
-                    if (error) {
-                        throw error;
-                    } else {
-                        console.log(`Updated ${employee.first_name}`);
-                        msg = `Updated ${employee.first_name}`;
-                    }
-                });
-            }
 
             async.parallel({
                 companies: (callback) => {
@@ -173,7 +160,21 @@ exports.updateAnEmployee = [
                 if (error) {
                     throw error;
                 } else {
-                    res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee, errors: err });
+                    if (errors.array().length !== 0) {
+                        err = errors.array();
+                        res.render('edit-employee', { companies: results.companies, employee: results.employee, errors: err });
+                    } else {
+                        employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((error, result) => {
+                            if (error) {
+                                throw error;
+                            } else {
+                                console.log(`Updated ${employee.first_name}`);
+                                msg = `Updated ${employee.first_name}`;
+                                res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee});
+                            }
+                        });
+                    }
+                    
                 }
             });
         } else {

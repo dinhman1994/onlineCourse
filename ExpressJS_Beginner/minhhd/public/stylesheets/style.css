@@ -1,5 +1,4 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -13,4 +12,44 @@ nav {
 
 nav h1 {
   color: white;
+}
+
+
+section {
+  width: 70%;
+  margin: 0 auto;
+}
+
+section h1 {
+  width: max-content;
+  margin: 50px auto;
+}
+
+.form-container {
+  width: 50%;
+  margin: 0 auto;
+  border-radius: 15px;
+  padding: 50px;
+  box-shadow: 1px 1px 10px 10px lightgray;
+}
+
+.navbar-collapse span{
+  display: flex;
+}
+
+.navbar-collapse span p{
+  margin: 0;
+}
+
+.navbar-collapse span a:nth-child(2){
+  margin-left: 10px;
+}
+
+.redirect-container {
+  width: 70%;
+  margin: auto;
+}
+
+.redirect-container a{
+  text-decoration: underline ;
 }

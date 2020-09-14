@@ -22,38 +22,49 @@
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <h1 >Login</h1>
+        <h1>Employee Management System</h1>
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="navbar-nav mr-auto">
             </ul>
         </div>
     </nav>
 
-    <form action="/login" method="post">
-        <table>
-            <tr>
-                <td>Username:</td>
-                <td><input type="text" name="username"></td>
-            </tr>
-            <tr>
-                <td>Password:</td>
-                <td><input type="password" name="password" id=""></td>
-            </tr>
-            <tr>
-                <td><input type="reset" value="Reset"></td>
-                <td><input type="submit" value="Login"></td>
-            </tr>
-        </table>
-    </form>
-    <% if (typeof(errors) != 'undefined') { %>
-    <% errors.forEach(error => { %>
-    <p><%= error.msg %> </p>
-    <% }) %>
-    <% } %>
-    <% if (typeof(msg) != 'undefined') { %>
-    <p> <%= msg %> </p>
-    <% } %>
-    <p>Don't have an account? <a href="/register">Register now!</a></p>
+    <section>
+        <h1>Login</h1>
+        <div class="form-container">
+            <form action="/login" method="post">
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <td>Username:</td>
+                            <td><input type="text" name="username"></td>
+                        </tr>
+                        <tr>
+                            <td>Password:</td>
+                            <td><input type="password" name="password" id=""></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><button type="reset" class="btn btn-secondary">Reset</button> <button type="submit"
+                                    class="btn btn-primary">Log in</button></td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+            <% if (typeof(errors) != 'undefined') { %>
+            <% errors.forEach(error => { %>
+            <p><%= error.msg %> </p>
+            <% }) %>
+            <% } %>
+            <% if (typeof(msg) != 'undefined') { %>
+            <p> <%= msg %> </p>
+            <% } %>
+            <div class="redirect-container">
+                <p>Don't have an account? <a href="/register">Register now!</a></p>
+                <a href="/">Back to Home page</a>
+            </div>
+        </div>
+    </section>
 </body>
 
 </html>
