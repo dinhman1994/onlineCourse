@@ -57,11 +57,19 @@ exports.login = [
 ];
 
 exports.renderLogin = (req, res, next) => {
-    res.render('login');
+    if (req.session.user) {
+        res.redirect('/');
+    } else {
+        res.render('login');
+    }
 }
 
 exports.renderRegister = (req, res, next) => {
-    res.render('register');
+    if (req.session.user) {
+        res.redirect('/');
+    } else {
+        res.render('register');
+    }
 }
 
 exports.register = [
