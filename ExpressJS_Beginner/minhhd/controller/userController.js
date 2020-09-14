@@ -18,14 +18,19 @@ exports.login = [
     sanitizeBody('password').escape(),
 
     (req, res, next) => {
+
         const errors = validationResult(req);
+
         if (errors.array().length !== 0) {
             res.render('login', { errors: errors.array() });
         }
+        
         userModel.findOne({ username: req.body.username }).then(user => {
+
             if (!user) {
                 res.render('login', { msg: 'User does not exist!' });
             }
+
             if (bcrypt.compareSync(req.body.password, user.password)) {
                 req.session.user = req.body.username;
                 async.parallel({
@@ -35,21 +40,14 @@ exports.login = [
                     totalEmployees: (callback) => {
                         employeeModel.countDocuments().exec(callback);
                     }
-                }, function (err, results) {
-                    if (err) {
-                        next(err);
-                    }
-                    res.render('index', {
-                        obj: 'Employees', title: 'Hello', employees: results.employees,
-                        totalEmployees: results.totalEmployees, msg: `Welcome, ${req.body.username}`
-                    });
-
+                }, function (error, result) {
+                    res.render('index', { title: 'Hello', msg: `Welcome, ${req.body.username}`, totalEmployees: result.totalEmployees, employees: result.employees });
                 });
-            } else {
-                res.render('login', { msg: 'Wrong password' });
             }
-        });
 
+            res.render('login', { msg: 'Wrong password!' });
+
+        });
 
     }
 ];
@@ -101,22 +99,23 @@ exports.register = [
         if (repass !== password) {
             msg = 'Re-password does not match!';
             res.render('register', { msg: msg });
-        } else {
-            userModel.findOne({ username: user.username }).then(u => {
-                if (!u) {
-                    userModel.create(user, (err) => {
-                        if (err) {
-                            throw err;
-                        } else {
-                            console.log(`Added user ${user.username}`);
-                            res.render('login', { msg: 'Registered successfully! Please login!' });
-                        }
-                    });
-                }
-                res.render('register', { msg: 'Username already exists!' });
-                Promise.reject(`${user.username} exists!`);
-            });
         }
+
+        userModel.findOne({ username: user.username }).then(u => {
+            if (!u) {
+                userModel.create(user, (err) => {
+                    if (err) {
+                        throw err;
+                    } else {
+                        console.log(`Added user ${user.username}`);
+                        res.render('login', { msg: 'Registered successfully! Please login!' });
+                    }
+                });
+            }
+            res.render('register', { msg: 'Username already exists!' });
+            Promise.reject(`${user.username} exists!`);
+        });
+
     }
 ];
 
