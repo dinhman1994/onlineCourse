@@ -25,20 +25,20 @@ exports.addEmployee = [
         if (req.session.user) {
             const errors = validationResult(req);
 
-            var employee = new Employee({
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                age: req.body.age,
-                company: req.body.company.trim()
-            });
+            var employee = new Employee(
+                req.body.first_name,
+                req.body.last_name,
+                req.body.age,
+                req.body.company
+            );
             var msg = '';
             var err = null;
-            if (!errors.isEmpty()) {
+            if (errors.array().length !== 0) {
                 err = errors.array();
             } else {
-                employeeModel.create(employee, (err) => {
-                    if (err) {
-                        throw err;
+                employeeModel.create(employee, (error) => {
+                    if (error) {
+                        throw error;
                     } else {
                         console.log(`Added ${employee.first_name}`);
                         msg = `Added ${employee.first_name}`;
@@ -47,7 +47,6 @@ exports.addEmployee = [
             }
             res.render('add-employee', { msg: msg, errors: err });
         } else {
-            req.session.fromUrl = req.path;
             res.redirect('/login');
         }
 
@@ -57,10 +56,9 @@ exports.addEmployee = [
 exports.displayForm = (req, res, next) => {
     if (req.session.user) {
         companyModel.find().then(companies => {
-            res.render('add-employee', { msg: '', companies: companies, errors: null });
+            res.render('add-employee', {companies: companies});
         });
     } else {
-        req.session.fromUrl = req.path;
         res.redirect('/login');
     }
 };
@@ -75,8 +73,7 @@ exports.getEmployees = (req, res, next) => {
         }
     }, function (err, results) {
         if (err) {
-            console.log(err);
-            next(err);
+            throw err;
         } else {
             var username = req.session.user;
             res.render('index', {
@@ -94,10 +91,9 @@ exports.deleteAnEmployee = (req, res, next) => {
             console.log(`Deleted id ${id}`);
             res.redirect('/');
         }).catch(err => {
-            console.log(err);
+            throw err;
         });
     } else {
-        req.session.fromUrl = req.path;
         res.redirect('/login');
     }
 
@@ -118,11 +114,10 @@ exports.editAnEmployee = (req, res, next) => {
             if (err) {
                 throw err;
             } else {
-                res.render('edit-employee', { msg: '', employee: results.employee, companies: results.companies, errors: null });
+                res.render('edit-employee', {employee: results.employee, companies: results.companies});
             }
         });
     } else {
-        req.session.fromUrl = req.path;
         res.redirect('/login');
     }
 
@@ -140,19 +135,18 @@ exports.updateAnEmployee = [
     sanitizeBody('age').escape(),
 
     (req, res, next) => {
-        if (req.body.user) {
+        if (req.session.user) {
             const id = req.body.id.trim();
             const errors = validationResult(req);
 
-            var employee = new Employee({
-                first_name: req.body.first_name.trim(),
-                last_name: req.body.last_name.trim(),
-                age: req.body.age.trim(),
-                company: req.body.company.trim()
-            });
+            var employee = new Employee(req.body.first_name,
+                req.body.last_name,
+                req.body.age,
+                req.body.company
+            );
             var msg = '';
             var err = null;
-            if (!errors.isEmpty()) {
+            if (errors.array().length !== 0) {
                 err = errors.array();
             } else {
                 employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((error, result) => {
@@ -180,7 +174,6 @@ exports.updateAnEmployee = [
                 }
             });
         } else {
-            req.session.fromUrl = req.path;
             res.redirect('/login');
         }
     }

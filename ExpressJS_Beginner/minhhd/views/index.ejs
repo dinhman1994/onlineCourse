@@ -4,34 +4,33 @@
 <head>
   <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
-  <style>
-    form:first-child {
-      margin-right: 5px;
-    }
-    form a {
-      text-decoration: underline;
-    }
-
-    form a:hover {
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
   <% if (user) { %>
-   <h1><%= msg %> </h1>
-   <a href="/logout">Log out</a>
+  <h1><%= msg %> </h1>
+  <a href="/logout">Log out</a>
   <% } %>
   <h1>List of <%= obj %></h1>
   <h2>Total employees: <%= totalEmployees %></h2>
   <table>
     <tr>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Age</td>
-    <th>Company</th>
-    <th></th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Age</td>
+      <th>Company</th>
+      <th></th>
     </tr>
     <% for( let index = 0; index < employees.length; index++ ) { %>
     <tr>
@@ -50,18 +49,19 @@
       <td style="display: flex;">
         <form method="post" action="/delete">
           <input type="hidden" name="id" value="<%= employees[index]._id %> " />
-          <a onclick="this.parentNode.submit();">Delete</a>
+          <a onclick="this.parentNode.submit();" href="#">Delete</a>
         </form>
+        |
         <form method="post" action="/edit">
           <input type="hidden" name="id" value="<%= employees[index]._id %> " />
-          <a onclick="this.parentNode.submit();">Edit</a>
+          <a onclick="this.parentNode.submit();" href="#">Edit</a>
         </form>
       </td>
     </tr>
     <% } %>
   </table>
   <a href="add-employee">Add employee hereeeee!</a>
-  
+
 </body>
 
 </html>

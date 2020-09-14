@@ -12,8 +12,7 @@ exports.login = [
 
     body('username').isLength({ min: 1, max: 20 }).trim().withMessage('Username can not be empty or more than 20 characters.')
         .isAlphanumeric().withMessage('Username has non-alphanumeric characters'),
-    body('password').isLength({ min: 8, max: 60 }).trim().withMessage('Password must be longer than 8 or shorter than 72 characters')
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password is invalid!'),
+    body('password').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
 
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape(),
@@ -76,10 +75,8 @@ exports.register = [
 
     body('username').isLength({ min: 1, max: 20 }).trim().withMessage('Username can not be empty or more than 20 characters.')
         .isAlphanumeric().withMessage('Username has non-alphanumeric characters.'),
-    body('password').isLength({ min: 8, max: 60 }).trim().withMessage('Password must be longer than 8 or shorter than 72 characters.')
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must contain alphabet and number.'),
-    body('repass').isLength({ min: 8, max: 60 }).trim().withMessage('Re-Password must be longer than 8 or shorter than 72 characters.')
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Re-Password must contain alphabet and number.'),
+    body('password').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
+    body('repass').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Re-Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
 
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape(),
@@ -95,9 +92,9 @@ exports.register = [
         hashedPass = bcrypt.hashSync(password, salt);
 
         var user = new User(req.body.username, hashedPass);
-
+        var msg = '';
         if (errors.array().length !== 0) {
-            var msg = '';
+            
             if (repass !== password) {
                 msg = 'Re-password does not match!';
             }
@@ -118,7 +115,6 @@ exports.register = [
                             }
                         });
                     } else {
-                        console.log('exist');
                         res.render('register', { msg: 'Username already exists!' });
                         Promise.reject(`${user.username} exists!`);
                     }
@@ -128,6 +124,12 @@ exports.register = [
     }
 ];
 
+/**
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {import('express-validator/src/base').Middleware} next 
+ */
 exports.logout = (req, res, next) => {
     if (req.session.user) {
         req.session.user = null;

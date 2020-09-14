@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
-    <h1><%= msg %> </h1>
+    <% if (typeof(msg) != 'undefined' && msg !== '') { %>
+        <h1><%= msg %></h1>
+    <% } %>
     <form action="/update" method="post">
         <table>
             <tr>
@@ -26,7 +30,7 @@
                 <td>
                     <select name="company" id="">
                         <% companies.forEach(company => { %>
-                         <option value="<%= company.name %> "><%= company.name %> </option>
+                        <option value="<%= company.name %> "><%= company.name %> </option>
                         <% }) %>
                     </select>
                 </td>
@@ -40,12 +44,13 @@
     </form>
     <br>
     <ul>
-        <% if (errors) { %>
-            <% errors.forEach(error => { %>
-             <li><%= error.msg %> </li>
-            <% }) %>
+        <% if (typeof(errors) != 'undefined' && errors !== null) { %>
+        <% errors.forEach(error => { %>
+        <li><%= error.msg %> </li>
+        <% }) %>
         <% } %>
     </ul>
     <a href="/">Back to home page</a>
 </body>
+
 </html>

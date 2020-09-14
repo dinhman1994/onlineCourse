@@ -8,7 +8,10 @@
 </head>
 
 <body>
-    <h1><%= msg %></h1>
+    <% if (typeof(msg) != 'undefined' && msg !== '') { %>
+        <h1><%= msg %></h1>
+    <% } %>
+    
     <form action="/add-employee" method="post">
         <table>
             <tr>
@@ -41,7 +44,7 @@
     </form>
     <br>
     <ul>
-        <% if (errors) { %>
+        <% if (typeof(errors) != 'undefined' && errors !== null)) { %>
             <% errors.forEach(error => { %>
              <li><%= error.msg %> </li>
             <% }) %>
