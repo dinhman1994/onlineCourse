@@ -37,17 +37,17 @@ exports.addEmployee = [
                 if (errors.array().length !== 0) {
                     err = errors.array();
                     res.render('add-employee', { errors: err, companies: companies });
-                } else {
-                    employeeModel.create(employee, (error, result) => {
-                        if (error) {
-                            throw error;
-                        } else {
-                            console.log(`Added ${employee.first_name}!`);
-                            msg = `Added ${employee.first_name}`;
-                            res.render('add-employee', { msg: msg, companies: companies });
-                        }
-                    });
                 }
+                employeeModel.create(employee, (error, result) => {
+                    if (error) {
+                        throw error;
+                    } else {
+                        console.log(`Added ${employee.first_name}!`);
+                        msg = `Added ${employee.first_name}`;
+                        res.render('add-employee', { msg: msg, companies: companies });
+                    }
+                });
+
             });
         } else {
             res.redirect('/login');
@@ -79,7 +79,8 @@ exports.getEmployees = (req, res, next) => {
             throw err;
         } else {
             var username = req.session.user;
-            res.render('index', {title: 'Hello', employees: results.employees,
+            res.render('index', {
+                title: 'Hello', employees: results.employees,
                 totalEmployees: results.totalEmployees, msg: `Welcome, ${username}`
             });
         }
@@ -163,18 +164,18 @@ exports.updateAnEmployee = [
                     if (errors.array().length !== 0) {
                         err = errors.array();
                         res.render('edit-employee', { companies: results.companies, employee: results.employee, errors: err });
-                    } else {
-                        employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((error, result) => {
-                            if (error) {
-                                throw error;
-                            } else {
-                                console.log(`Updated ${employee.first_name}`);
-                                msg = `Updated ${employee.first_name}`;
-                                res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee});
-                            }
-                        });
                     }
-                    
+                    employeeModel.findByIdAndUpdate({ _id: id }, employee).exec((error, result) => {
+                        if (error) {
+                            throw error;
+                        } else {
+                            console.log(`Updated ${employee.first_name}`);
+                            msg = `Updated ${employee.first_name}`;
+                            res.render('edit-employee', { msg: msg, companies: results.companies, employee: results.employee });
+                        }
+                    });
+
+
                 }
             });
         } else {
