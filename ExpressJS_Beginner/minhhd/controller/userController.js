@@ -70,8 +70,8 @@ exports.register = [
         .isAlphanumeric().withMessage('Username has non-alphanumeric characters.'),
     body('password').isLength({ min: 8, max: 60 }).trim().withMessage('Password must be longer than 8 or shorter than 72 characters.')
         .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must contain alphabet and number.'),
-    body('repass').isLength({ min: 8, max: 60 }).trim().withMessage('Password must be longer than 8 or shorter than 72 characters.')
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must contain alphabet and number.'),
+    body('repass').isLength({ min: 8, max: 60 }).trim().withMessage('Re-Password must be longer than 8 or shorter than 72 characters.')
+        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Re-Password must contain alphabet and number.'),
 
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape(),
