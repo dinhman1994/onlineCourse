@@ -90,10 +90,15 @@ exports.register = [
 
 
         var msg = '';
+        if (repass !== password) {
+            msg = 'Re-password does not match!';
+            res.render('register', {
+                errors: errors.array(),
+                msg: msg
+            });
+        }
         if (errors.array().length !== 0) {
-            if (repass !== password) {
-                msg = 'Re-password does not match!';
-            }
+
             res.render('register', {
                 errors: errors.array(),
                 msg: msg
@@ -134,3 +139,68 @@ function encodePassword(password) {
     var salt = bcrypt.genSaltSync();
     return bcrypt.hashSync(password, salt);
 }
+
+exports.renderChangePassword = async (req, res, next) => {
+    if (!req.session.user) {
+        res.redirect('/login');
+    } else {
+        let user = await userModel.findOne({ username: req.session.user }).exec();
+        res.render('change-password', { user: user });
+    }
+}
+
+exports.changePassword = [
+    ...loginValidator,
+
+    body('repass').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g')
+        .withMessage('Re-Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
+
+    sanitizeBody('repass').escape(),
+
+    async (req, res, next) => {
+        const errors = validationResult(req);
+
+        var password = req.body.password;
+        var repass = req.body.repass;
+        var username = req.session.user;
+
+        var msg = '';
+
+        let existedUser = await userModel.findOne({ username: req.session.user }).exec();
+
+        if (repass !== password) {
+            msg = 'Re-password does not match!';
+            res.render('change-password', {
+                errors: errors.array(),
+                msg: msg,
+                user: existedUser
+            });
+        }
+        if (errors.array().length !== 0) {
+
+            res.render('change-password', {
+                errors: errors.array(),
+                msg: msg,
+                user: existedUser
+            });
+        }
+
+        let user = new User(req.body.username, encodePassword(password));
+
+        userModel
+            .findOneAndUpdate({ username: username }, user)
+            .exec((err, result) => {
+                if (err) {
+                    throw err;
+                }
+
+                console.log(`${user.username}changed password successfully`);
+                msg = 'Password changed successfully';
+                res.render('change-password', {
+                    msg: msg,
+                    user: user
+                });
+
+            })
+    }
+]

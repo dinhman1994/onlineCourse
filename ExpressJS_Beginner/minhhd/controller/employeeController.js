@@ -6,8 +6,6 @@ const companyModel = Company.CompanyModel;
 const { body, validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
-const async = require('async');
-
 var employeeValidator = [
     body('first_name')
         .isLength({ min: 1, max: 100 })

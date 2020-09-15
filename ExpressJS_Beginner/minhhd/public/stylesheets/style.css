@@ -6,6 +6,10 @@ a {
   color: #00B7FF;
 }
 
+aside{
+  display: inline-block;
+}
+
 nav {
   margin-bottom: 50px;
 }
@@ -14,9 +18,11 @@ nav h1 {
   color: white;
 }
 
+main{
+  width: 100%;
+}
 
 section {
-  width: 70%;
   margin: 0 auto;
 }
 
@@ -24,6 +30,7 @@ section h1 {
   width: max-content;
   margin: 50px auto;
 }
+
 
 .form-container {
   width: 50%;
@@ -52,6 +59,10 @@ section h1 {
 
 .redirect-container a{
   text-decoration: underline ;
+}
+
+.row {
+  background-color: white;
 }
 
 #navbarText {

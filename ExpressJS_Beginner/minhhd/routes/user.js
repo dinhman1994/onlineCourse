@@ -8,6 +8,9 @@ router.post('/login', userController.login);
 router.get('/register', userController.renderRegister);
 router.post('/register', userController.register);
 
+router.get('/change-password', userController.renderChangePassword);
+router.post('/change-password', userController.changePassword);
+
 router.get('/logout', userController.logout);
 
 module.exports = router;
