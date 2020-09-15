@@ -1,7 +1,9 @@
-div {
+.footer-container {
     background-color: #343a40;
     padding: 20px;
-    margin-top: 50px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }
 
 p {
