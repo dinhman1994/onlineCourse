@@ -1,0 +1,61 @@
+doctype html
+head
+  title Index
+  meta(charset='utf-8')
+  style(type='text/css').
+    h1{
+    font-family: "Avant Garde", Avantgarde, "Century Gothic", CenturyGothic, "AppleGothic", sans-serif;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 70px;
+    height: 108px;
+    padding-top: 40px;
+    color: #FFCC33;
+    letter-spacing: .15em;
+    text-shadow: 1px -1px 0 #767676, -1px 2px 1px #737272, -2px 4px 1px #767474, -3px 6px 1px #787777, -4px 8px 1px #7b7a7a, -5px 10px 1px #7f7d7d, -6px 12px 1px #828181, -7px 14px 1px #868585, -8px 16px 1px #8b8a89, -9px 18px 1px #8f8e8d, -10px 20px 1px #949392, -11px 22px 1px #999897;
+    }
+    .all{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+    .login{
+    position: relative;
+    font-size: 50px;
+    color: red;
+    border-radius: 100px;
+    width: 200px;
+    height: 70px;
+    width: 260px;
+    border-radius: 50px;
+    }
+    .signup{
+    position: relative;
+    font-size: 50px;
+    color: red;
+    border-radius: 100px;
+    width: 200px;
+    height: 70px;
+    width: 260px;
+    border-radius: 50px;
+    }
+    .login:hover {
+    font-weight: 700;
+    letter-spacing: 2px;
+    width: 300px;
+    text-decoration: underline;
+    }
+    .signup:hover {
+    font-weight: 700;
+    letter-spacing: 2px;
+    width: 300px;
+    text-decoration: underline;
+    }
+h1 WELCOME TO BEBE
+br
+.all
+  form(action='/login')
+    button.login(name='id') LOGIN
+  br
+  form(action='/signup')
+    button.signup(name='id') SIGNUP

@@ -1,0 +1,64 @@
+doctype html
+head
+  title
+  meta(charset='utf-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1')
+  link(rel='stylesheet', href='https://pro.fontawesome.com/releases/v5.10.0/css/all.css', integrity='sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p', crossorigin='anonymous')
+  link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css', integrity='sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z', crossorigin='anonymous')
+  link(rel='stylesheet', type='text/css', href='/stylesheets/profile.css')
+  // JS, Popper.js, and jQuery
+  script(src='https://code.jquery.com/jquery-3.5.1.slim.min.js', integrity='sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj', crossorigin='anonymous')
+  script(src='https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js', integrity='sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN', crossorigin='anonymous')
+  script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js', integrity='sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV', crossorigin='anonymous')
+// Inline form
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  a.navbar-brand(href='#')
+  button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+    span.navbar-toggler-icon
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link(href='/user')
+          | Home 
+          span.sr-only (current)
+      li.nav-item.active
+        a.nav-link(href='/user/profile') Profile
+      li.nav-item
+        a.nav-link(href='/user/image') Image
+      li.nav-item.dropdown
+        a#navbarDropdown.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+          | Options
+        .dropdown-menu(aria-labelledby='navbarDropdown')
+          form(action='/user', method='POST')
+            button Log Out
+          a.dropdown-item(href='/signup') Sign Up
+    form.form-inline.my-2.my-lg-0
+      input.form-control.mr-sm-2(type='search', placeholder='Search', aria-label='Search')
+      button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Search
+.container
+  .left-content
+    img(src='/'+user.avatar)
+  .right-content
+    span.say-hi HELLO
+    h2.my-name
+      | I&apos;m 
+      span 
+    span.my-facebook
+    .details
+      .labels
+        p Name
+        p Birthday
+        p Username
+      .infor
+        p #{user.name}
+        p #{date.date_of_birth} 
+        p #{user.userName}
+  .bottom-content
+    a(href='')
+      i.fab.fa-facebook
+    a(href='')
+      i.fab.fa-instagram
+    a(href='')
+      i.fas.fa-envelope
+    a(href='')
+      i.fas.fa-phone
