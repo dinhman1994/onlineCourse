@@ -9,11 +9,23 @@ const { sanitizeBody } = require('express-validator/filter');
 const async = require('async');
 
 var employeeValidator = [
-    body('first_name').isLength({ min: 1, max: 100 }).trim().withMessage('First name cannot be string or longer than 100 characters.')
-        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
-    body('last_name').isLength({ min: 1, max: 100 }).trim().withMessage('Last name cannot be string or longer than 100 characters.')
+    body('first_name')
+        .isLength({ min: 1, max: 100 })
+        .trim()
+        .withMessage('First name cannot be string or longer than 100 characters.')
+        .isAlphanumeric()
+        .withMessage('First name has non-alphanumeric characters.'),
+
+    body('last_name')
+        .isLength({ min: 1, max: 100 })
+        .trim()
+        .withMessage('Last name cannot be string or longer than 100 characters.')
         .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
-    body('age').isInt({ min: 18, max: 60 }).trim().withMessage('Age can not be greater than 60 or less than 18 and can not be decimal.'),
+
+    body('age')
+        .isInt({ min: 18, max: 60 })
+        .trim()
+        .withMessage('Age can not be greater than 60 or less than 18 and can not be decimal.'),
 
 
     sanitizeBody('first_name').escape(),
@@ -41,7 +53,10 @@ exports.addEmployee = [
             let companies = await companyModel.find().exec();
             if (errors.array().length !== 0) {
                 err = errors.array();
-                res.render('add-employee', { errors: err, companies: companies });
+                res.render('add-employee', {
+                    errors: err,
+                    companies: companies
+                });
             }
 
             employeeModel.create(employee, (error, result) => {
@@ -50,7 +65,10 @@ exports.addEmployee = [
                 } else {
                     console.log(`Added ${employee.first_name}!`);
                     msg = `Added ${employee.first_name}`;
-                    res.render('add-employee', { msg: msg, companies: companies });
+                    res.render('add-employee', {
+                        msg: msg,
+                        companies: companies
+                    });
                 }
             });
 

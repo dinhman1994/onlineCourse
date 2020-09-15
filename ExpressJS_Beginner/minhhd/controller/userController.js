@@ -14,7 +14,9 @@ var loginValidator = [
         trim().
         withMessage('Username can not be empty or more than 20 characters.')
         .isAlphanumeric().withMessage('Username has non-alphanumeric characters'),
-    body('password').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g').withMessage('Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
+    body('password')
+        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g')
+        .withMessage('Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
 
     sanitizeBody('username').escape(),
     sanitizeBody('password').escape()];
@@ -42,15 +44,14 @@ exports.login = [
 
         req.session.user = req.body.username;
         res.locals.user = req.body.username;
-        async.parallel({
-            employees: (callback) => {
-                employeeModel.find().exec(callback);
-            },
-            totalEmployees: (callback) => {
-                employeeModel.countDocuments().exec(callback);
-            }
-        }, function (error, result) {
-            res.render('index', { title: 'Hello', msg: `Welcome, ${req.body.username}`, totalEmployees: result.totalEmployees, employees: result.employees });
+        let employees = await employeeModel.findOne().exec();
+        let totalEmployees = await employeeModel.countDocuments().exec(callback);
+
+        res.render('index', {
+            title: 'Hello',
+            msg: `Welcome, ${req.body.username}`,
+            totalEmployees: totalEmployees,
+            employees: employees
         });
 
     }
@@ -87,13 +88,16 @@ exports.register = [
         var password = req.body.password;
         var repass = req.body.repass;
 
-        
+
         var msg = '';
         if (errors.array().length !== 0) {
             if (repass !== password) {
                 msg = 'Re-password does not match!';
             }
-            res.render('register', { errors: errors.array(), msg: msg });
+            res.render('register', {
+                errors: errors.array(),
+                msg: msg
+            });
         }
 
         let user = new User(req.body.username, encodePassword(password));
@@ -111,7 +115,7 @@ exports.register = [
             } else {
                 console.log(`Added user ${user.username}`);
                 msg = 'Registered successfully! Please login!';
-                res.render('login', { msg:  msg});
+                res.render('login', { msg: msg });
             }
         });
     }
