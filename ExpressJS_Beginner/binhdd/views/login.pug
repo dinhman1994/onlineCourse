@@ -297,6 +297,11 @@ head
     background: #e9e5d5;
     }
 #fullpage
+  if errors
+    each error in errors
+      .alert
+        span.closebtn(onclick="this.parentElement.style.display='none';") &times;
+        |   #{error.message}
   .section
     .content LOGIN 
     form.login(action='/login', method='POST')
@@ -305,7 +310,7 @@ head
         input#userName(type='text', name='userName')
         br
         label(for='password') Password: 
-        input#password(type='text', name='password')
+        input#password(type='password', name='password')
         br
         button.buttonLogin LOGIN
     br
@@ -317,12 +322,4 @@ head
     br
     form.login(action='/', method='GET')
       button.buttonLogin GO BACK
-    .time-circle
-      .sun
-      .moon
-      .stars
-      .water
-    #intro-text
-      h1(href='#') Change Theme
-    #switch
-      #circle
+    

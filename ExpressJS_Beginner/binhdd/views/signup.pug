@@ -298,23 +298,30 @@ head
     }
 #fullpage
   if errors
+    each error in errors
+      .alert
+        span.closebtn(onclick="this.parentElement.style.display='none';") &times;
+        |   #{error.message}
   .section
-    .content RANK POST
+    .content SIGN UP 
     form.login(action='/signup', method='POST', enctype='multipart/form-data')
       .header
-        label(for='name') Name: 
-        input#name.form-control(type='text', name='name')
         label(for='userName') UserName: 
-        input#name(type='text', name='userName')
+        input#userName(type='text', name='userName')
         br
         label(for='password') Password: 
         input#password(type='text', name='password')
-        label(for='date_of_birth') Date_of_birth: 
-        input#name.form-control(type='date', name='date_of_birth')
-        label(for='avatar') Avatar
-        input#avatar.form-control-file(type='file', name='avatar')
         br
-        button.buttonLogin SIGNUP
+        label(for='name') Name: 
+        input#name.form-control(type='text', name='name')
+        br
+        label(for='date_of_birth') Birthday
+        input#date_of_birth(type='date', name='date_of_birth')
+        br
+        label(for='avatar') Avatar
+        input#avatar(type='file', name='avatar')
+        br
+        button.buttonLogin SIGN UP
     br
     br
     br
@@ -324,12 +331,12 @@ head
     br
     form.login(action='/', method='GET')
       button.buttonLogin GO BACK
-    .time-circle
-      .sun
-      .moon
-      .stars
-      .water
-    #intro-text
-      h1(href='#') Change Theme
-    #switch
-      #circle
+    
+   
+
+
+
+
+
+
+

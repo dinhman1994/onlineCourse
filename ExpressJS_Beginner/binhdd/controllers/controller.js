@@ -2,10 +2,14 @@ const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 const bcrypt = require('bcrypt');
 var async = require('async');
+var multer  = require('multer');
+
 
 var User = require('../models/user');
 var History = require('../models/history');
 var Image = require('../models/image');
+
+var upload = multer({ dest: './public/images/' });
 
 function userCreate(name, age, date_of_birth, userName, password,avatar,cb) {
   userdetail = {name:name , age: age , userName: userName, password: password };
@@ -93,15 +97,18 @@ exports.checkLogin = [
     (req, res, next) => {
 
         // Extract the validation errors from a request .
-        const errors = validationResult(req);
+        const validate = validationResult(req);
+        var errors = [];
+        for(err of validate.array()){
+          errors.push({message:err.msg});
+        }
 
     // Create a genre object with escaped and trimmed data (and the old id!)
      
 
-        if (!errors.isEmpty()) {
+        if (errors.length!=0) {
             // There are errors. Render the form again with sanitized values and error messages.
-            console.log('Invalid Value');
-            res.render('login', { title: 'Update Login', errors: errors.array()});
+            next(errors);
         return;
         }
         else {
@@ -115,8 +122,8 @@ exports.checkLogin = [
                 if(results.length===0)
                 {
                     var err = new Error('User not found');
-                    err.status =401;
-                    next(err);
+                    errors.push(err);
+                    next(errors);
                 }
                 else{
                     let checkPass = bcrypt.hashSync(results[0].password, bcrypt.genSaltSync(10), null);
@@ -124,43 +131,32 @@ exports.checkLogin = [
                     bcrypt.compare(req.body.password, checkPass , function (err, result) {
                         if(result===false){
                             err = new Error('Wrong password');
-                            next(err);
+                            errors.push(err);
+                            next(errors);
                         }
                         else{
                             req.session.userId = results[0].id;
-                            err = new Error();
-                            next(err);
+                            next(errors);
                         }
                     });       
                 }
               }
-            });
-		    	// if(results.length===0){
-		    	// 	console.log("UNIQUE");
-       //              console.log(req.body.password);
-       //              var createHash = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(10), null);
-       //              console.log(createHash);
-       //              var err = new Error('User not found');
-       //              err.status =401;
-       //              next(err);
-		    	// }
-       //          else{
-       //              bcrypt.compare(password, user.password, function (err, result) {
-       //                  if (result === true) {
-       //                    next(null, user);
-       //                  } else {
-       //                    next();
-       //                  }
-       //              });                        
-       //          } 
-		     //  }; 
-            // console.log(results);
-            // var err = new Error();
-            // next(err);
-		    
-		}
+            }); 
+		    }
     }
 ];
+
+exports.doneLogin = function(errors,req,res,next){
+    console.log("Finnal step");
+    if(errors.length!=0){
+      res.render('login',{errors:errors});
+    }
+    else{
+      res.redirect('/user');
+    }
+}
+
+
 
 exports.postLogout = function(req,res){
     req.session.destroy(function(err) {
@@ -177,54 +173,55 @@ exports.createUser = [
   body('userName', 'UserName name required at least 2 characters').isLength({ min: 2 }).trim(),
   body('password', 'Password required at least 6 characters').isLength({ min: 6 }).trim(),
   body('name', 'Name required at least 2 characters').isLength({ min: 2 }).trim(),
+  body('date_of_birth', 'Date_of_birth is required').isLength({ min: 2 }).trim(),
   (req,res,next) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()){
-      console.log(errors.array());
-      next(errors.array());
+
+    upload.single('avatar');
+   
+    const validate = validationResult(req);
+    var errors = [];
+    for(err of validate.array()){
+      errors.push({message:err.msg});
     }
+
+    if(errors.length>0){
+      next(errors);
+    }
+
     let obj = req.body;
-    obj.avatar = req.file.path.split('/').slice(1).join('/');
+    if(req.file){
+      obj.avatar = req.file.path.split('/').slice(1).join('/');
+    }
+    else{
+      obj.avatar = "";
+    }
+  
     User.create(obj, function (err, user) {
       if (err) {
-        console.log("Error");
-        console.log(err);
-        res.locals.test = "test";
-        var err = new Pcss;
-        next(err);
+        errors.push(err);
+        next(errors);
       }
       else{
         console.log(user);
         req.session.userId = user.id;
-        var err = new Error();
-        next(err);
+        next(errors);
       }
     });     
   } 
 ]
 
 
-exports.doneSignup = function(err,req,res,next){
+exports.doneSignup = function(errors,req,res,next){
   console.log("Finnal step signup");
-  if(err.message!=""){
-    console.log(err.message);
-    let errors = err.array();
-    res.render('signup',{errors: err.array()});
+  if(errors.length>0){
+    res.render('signup',{errors: errors});
   }
   else{
     res.redirect('/user');
   }
 }
 
-exports.doneLogin = function(err,req,res,next){
-    console.log("Finnal step");
-    if(err.message!=""){
-        res.redirect('/login');
-    }
-    else {
-        res.redirect('/user');
-    }
-}
+
 
 exports.listUsers = function(req,res) {
 
