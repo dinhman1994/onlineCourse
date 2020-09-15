@@ -92,7 +92,7 @@ exports.displayForm = (req, res, next) => {
 exports.getEmployees = async (req, res, next) => {
 
     let employees = await employeeModel.findOne().exec();
-    let totalEmployees = await employeeModel.countDocuments().exec(callback);
+    let totalEmployees = await employeeModel.countDocuments().exec();
 
     var username = req.session.user;
     res.render('index', {
