@@ -44,8 +44,8 @@ exports.login = [
 
         req.session.user = req.body.username;
         res.locals.user = req.body.username;
-        let employees = await employeeModel.findOne().exec();
-        let totalEmployees = await employeeModel.countDocuments().exec(callback);
+        let employees = await employeeModel.find().exec();
+        let totalEmployees = await employeeModel.countDocuments().exec();
 
         res.render('index', {
             title: 'Hello',
