@@ -53,3 +53,7 @@ section h1 {
 .redirect-container a{
   text-decoration: underline ;
 }
+
+#navbarText {
+  margin: 0;
+}

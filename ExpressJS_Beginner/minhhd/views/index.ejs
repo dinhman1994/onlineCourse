@@ -19,32 +19,9 @@
 
 <body>
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
-      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <h1>EMS</h1>
-    <div class="collapse navbar-collapse" id="navbarText">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/add-employee">Add employee</a>
-        </li>
-      </ul>
-      <span class="navbar-text">
-        <% if (user) { %>
-        <p><u><%= msg %></u></p>
-        <a href="/logout">Log out</a>
-        <% } else {%>
-        <a href="/login">Log in</a>
-        <a href="/register">Register</a>
-        <% } %>
-      </span>
-    </div>
-  </nav>
+  <header>
+    <%- include('header', {msg: msg}) %>
+  </header>
 
   <section>
     <h2>Total employees: <%= totalEmployees %></h2>
@@ -90,6 +67,9 @@
       <% } %>
     </table>
   </section>
+  <footer>
+    <%- include('footer') %>
+  </footer>
 </body>
 
 </html>
