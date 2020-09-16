@@ -47,15 +47,16 @@
                     </table>
                 </div>
             </form>
-            <% if (typeof(errors) != 'undefined') { %>
-            <% errors.forEach(error => { %>
-            <p><%= error.msg %> </p>
-            <% }) %>
-            <% } %>
-            <% if (typeof(msg) != 'undefined') { %>
-            <p> <%= msg %> </p>
-            <% } %>
+
             <div class="redirect-container">
+                <% if (typeof(errors) != 'undefined') { %>
+                <% errors.forEach(error => { %>
+                <p><%= error.msg %> </p>
+                <% }) %>
+                <% } %>
+                <% if (typeof(msg) != 'undefined') { %>
+                <p> <%= msg %> </p>
+                <% } %>
                 <p>Don't have an account? <a href="/register">Register now!</a></p>
                 <a href="/">Back to Home page</a>
             </div>

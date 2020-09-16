@@ -51,15 +51,16 @@
                     </tr>
                 </table>
             </form>
-            <% if (typeof(errors) != 'undefined') { %>
-            <% errors.forEach(error => { %>
-            <p><%= error.msg %> </p>
-            <% }) %>
-            <% } %>
-            <% if (typeof(msg) != "undefined") { %>
-            <p><%= msg %> </p>
-            <% } %>
+
             <div class="redirect-container">
+                <% if (typeof(errors) != 'undefined') { %>
+                <% errors.forEach(error => { %>
+                <p><%= error.msg %> </p>
+                <% }) %>
+                <% } %>
+                <% if (typeof(msg) != "undefined") { %>
+                <p><%= msg %> </p>
+                <% } %>
                 <p>Already have an account? Login <a href="/login">here</a></p>
                 <a href="/">Back to Home page</a>
             </div>

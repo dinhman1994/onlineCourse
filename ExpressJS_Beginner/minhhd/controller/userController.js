@@ -2,27 +2,15 @@ const User = require('../model/user');
 const userModel = User.UserModel;
 const Employee = require('../model/employee');
 const employeeModel = Employee.EmployeeModel;
+const userValidator = require('../validator/userValidator');
+const { validationResult } = require('express-validator/check');
 
-const async = require('async');
-const { body, validationResult } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
 const bcrypt = require('bcryptjs');
 
 
-var loginValidator = [
-    body('username').isLength({ min: 1, max: 20 }).
-        trim().
-        withMessage('Username can not be empty or more than 20 characters.')
-        .isAlphanumeric().withMessage('Username has non-alphanumeric characters'),
-    body('password')
-        .matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g')
-        .withMessage('Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
-
-    sanitizeBody('username').escape(),
-    sanitizeBody('password').escape()];
 
 exports.login = [
-    ...loginValidator,
+    userValidator.loginValidator,
 
     async (req, res, next) => {
 
@@ -75,12 +63,9 @@ exports.renderRegister = (req, res, next) => {
 
 exports.register = [
 
-    ...loginValidator,
+    userValidator.registerValidator,
 
-    body('repass').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g')
-        .withMessage('Re-Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
 
-    sanitizeBody('repass').escape(),
 
     async (req, res, next) => {
         const errors = validationResult(req);
@@ -112,27 +97,23 @@ exports.register = [
         if (existedUser) {
             res.render('register', { msg: 'Username already exists!' });
             Promise.reject(`${user.username} exists!`);
-        }
-
-        userModel.create(user, (err) => {
-            if (err) {
-                throw err;
-            } else {
+        } else {
+            userModel.create(user, (err) => {
+                if (err) {
+                    throw err;
+                }
                 console.log(`Added user ${user.username}`);
                 msg = 'Registered successfully! Please login!';
                 res.render('login', { msg: msg });
-            }
-        });
+            });
+        }
+
     }
 ];
 
 exports.logout = (req, res, next) => {
-    if (req.session.user) {
-        req.session.user = null;
-        res.redirect('/');
-    } else {
-        res.redirect('/');
-    }
+    req.session.user = null;
+    res.redirect('/');
 }
 
 function encodePassword(password) {
@@ -141,21 +122,15 @@ function encodePassword(password) {
 }
 
 exports.renderChangePassword = async (req, res, next) => {
-    if (!req.session.user) {
-        res.redirect('/login');
-    } else {
-        let user = await userModel.findOne({ username: req.session.user }).exec();
-        res.render('change-password', { user: user });
-    }
+
+    let user = await userModel.findOne({ username: req.session.user }).exec();
+    res.render('change-password', { user: user });
+
 }
 
 exports.changePassword = [
-    ...loginValidator,
 
-    body('repass').matches(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,72}$/, 'g')
-        .withMessage('Re-Password must be longer than 8 or shorter than 72 characters, and must contain number.'),
-
-    sanitizeBody('repass').escape(),
+    userValidator.registerValidator,
 
     async (req, res, next) => {
         const errors = validationResult(req);

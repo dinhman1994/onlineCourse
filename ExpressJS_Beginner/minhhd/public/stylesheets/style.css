@@ -58,6 +58,10 @@ section h1 {
   margin: auto;
 }
 
+.redirect-container p{
+  color: black;
+}
+
 .redirect-container a{
   text-decoration: underline ;
 }

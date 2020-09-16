@@ -52,14 +52,14 @@
           <%= employees[index].company %>
         </td>
         <td>
-          <form method="post" action="/delete" id="delete">
+          <form method="post" action="/employee/delete" id="delete">
             <input type="hidden" name="id" value="<%= employees[index]._id %> " />
             <a onclick="this.parentNode.submit();" href="#" data-toggle="modal" data-target="#exampleModalCenter"
               id="delete-link">Delete</a>
           </form>
         </td>
         <td>
-          <form method="post" action="/edit">
+          <form method="post" action="/employee/edit">
             <input type="hidden" name="id" value="<%= employees[index]._id %> " />
             <a onclick="this.parentNode.submit();" href="#">Edit</a>
           </form>
