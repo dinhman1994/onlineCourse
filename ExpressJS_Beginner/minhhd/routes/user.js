@@ -14,4 +14,6 @@ router.post('/change-password', userValidator.isLoggedIn, userController.changeP
 
 router.get('/logout', userValidator.isLoggedIn, userController.logout);
 
+router.get('/api/v1/user/:username', userValidator.isLoggedIn, userController.getUser);
+
 module.exports = router;

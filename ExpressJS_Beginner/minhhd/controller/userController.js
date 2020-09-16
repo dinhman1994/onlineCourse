@@ -178,4 +178,16 @@ exports.changePassword = [
 
             })
     }
-]
+];
+
+exports.getUser = (req, res, next) => {
+    let username = req.params.username;
+
+    userModel.findOne({ username: username }).then(user => {
+        if (user) {
+            return res.status(200).send(user);
+        } else {
+            next();
+        }
+    });
+};
