@@ -35,8 +35,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/company', companyRouter);
-app.use('/employee', employeeRouter)
+app.use('/companies', companyRouter);
+app.use('/employees', employeeRouter)
 app.use(userRouter);
 
 // setup mongoose connection

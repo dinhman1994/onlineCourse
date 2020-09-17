@@ -10,7 +10,7 @@ exports.addEmployee = [
     ...employeeValidator,
 
     async (req, res, next) => {
-        const errors = validationResult(req);
+        let errors = validationResult(req);
 
         let employee = new Employee(
             req.body.first_name,

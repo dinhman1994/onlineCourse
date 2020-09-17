@@ -55,14 +55,14 @@
         </td>
         <% if (user) { %>
         <td>
-          <form method="post" action="/employee/<%= employees[index]._id %>"
+          <form method="post" action="/employees/<%= employees[index]._id %>"
             enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="_method" value="DELETE" />
             <a onclick="this.parentNode.submit();" href="#">Delete</a>
           </form>
         </td>
         <td>
-          <form method="post" action="/employee/id/edit">
+          <form method="post" action="/employees/id/edit">
             <input type="hidden" name="id" value="<%= employees[index]._id %>">
             <a onclick="this.parentNode.submit();" href="#">Edit</a>
           </form>
