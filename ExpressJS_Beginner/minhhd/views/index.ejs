@@ -33,8 +33,10 @@
           <th>Last Name</th>
           <th>Age</th>
           <th>Company</th>
+          <% if (user) { %>
           <th></th>
           <th></th>
+          <% } %>
         </tr>
       </thead>
       <% for( let index = 0; index < employees.length; index++ ) { %>
@@ -51,19 +53,21 @@
         <td>
           <%= employees[index].company %>
         </td>
+        <% if (user) { %>
         <td>
-          <form method="post" action="/employee/delete" id="delete">
-            <input type="hidden" name="id" value="<%= employees[index]._id %> " />
-            <a onclick="this.parentNode.submit();" href="#" data-toggle="modal" data-target="#exampleModalCenter"
-              id="delete-link">Delete</a>
+          <form method="post" action="/employee/<%= employees[index]._id %>"
+            enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="_method" value="DELETE" />
+            <a onclick="this.parentNode.submit();" href="#">Delete</a>
           </form>
         </td>
         <td>
-          <form method="post" action="/employee/edit">
-            <input type="hidden" name="id" value="<%= employees[index]._id %> " />
+          <form method="post" action="/employee/id/edit">
+            <input type="hidden" name="id" value="<%= employees[index]._id %>">
             <a onclick="this.parentNode.submit();" href="#">Edit</a>
           </form>
         </td>
+        <% } %>
       </tr>
       <% } %>
     </table>
@@ -72,6 +76,7 @@
   <footer>
     <%- include('footer') %>
   </footer>
+
 </body>
 
 </html>

@@ -3,6 +3,7 @@ const employeeModel = Employee.EmployeeModel;
 const Company = require('../model/company');
 const companyModel = Company.CompanyModel;
 const employeeValidator = require('../validator/employeeValidator').employeeValidator;
+const { validationResult } = require('express-validator/check');
 
 exports.addEmployee = [
 
@@ -70,9 +71,9 @@ exports.getEmployees = async (req, res, next) => {
 
 exports.deleteAnEmployee = (req, res, next) => {
 
-    const id = req.body.id.trim();
+    const id = req.params.id;
     employeeModel.findOneAndDelete({ _id: id }).then((employee) => {
-        console.log(`Deleted ${employee.first_name}`);
+        console.log(`Deleted ${employee}`);
         res.redirect('/');
     }).catch(err => {
         throw err;
@@ -81,7 +82,7 @@ exports.deleteAnEmployee = (req, res, next) => {
 };
 
 exports.editAnEmployee = async (req, res, next) => {
-    const id = req.body.id.trim();
+    const id = req.body.id;
 
     let employee = await employeeModel.findOne({ _id: id }).exec();
     let companies = await companyModel.find().exec();
@@ -98,7 +99,7 @@ exports.updateAnEmployee = [
     ...employeeValidator,
 
     async (req, res, next) => {
-        const id = req.body.id.trim();
+        const id = req.params.id;
         const errors = validationResult(req);
 
         var employee = new Employee(

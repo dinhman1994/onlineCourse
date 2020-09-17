@@ -31,7 +31,7 @@
             <% if (typeof(msg) != 'undefined' && msg !== '') { %>
             <h3><%= msg %></h3>
             <% } %>
-            <form action="/employee/update" method="post">
+            <form action="/employee/<%= employee._id %>" method="post">
                 <table class="table">
                     <tr>
                         <td>First Name:</td>
@@ -63,7 +63,7 @@
                                 class="btn btn-primary">Update</button></td>
                     </tr>
                 </table>
-                <input type="hidden" name="id" value="<%= employee._id %> ">
+                <input type="hidden" name="_method" value="PUT">
             </form>
             <br>
             <ul>
