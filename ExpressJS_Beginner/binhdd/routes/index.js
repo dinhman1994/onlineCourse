@@ -10,10 +10,11 @@ router.get('/', controller.index);
 router.get('/login' , controller.login);
 router.get('/signup' , controller.signup);
 router.get('/listUsers',controller.listUsers);
+router.get('/checkUser',controller.checkUser);
 
 router.post('/login', controller.checkLogin, controller.doneLogin);
 router.post('/signup',
-	upload.single('avatar'),
+	controller.loadImage,
 	controller.createUser,
 	controller.doneSignup);
 

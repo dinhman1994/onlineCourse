@@ -2,6 +2,7 @@ doctype html
 head
   title Login
   meta(charset='utf-8')
+  link(rel='stylesheet', type='text/css', href='/stylesheets/signup.css')
   style(type='text/css').
     @import url(https://fonts.googleapis.com/css?family=Lato);
     .content {
@@ -301,7 +302,7 @@ head
     each error in errors
       .alert
         span.closebtn(onclick="this.parentElement.style.display='none';") &times;
-        |   #{error.message}
+        |   #{error.message}  
   .section
     .content SIGN UP 
     form.login(action='/signup', method='POST', enctype='multipart/form-data')

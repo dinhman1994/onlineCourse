@@ -2,14 +2,14 @@ const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 const bcrypt = require('bcrypt');
 var async = require('async');
-var multer  = require('multer');
+var multer = require('multer');
 
 
 var User = require('../models/user');
 var History = require('../models/history');
 var Image = require('../models/image');
 
-var upload = multer({ dest: './public/images/' });
+var upload = multer({ dest: './public/images/' }).single('avatar');
 
 function userCreate(name, age, date_of_birth, userName, password,avatar,cb) {
   userdetail = {name:name , age: age , userName: userName, password: password };
@@ -29,33 +29,6 @@ function userCreate(name, age, date_of_birth, userName, password,avatar,cb) {
   });
 }
 
-exports.userCreateDB = function(req,res,next) {
-    // async.series([
-    //     function(callback) {
-    //       userCreate('Tung', 25, '1993-03-15', 'Tungbg95', '25251325ce0',callback);
-    //     }],
-    //     // optional callback
-    //     (err, results)=>{
-    //       if (err) {
-    //           console.log('FINAL ERR: '+err);
-    //           next();
-    //       }
-    //       else {
-    //           console.log('Users: '+users);
-    //           next();
-    //       }
-    //       // All done, disconnect from database
-    //       next();
-    //     });
-
-    // obj = {name: 'Tung', age: 25, date_of_birth: '1993-03-15', userName: 'Tungbg95', password: '25251325ce0' };
-    // User.create(obj, function (err, small) {
-    //   if (err) return handleError(err);
-    //   // saved!
-      next();
-    // });
-}
-
 exports.index = function(req,res){
 	res.render('index');
 }
@@ -69,7 +42,6 @@ exports.signup = function(req,res){
 }
 
 exports.userHome = function(req,res){
-  console.log(res.locals.test);
 	res.render('user',{ user: res.locals.user });
 }
 
@@ -85,66 +57,75 @@ exports.getProfile = function(req,res){
 	res.render('profile',{ user: res.locals.user, date: res.locals.date_of_birth});
 }
 
+
 exports.checkLogin = [
    
-    // Validate that the name field is not empty.
-    body('userName', 'userName name required').isLength({ min: 1 }).trim(),
-    body('password', 'password name required').isLength({ min: 1 }).trim(), 
-    // Sanitize (escape) the name field.
-    sanitizeBody('email').escape(),
+  // Validate that the name field is not empty.
+  body('userName', 'userName name required').isLength({ min: 1 }).trim(),
+  body('password', 'password name required').isLength({ min: 1 }).trim(), 
+  // Sanitize (escape) the name field.
+  sanitizeBody('email').escape(),
 
-    // Process request after validation and sanitization.
-    (req, res, next) => {
-
-        // Extract the validation errors from a request .
-        const validate = validationResult(req);
-        var errors = [];
-        for(err of validate.array()){
-          errors.push({message:err.msg});
-        }
-
-    // Create a genre object with escaped and trimmed data (and the old id!)
-     
-
-        if (errors.length!=0) {
-            // There are errors. Render the form again with sanitized values and error messages.
-            next(errors);
-        return;
-        }
-        else {
-            // Data from form is valid. Update the record.
-           	
-        User.find({userName:req.body.userName})
-		    .populate('user')
-        .exec(function (err, results) {
-		      if (err) {return next(err)} 
-		      else {
-                if(results.length===0)
-                {
-                    var err = new Error('User not found');
-                    errors.push(err);
-                    next(errors);
-                }
-                else{
-                    let checkPass = bcrypt.hashSync(results[0].password, bcrypt.genSaltSync(10), null);
-                    console.log(checkPass);
-                    bcrypt.compare(req.body.password, checkPass , function (err, result) {
-                        if(result===false){
-                            err = new Error('Wrong password');
-                            errors.push(err);
-                            next(errors);
-                        }
-                        else{
-                            req.session.userId = results[0].id;
-                            next(errors);
-                        }
-                    });       
-                }
-              }
-            }); 
-		    }
+  // Process request after validation and sanitization.
+  (req, res, next) => {
+    const validate = validationResult(req);
+    var errors = [];
+    for(err of validate.array()){
+      errors.push({message:err.msg});
     }
+    if (errors.length!=0) {
+    // There are errors. Render the form again with sanitized values and error messages.
+      next(errors);
+      return;
+    }
+
+    async.waterfall([
+      (callback) => {
+        User.find({userName:req.body.userName})
+        .populate('user')
+        .exec((users,err)=>{
+          callback(users,err);
+        });  
+      },
+      (results,callback,err) => {
+        if(err){
+          errors.push(err);
+          next(errors);
+          return;
+        }
+        if(results.length===0){
+          var err = new Error('User not found');
+          errors.push(err);
+          next(errors);
+          return;
+        }
+        callback(null,results);
+      },
+      (results,callback,err) => {
+        let checkPass = bcrypt.hashSync(results[0].password, bcrypt.genSaltSync(10), null);
+        let user = results[0];
+        bcrypt.compare(req.body.password, checkPass, (err,result)=>{
+          console.log(user);
+          callback(result,user)
+        });
+      }
+      ],
+
+      (result,user,err) => {
+        if(result===false){
+            err = new Error('Wrong password');
+            errors.push(err);
+            next(errors);
+        }
+        else{
+            req.session.userId = user.id;
+            next(errors);
+        }        
+      }
+    );
+  }
 ];
+
 
 exports.doneLogin = function(errors,req,res,next){
     console.log("Finnal step");
@@ -159,15 +140,30 @@ exports.doneLogin = function(errors,req,res,next){
 
 
 exports.postLogout = function(req,res){
-    req.session.destroy(function(err) {
-      if(err) {
-        console.log(err);
-      } else {
-        console.log('Deleted');
-      }
-    });
-    res.redirect('/');
+  req.session.destroy(function(err) {
+    if(err) {
+      console.log(err);
+    } else {
+      console.log('Deleted');
+    }
+  });
+  res.redirect('/');
 }
+
+
+exports.loadImage = function(req,res,next){
+  upload(req, res, function (err) {
+    if (err instanceof multer.MulterError) {
+      console.log(err);
+      next();
+    } else if (err) {
+      console.log(err);
+      next();
+    }
+    next();
+  });
+}
+
 
 exports.createUser = [
   body('userName', 'UserName name required at least 2 characters').isLength({ min: 2 }).trim(),
@@ -175,8 +171,6 @@ exports.createUser = [
   body('name', 'Name required at least 2 characters').isLength({ min: 2 }).trim(),
   body('date_of_birth', 'Date_of_birth is required').isLength({ min: 2 }).trim(),
   (req,res,next) => {
-
-    upload.single('avatar');
    
     const validate = validationResult(req);
     var errors = [];
@@ -186,35 +180,38 @@ exports.createUser = [
 
     if(errors.length>0){
       next(errors);
-    }
-
-    let obj = req.body;
-    if(req.file){
-      obj.avatar = req.file.path.split('/').slice(1).join('/');
-    }
+      return;
+    } 
     else{
-      obj.avatar = "";
-    }
-  
-    User.create(obj, function (err, user) {
-      if (err) {
-        errors.push(err);
-        next(errors);
-      }
-      else{
-        console.log(user);
-        req.session.userId = user.id;
-        next(errors);
-      }
-    });     
-  } 
+        let obj = req.body;
+        if(req.file){
+          obj.avatar = req.file.path.split('/').slice(1).join('/');
+        }
+        else{
+          obj.avatar = "/images/avatar.jpg";
+        }
+      
+        User.create(obj, function (err, user) {
+          if (err) {
+            err.message = 'UserName already exited';
+            errors.push(err);
+            next(errors);
+          }
+          else{
+            console.log(user);
+            req.session.userId = user.id;
+            next(errors);
+          }
+        }); 
+    } 
+  }
 ]
 
 
 exports.doneSignup = function(errors,req,res,next){
   console.log("Finnal step signup");
   if(errors.length>0){
-    res.render('signup',{errors: errors});
+    res.render('signup',{errors:errors});
   }
   else{
     res.redirect('/user');
@@ -223,25 +220,16 @@ exports.doneSignup = function(errors,req,res,next){
 
 
 
-exports.listUsers = function(req,res) {
+exports.listUsers = async function(req,res) {
 
-  User.find({})
-    .populate('user')
-    .exec(function (err, list_users) {
-      console.log('Ok');
-      if (err) {
-        res.redirect('/');
-      } 
-      else {
-        console.log(list_users);
-        res.redirect('/');      
-      }
-    });
+  var results= await User.find({}).populate('user').exec();
+  console.log(results);
+  res.render('index');
 }
 
 
 exports.checkSession = function(req,res,next){
-  if(req.session.userId===""){
+  if(!req.session.userId){
     res.redirect('/');
   }
   else{
@@ -272,4 +260,20 @@ exports.getUser = function(req,res,next){
           }
     }
   });
+}
+
+exports.checser = async function(req,res){
+  var results = await User.find({fsafasfa : '1111'}).populate('user').exec();
+  console.log(results);
+  res.render('index');  
+}
+
+exports.checkUser = async function(req,res){
+  var user = await User.create({name: 'Binhbg14', age: 25, date_of_birth: '1993-03-15', userName: 'Binhbg14', password: '25251325ce0' });
+}
+
+
+exports.checUser = async function(req,res){
+  await User.deleteMany();
+  res.render('index');
 }
