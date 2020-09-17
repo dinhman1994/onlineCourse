@@ -82,7 +82,7 @@ exports.deleteAnEmployee = (req, res, next) => {
 };
 
 exports.editAnEmployee = async (req, res, next) => {
-    const id = req.body.id;
+    const id = req.params.id;
 
     let employee = await employeeModel.findOne({ _id: id }).exec();
     let companies = await companyModel.find().exec();

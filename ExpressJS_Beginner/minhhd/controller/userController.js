@@ -123,7 +123,9 @@ function encodePassword(password) {
 
 exports.renderChangePassword = async (req, res, next) => {
 
-    let user = await userModel.findOne({ username: req.session.user }).exec();
+    let user = await userModel
+        .findOne({ username: req.session.user })
+        .exec();
     res.render('change-password', { user: user });
 
 }
