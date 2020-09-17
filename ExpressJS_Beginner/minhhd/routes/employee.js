@@ -12,7 +12,7 @@ router.use(methodOverride(function (req, res) {
     }
 }));
 
-router.delete('/:id', employeeController.deleteAnEmployee);
+router.delete('/:id', userMiddleware.isLoggedIn, employeeController.deleteAnEmployee);
 
 router.get('/', userMiddleware.isLoggedIn, employeeController.getEmployees);
 router.put('/:id', userMiddleware.isLoggedIn, employeeController.updateAnEmployee);
