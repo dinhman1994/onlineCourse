@@ -4,40 +4,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        input {
-            background-color: blue;
-        }
-    </style>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
     <title>Document</title>
 </head>
 
 <body>
-    <h1><%= msg %> </h1>
-    <form action="/add-employee" method="post">
-        <table>
-            <tr>
-                <td>First Name:</td>
-                <td><input type="text" name="first_name" id=""></td>
-            </tr>
-            <tr>
-                <td>Last Name:</td>
-                <td><input type="text" name="last_name" id=""></td>
-            </tr>
-            <tr>
-                <td>Age:</td>
-                <td><input type="text" name="age" id=""></td>
-            </tr>
-            <tr>
-                <td>Company:</td>
-                <td><input type="text" name="company" id=""></td>
-            </tr>
-            <tr>
-                <td><input type="reset" value="Reset"></td>
-                <td><input type="submit" value="Add"></td>
-            </tr>
-        </table>
-    </form>
+
+    <header>
+        <%- include('header', {msg: ''}) %>
+    </header>
+
+    <section>
+        <h1>Add employee</h1>
+        <div class="form-container">
+            <form action="/employees/" method="post">
+                <% if (typeof(msg) !== 'undefined' && msg !== '') { %>
+                <h3><%= msg %></h3>
+                <% } %>
+                <table class="table">
+                    <tr>
+                        <td>First Name:</td>
+                        <td><input type="text" name="first_name" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>Last Name:</td>
+                        <td><input type="text" name="last_name" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>Age:</td>
+                        <td><input type="text" name="age" id=""></td>
+                    </tr>
+                    <tr>
+                        <td>Company:</td>
+                        <td>
+                            <select name="company" id="">
+                                <% if (typeof(companies) != 'undefined' && companies !== null) { %>
+                                <% companies.forEach(company => { %>
+                                <option value="<%= company.name %> "><%= company.name %> </option>
+                                <% }); %>
+                                <% } %>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><button type="reset" class="btn btn-secondary">Reset</button> <button type="submit"
+                                class="btn btn-primary">Add</button></td>
+                    </tr>
+                </table>
+            </form>
+            <br>
+            <ul>
+                <% if (typeof(errors) != 'undefined' && errors !== null) { %>
+                <% errors.forEach(error => { %>
+                <li><%= error.msg %> </li>
+                <% }); %>
+                <% } %>
+            </ul>
+            <a href="/">Back to Home page</a>
+        </div>
+    </section>
+    <footer>
+        <%- include('footer') %>
+    </footer>
 </body>
 
 </html>

@@ -1,84 +1,144 @@
 const Employee = require('../model/employee');
-const { isValidObjectId } = require('mongoose');
 const employeeModel = Employee.EmployeeModel;
+const Company = require('../model/company');
+const companyModel = Company.CompanyModel;
+const employeeValidator = require('../validator/employeeValidator').employeeValidator;
+const { validationResult } = require('express-validator/check');
 
-exports.addEmployee = (req, res, next) => {
-    var employee = new Employee({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        age: req.body.age,
-        company: req.body.company
-    });
-    var msg = '';
-    if ((employee.age < 18 || employee.age > 60)
-        && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
-        msg = 'Invalid input';
-    } else {
-        employeeModel.create(employee, (err, Employee) => {
-            if (err) {
-                throw err;
+exports.addEmployee = [
+
+    ...employeeValidator,
+
+    async (req, res, next) => {
+        let errors = validationResult(req);
+
+        let employee = new Employee(
+            req.body.first_name,
+            req.body.last_name,
+            req.body.age,
+            req.body.company
+        );
+        let msg = '';
+        let err = null;
+
+        let companies = await companyModel.find().exec();
+        if (errors.array().length !== 0) {
+            err = errors.array();
+            res.render('add-employee', {
+                errors: err,
+                companies: companies
+            });
+        }
+
+        employeeModel.create(employee, (error, result) => {
+            if (error) {
+                throw error;
             } else {
-                console.log(`Added ${employee.first_name}`);
+                console.log(`Added ${employee.first_name}!`);
+                msg = `Added ${employee.first_name}`;
+                res.render('add-employee', {
+                    msg: msg,
+                    companies: companies
+                });
             }
         });
-        msg = `Added ${employee.first_name}`;
+
+
     }
-
-    res.render('add-employee', { msg: msg });
-
-};
+];
 
 exports.displayForm = (req, res, next) => {
-    var msg = '';
-    res.render('add-employee', { msg: msg });
+
+    companyModel.find().then(companies => {
+        res.render('add-employee', { companies: companies });
+    });
+
 };
 
-exports.getEmployees = (req, res, next) => {
-    employeeModel.find().then(employees => {
-        res.render('index', { obj: 'Employees', title: 'Hello', employees: employees, msg: ''});
+exports.getEmployees = async (req, res, next) => {
+
+    let employees = await employeeModel.find().exec();
+    let totalEmployees = await employeeModel.countDocuments().exec();
+
+    var username = req.session.user;
+    res.render('index', {
+        title: 'Hello',
+        employees: employees,
+        totalEmployees: totalEmployees,
+        msg: `Welcome, ${username}`
     });
 };
 
 exports.deleteAnEmployee = (req, res, next) => {
-    const id = req.body.id.trim();
-    employeeModel.findOneAndDelete({ _id: id }).then(() => {
-        console.log(`Deleted id ${id}`);
+
+    const id = req.params.id;
+    employeeModel.findOneAndDelete({ _id: id }).then((employee) => {
+        console.log(`Deleted ${employee}`);
         res.redirect('/');
     }).catch(err => {
-        console.log(err);
+        throw err;
     });
 
 };
 
-exports.editAnEmployee = (req, res, next) => {
-    const id = req.body.id.trim();
-    console.log(id);
-    employeeModel.findOne({_id: id}).then(employee => {
-        console.log(employee);
-        res.render('edit-employee', {employee: employee});
+exports.editAnEmployee = async (req, res, next) => {
+    const id = req.params.id;
+
+    let employee = await employeeModel.findOne({ _id: id }).exec();
+    let companies = await companyModel.find().exec();
+
+    res.render('edit-employee', {
+        employee: employee,
+        companies: companies
     });
+
 };
 
-exports.updateAnEmployee = (req, res, next) => {
-    const id = req.body.id.trim();
-    var employee = new Employee({
-        first_name: req.body.first_name,
-        last_name: req.body.last_name,
-        age: req.body.age,
-        company: req.body.company
-    });
-    var msg = '';
-    if ((employee.age < 18 || employee.age > 60)
-        && (employee.first_name === '' || employee.last_name === '' || employee.age === '')) {
-        msg = 'Invalid input';
-    } else {
-        employeeModel.findByIdAndUpdate({_id: id}, employee).then(() => {
-            console.log('Updated');
-        });
-        employeeModel.find().then(employees => {
-            msg = 'Updated successfully!'
-            res.render('index', { obj: 'Employees', title: 'Hello', employees: employees, msg: ''});
-        });
+exports.updateAnEmployee = [
+
+    ...employeeValidator,
+
+    async (req, res, next) => {
+        const id = req.params.id;
+        const errors = validationResult(req);
+
+        var employee = new Employee(
+            req.body.first_name,
+            req.body.last_name,
+            req.body.age,
+            req.body.company
+        );
+        var msg = '';
+        var err = null;
+
+        let companies = await companyModel.find().exec();
+
+
+        if (errors.array().length !== 0) {
+            err = errors.array();
+            res.render('edit-employee', {
+                companies: companies,
+                employee: employee,
+                errors: err
+            });
+        }
+
+        employeeModel.findByIdAndUpdate({ _id: id }, employee).exec(
+            async (error, result) => {
+                if (error) {
+                    throw error;
+                }
+
+                console.log(`Updated ${employee.first_name}`);
+                msg = `Updated ${employee.first_name}`;
+                let employeeDocument = await employeeModel.findOne({ _id: id }).exec();
+                res.render('edit-employee', {
+                    msg: msg,
+                    companies: companies,
+                    employee: employeeDocument
+                });
+
+            });
+
     }
-
-};
+];

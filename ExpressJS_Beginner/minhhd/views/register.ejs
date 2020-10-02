@@ -26,54 +26,44 @@
     </header>
 
     <section>
-        <h1>Update employee</h1>
+        <h1>Register</h1>
+
+
         <div class="form-container">
-            <% if (typeof(msg) != 'undefined' && msg !== '') { %>
-            <h3><%= msg %></h3>
-            <% } %>
-            <form action="/employees/<%= employee._id %>" method="post">
+            <form action="/register" method="post">
                 <table class="table">
                     <tr>
-                        <td>First Name:</td>
-                        <td><input type="text" name="first_name" id="" value="<%= employee.first_name %> "></td>
+                        <td>Username:</td>
+                        <td><input type="text" name="username"></td>
                     </tr>
                     <tr>
-                        <td>Last Name:</td>
-                        <td><input type="text" name="last_name" id="" value="<%= employee.last_name %> "></td>
+                        <td>Password:</td>
+                        <td><input type="password" name="password" id=""></td>
                     </tr>
                     <tr>
-                        <td>Age:</td>
-                        <td><input type="text" name="age" id="" value="<%= employee.age %> "></td>
-                    </tr>
-                    <tr>
-                        <td>Company:</td>
-                        <td>
-                            <select name="company" id="">
-                                <% if (typeof(companies) != 'undefined' && companies !== null) { %>
-                                <% companies.forEach(company => { %>
-                                <option value="<%= company.name %> "><%= company.name %> </option>
-                                <% }); %>
-                                <% } %>
-                            </select>
-                        </td>
+                        <td>Re-Password:</td>
+                        <td><input type="password" name="repass" id=""></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><button type="reset" class="btn btn-secondary">Reset</button> <button type="submit"
-                                class="btn btn-primary">Update</button></td>
+                                class="btn btn-primary">Register</button></td>
                     </tr>
                 </table>
-                <input type="hidden" name="_method" value="PUT">
             </form>
-            <br>
-            <ul>
-                <% if (typeof(errors) != 'undefined' && errors !== null) { %>
+
+            <div class="redirect-container">
+                <% if (typeof(errors) != 'undefined') { %>
                 <% errors.forEach(error => { %>
-                <li><%= error.msg %> </li>
+                <p><%= error.msg %> </p>
                 <% }) %>
                 <% } %>
-            </ul>
-            <a href="/">Back to home page</a>
+                <% if (typeof(msg) != "undefined") { %>
+                <p><%= msg %> </p>
+                <% } %>
+                <p>Already have an account? Login <a href="/login">here</a></p>
+                <a href="/">Back to Home page</a>
+            </div>
         </div>
     </section>
     <footer>

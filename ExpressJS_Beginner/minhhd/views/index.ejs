@@ -4,61 +4,79 @@
 <head>
   <title><%= title %></title>
   <link rel='stylesheet' href='/stylesheets/style.css' />
-  <style>
-    form:first-child {
-      margin-right: 5px;
-    }
-    form a {
-      text-decoration: underline;
-    }
-
-    form a:hover {
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+    integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+    crossorigin="anonymous"></script>
 </head>
 
 <body>
-  <h1><%= msg %> </h1>
-  <h1>List of <%= obj %></h1>
-  <table>
-    <th>
-    <td>First Name</td>
-    <td>Last Name</td>
-    <td>Age</td>
-    <td>Company</td>
-    <td></td>
-    </th>
-    <% for( let index = 0; index < employees.length; index++ ) { %>
-    <tr>
-      <td></td>
-      <td>
-        <%= employees[index].first_name %>
-      </td>
-      <td>
-        <%= employees[index].last_name %>
-      </td>
-      <td>
-        <%= employees[index].age %>
-      </td>
-      <td>
-        <%= employees[index].company %>
-      </td>
-      <td style="display: flex;">
-        <form method="post" action="/delete">
-          <input type="hidden" name="id" value="<%=employees[index]._id%> " />
-          <a onclick="this.parentNode.submit();">Delete</a>
-        </form>
-        <form method="post" action="/edit">
-          <input type="hidden" name="id" value="<%=employees[index]._id%> " />
-          <a onclick="this.parentNode.submit();">Edit</a>
-        </form>
-      </td>
-    </tr>
-    <% } %>
-  </table>
-  <a href="add-employee">Add employee hereeeee!</a>
-  
+
+  <header>
+    <%- include('header', {msg: msg}) %>
+  </header>
+
+
+  <section class="col-md-8">
+    <h2>Total employees: <%= totalEmployees %></h2>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Age</th>
+          <th>Company</th>
+          <% if (user) { %>
+          <th></th>
+          <th></th>
+          <% } %>
+        </tr>
+      </thead>
+      <% for( let index = 0; index < employees.length; index++ ) { %>
+      <tr>
+        <td>
+          <%= employees[index].first_name %>
+        </td>
+        <td>
+          <%= employees[index].last_name %>
+        </td>
+        <td>
+          <%= employees[index].age %>
+        </td>
+        <td>
+          <%= employees[index].company %>
+        </td>
+        <% if (user) { %>
+        <td>
+          <form method="post" action="/employees/<%= employees[index]._id %>"
+            enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="_method" value="DELETE" />
+            <a onclick="this.parentNode.submit();" href="#">Delete</a>
+          </form>
+        </td>
+        <td>
+          <form method="post" action="/employees/id/edit">
+            <input type="hidden" name="id" value="<%= employees[index]._id %>">
+            <a onclick="this.parentNode.submit();" href="#">Edit</a>
+          </form>
+        </td>
+        <% } %>
+      </tr>
+      <% } %>
+    </table>
+  </section>
+
+  <footer>
+    <%- include('footer') %>
+  </footer>
+
 </body>
 
 </html>

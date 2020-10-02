@@ -1,0 +1,14 @@
+.footer-container {
+    background-color: #343a40;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+p {
+    width: max-content;
+    margin: 0 auto;
+    color: white;
+    font-family: inherit;
+}
