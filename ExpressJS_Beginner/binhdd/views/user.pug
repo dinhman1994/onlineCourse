@@ -1,0 +1,23 @@
+extends layout.pug
+
+block css
+  link(rel='stylesheet', type='text/css', href='/stylesheets/user.css')
+
+block scripts
+  scripts(src='/js/user.js')
+
+block content
+  .jumbotron.bg-size-cover.bg-position-center.bg-no-repeat.text-center
+    h1.text-shadow WELLCOME, #{user.name}!
+    .avatar-area
+      .avatar
+        img(src=user.avatar)    
+    .btn-group    
+      form(action='/user', method='POST')
+        button LOG OUT
+      form(action='/user/profile', method='GET')
+        button PROFILE
+      form(action='/user/history', method='GET')
+        button HISTORY
+      form(action='/user/image', method='GET')
+        button IMAGES

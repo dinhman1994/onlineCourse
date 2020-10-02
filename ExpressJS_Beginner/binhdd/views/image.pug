@@ -1,0 +1,17 @@
+extends layout.pug
+
+block css
+  link(rel='stylesheet', type='text/css', href='/stylesheets/image.css')
+
+block scripts
+  scripts(src='/js/image.js')
+
+block content
+  .jumbotron.bg-size-cover.bg-position-center.bg-no-repeat.text-center
+    h1.text-shadow Hello, world!
+    p.lead.text-shadow
+      | This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.
+    hr.my-4.hr-light
+    p.text-shadow.pb-3
+      | It uses utility classes for typography and spacing to space content out within the larger container.
+    a.btn.btn-primary(href='#', role='button') Image

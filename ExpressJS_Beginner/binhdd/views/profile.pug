@@ -1,0 +1,36 @@
+extends layout.pug
+
+block css
+  link(rel='stylesheet', type='text/css', href='/stylesheets/profile.css')
+
+block scripts
+  scripts(src='/js/profile.js')
+
+block content
+  .container
+    .left-content
+      img(src='/'+user.avatar)
+    .right-content
+      span.say-hi HELLO
+      h2.my-name
+        | I&apos;m 
+        span #{user.name}
+      span.my-facebook
+      .details
+        .labels
+          p Name
+          p Birthday
+          p Username
+        .infor
+          p #{user.name}
+          p #{date.date_of_birth} 
+          p #{user.userName}
+    .bottom-content
+      a(href='')
+        i.fab.fa-facebook
+      a(href='')
+        i.fab.fa-instagram
+      a(href='')
+        i.fas.fa-envelope
+      a(href='')
+        i.fas.fa-phone
