@@ -1,0 +1,197 @@
+extends layout
+
+block body
+	body.hold-transition.sidebar-mini
+		.wrapper
+			// Navbar
+			nav.main-header.navbar.navbar-expand.navbar-white.navbar-light
+				// Left navbar links
+				ul.navbar-nav
+					li.nav-item
+						a.nav-link(data-widget='pushmenu', href='#', role='button')
+							i.fas.fa-bars
+					li.nav-item.d-none.d-sm-inline-block
+						a.nav-link(href='../../index3.html') Home
+					li.nav-item.d-none.d-sm-inline-block
+						a.nav-link(href='#') Courses
+				// SEARCH FORM
+				form.form-inline.ml-3
+					.input-group.input-group-sm
+						input.form-control.form-control-navbar(type='search', placeholder='Search', aria-label='Search')
+						.input-group-append
+							button.btn.btn-navbar(type='submit')
+								i.fas.fa-search
+				// Right navbar links
+				ul.navbar-nav.ml-auto
+					// Messages Dropdown Menu
+					li.nav-item.dropdown
+						a.nav-link(data-toggle='dropdown', href='#')
+							i.far.fa-comments
+							span.badge.badge-danger.navbar-badge 3
+						.dropdown-menu.dropdown-menu-lg.dropdown-menu-right
+							a.dropdown-item(href='#')
+								// Message Start
+								.media
+									.media-body
+										h3.dropdown-item-title
+											| Brad Diesel
+											span.float-right.text-sm.text-danger
+												i.fas.fa-star
+										p.text-sm Call me whenever you can...
+										p.text-sm.text-muted
+											i.far.fa-clock.mr-1
+											|  4 Hours Ago
+								// Message End
+							.dropdown-divider
+							a.dropdown-item(href='#')
+								// Message Start
+								.media
+									.media-body
+										h3.dropdown-item-title
+											| John Pierce
+											span.float-right.text-sm.text-muted
+												i.fas.fa-star
+										p.text-sm I got your message bro
+										p.text-sm.text-muted
+											i.far.fa-clock.mr-1
+											|  4 Hours Ago
+								// Message End
+							.dropdown-divider
+							a.dropdown-item(href='#')
+								// Message Start
+								.media
+									.media-body
+										h3.dropdown-item-title
+											| Nora Silvester
+											span.float-right.text-sm.text-warning
+												i.fas.fa-star
+										p.text-sm The subject goes here
+										p.text-sm.text-muted
+											i.far.fa-clock.mr-1
+											|  4 Hours Ago
+								// Message End
+							.dropdown-divider
+							a.dropdown-item.dropdown-footer(href='#') See All Messages
+					// Notifications Dropdown Menu
+					li.nav-item.dropdown
+						a.nav-link(data-toggle='dropdown', href='#')
+							i.far.fa-bell
+							span.badge.badge-warning.navbar-badge 15
+						.dropdown-menu.dropdown-menu-lg.dropdown-menu-right
+							span.dropdown-item.dropdown-header 15 Notifications
+							.dropdown-divider
+							a.dropdown-item(href='#')
+								i.fas.fa-envelope.mr-2
+								|  4 new messages
+								span.float-right.text-muted.text-sm 3 mins
+							.dropdown-divider
+							a.dropdown-item(href='#')
+								i.fas.fa-users.mr-2
+								|  8 friend requests
+								span.float-right.text-muted.text-sm 12 hours
+							.dropdown-divider
+							a.dropdown-item(href='#')
+								i.fas.fa-file.mr-2
+								|  3 new reports
+								span.float-right.text-muted.text-sm 2 days
+							.dropdown-divider
+							a.dropdown-item.dropdown-footer(href='#') See All Notifications
+					li.nav-item
+						a.nav-link(data-widget='control-sidebar', data-slide='true', href='#', role='button')
+							i.fas.fa-th-large
+
+			// Content Wrapper. Contains page content
+			.content-wrapper
+				// Content Header (Page header)
+				section.content-header
+					.container-fluid
+						.row.mb-2
+							.col-sm-6
+								block pageHead
+					// /.container-fluid
+				// Main content
+				section.content
+					.container-fluid
+						.row
+							.col-md-3
+								// Profile Image
+								.card.card-primary.card-outline
+									.card-body.box-profile
+										h3.profile-username.text-center #{user.name}
+										p.text-muted.text-center #{user.birthday}
+										ul.list-group.list-group-unbordered.mb-3
+											li.list-group-item
+												b Courses
+												a.float-right 1,322
+											li.list-group-item
+												b DoneCourses
+												a.float-right 543
+											li.list-group-item
+												b DoingCourses
+												a.float-right 13,287
+										a.btn.btn-primary.btn-block(href='/trainee/profile')
+											b Edit Profile
+									// /.card-body
+								// /.card
+								// About Me Box
+								.card.card-primary
+									.card-header
+										h3.card-title About Me
+									// /.card-header
+									.card-body
+										strong
+											i.fas.fa-envelope.mr-1
+											|  Email
+										p.text-muted #{user.email}
+										hr
+										strong
+											i.fas.fa-map-marker-alt.mr-1
+											|  Address
+										p.text-muted #{user.address}
+										hr
+										strong
+											i.fas.fa-phone.mr-1
+											|  Phone
+										p.text-muted #{user.tel}
+										hr
+										strong
+											i.far.fa-file-alt.mr-1
+											|  Notes
+										p.text-muted
+											| Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.
+									// /.card-body
+								// /.card
+							// /.col
+							.col-md-9
+								.card
+									.card-header.p-2
+										block pageLinks
+										form(action='/logout',method='get')
+											button LOGOUT
+		
+									// /.card-header
+									.card-body
+										.tab-content
+										block contentPage
+											// /.tab-pane
+										// /.tab-content
+									// /.card-body
+								// /.nav-tabs-custom
+							// /.col
+						// /.row
+					// /.container-fluid
+				// /.content
+			// /.content-wrapper
+			footer.main-footer
+				.float-right.d-none.d-sm-block
+					b Version
+					|  3.0.5
+				strong
+					| Copyright &copy; 2014-2019 
+					a(href='http://adminlte.io') AdminLTE.io
+					| .
+				|  All rights &#x9;&#x9;&#x9;&#x9;reserved.
+			// Control Sidebar
+			aside.control-sidebar.control-sidebar-dark
+				// Control sidebar content goes here
+			// /.control-sidebar

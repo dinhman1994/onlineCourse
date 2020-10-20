@@ -1,6 +1,7 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
+const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
@@ -12,6 +13,9 @@ const rfs = require('rotating-file-stream');
 const moment = require('moment');
 const generator = require('./util/generator');
 const indexRouter = require('./routes/index');
+const traineeRouter = require('./routes/trainee');
+const supervisorRouter = require('./routes/supervisor');
+const adminRouter = require('./routes/admin');
 const defaultMiddleware = require('./middleware/default');
 const staticSetting = require('./statics/index');
 const { sequelize } = require('./models/index');
@@ -29,6 +33,11 @@ const accessLogStream = rfs.createStream(generator.logFileGenerator(), {
 });
 app.use(logger('combined', { stream: accessLogStream }));
 app.use(logger('dev'));
+app.use(session({
+    resave: true, 
+    saveUninitialized: true, 
+    secret: 'somesecret', 
+    cookie: { maxAge: 60000 }}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -64,6 +73,10 @@ app.use(bodyParser.json());
 
 // define list routers
 app.use('/', indexRouter);
+app.use('/trainee', traineeRouter);
+app.use('/supervisor',supervisorRouter);
+app.use('/admin',adminRouter);
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

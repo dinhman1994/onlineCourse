@@ -1,0 +1,41 @@
+extends ./home
+
+block pageLinks
+	ul.nav.nav-pills
+		li.nav-item
+			a.nav-link(href='/trainee', data-toggle='tab') Courses
+		li.nav-item
+			a.nav-link(href='/trainee/yourCourses', data-toggle='tab') YourCourses
+		li.nav-item
+			a.nav-link.active(href='/trainee/profile', data-toggle='tab') Edit Profile
+
+block contentPage
+	#Profile.active.tab-pane
+		form.form-horizontal
+			.form-group.row
+				label.col-sm-2.col-form-label(for='Email') Email
+				.col-sm-10
+					input#Email.form-control(type='email', placeholder=user.email, name='email')
+			.form-group.row
+				label.col-sm-2.col-form-label(for='Password') Password
+				.col-sm-10
+					input#Password.form-control(type='password', placeholder='Password', name='password')
+			.form-group.row
+				label.col-sm-2.col-form-label(for='Retype password') Retype password
+				.col-sm-10
+					input.form-control(type='password', id='Retype password', placeholder='Retype password', name='retype_password')
+			.form-group.row
+				label.col-sm-2.col-form-label(for='Full name') Full name
+				.col-sm-10
+					input.form-control(type='text', id='Full name', placeholder=user.name, name='name')
+			.form-group.row
+				label.col-sm-2.col-form-label(for='Address') Address
+				.col-sm-10
+					input#Address.form-control(type='text', placeholder=user.address, name='address')
+			.form-group.row
+				label.col-sm-2.col-form-label(for='Telephone') Telephone
+				.col-sm-10
+					input#Telephone.form-control(type='tel', placeholder=user.tel)
+			.form-group.row
+				.offset-sm-2.col-sm-10
+					button.btn.btn-danger(type='submit') Submit

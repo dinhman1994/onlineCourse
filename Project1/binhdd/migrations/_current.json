@@ -1,0 +1,465 @@
+{
+    "tables": {
+        "Admins": {
+            "tableName": "Admins",
+            "schema": {
+                "adminId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "adminId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Categories": {
+            "tableName": "Categories",
+            "schema": {
+                "categoryId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "categoryId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "categoryName": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "categoryName",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "CategoriesOfCourse": {
+            "tableName": "CategoriesOfCourse",
+            "schema": {
+                "cateOfCourseId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "cateOfCourseId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Courses": {
+            "tableName": "Courses",
+            "schema": {
+                "courseId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "courseId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "timeOfCourse": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 0
+                    },
+                    "field": "timeOfCourse",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "overView": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": ""
+                    },
+                    "field": "overView",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "name": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": ""
+                    },
+                    "field": "name",
+                    "seqType": "Sequelize.TEXT"
+                },
+                "createDay": {
+                    "allowNull": false,
+                    "field": "createDay",
+                    "seqType": "Sequelize.DATE"
+                },
+                "statusCourse": {
+                    "defaultValue": {
+                        "value": "public"
+                    },
+                    "field": "statusCourse",
+                    "seqType": "Sequelize.ENUM('private', 'public')"
+                },
+                "typeOfCourse": {
+                    "defaultValue": {
+                        "value": "limited"
+                    },
+                    "field": "typeOfCourse",
+                    "seqType": "Sequelize.ENUM('free', 'limited')"
+                },
+                "secretKey": {
+                    "defaultValue": {
+                        "value": ""
+                    },
+                    "field": "secretKey",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Documents": {
+            "tableName": "Documents",
+            "schema": {
+                "documentId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "documentId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "type": {
+                    "defaultValue": {
+                        "value": "pdf"
+                    },
+                    "field": "type",
+                    "seqType": "Sequelize.ENUM('file', 'img', 'pdf')"
+                },
+                "path": {
+                    "allowNull": false,
+                    "field": "path",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "EnrollHistories": {
+            "tableName": "EnrollHistories",
+            "schema": {
+                "enrollHistoryId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "enrollHistoryId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "process": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": 0
+                    },
+                    "field": "process",
+                    "seqType": "Sequelize.DOUBLE"
+                },
+                "startDay": {
+                    "allowNull": false,
+                    "field": "startDay",
+                    "seqType": "Sequelize.DATE"
+                },
+                "endDay": {
+                    "allowNull": false,
+                    "field": "endDay",
+                    "seqType": "Sequelize.DATE"
+                },
+                "statusEnroll": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "statusEnroll",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "ReportHistories": {
+            "tableName": "ReportHistories",
+            "schema": {
+                "reportHistoryId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "reportHistoryId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "reportContent": {
+                    "field": "reportContent",
+                    "seqType": "Sequelize.STRING(80)"
+                },
+                "timeWrite": {
+                    "allowNull": false,
+                    "field": "timeWrite",
+                    "seqType": "Sequelize.DATE"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Supervisors": {
+            "tableName": "Supervisors",
+            "schema": {
+                "supervisorId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "supervisorId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "TasksInEnroll": {
+            "tableName": "TasksInEnroll",
+            "schema": {
+                "taskInEnrollId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "taskInEnrollId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "status": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "status",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "result": {
+                    "field": "result",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "TasksOfCourse": {
+            "tableName": "TasksOfCourse",
+            "schema": {
+                "taskId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "taskId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "question": {
+                    "allowNull": false,
+                    "unique": true,
+                    "field": "question",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Trainees": {
+            "tableName": "Trainees",
+            "schema": {
+                "traineeId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "traineeId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "statusBlock": {
+                    "allowNull": false,
+                    "defaultValue": {
+                        "value": false
+                    },
+                    "field": "statusBlock",
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Users": {
+            "tableName": "Users",
+            "schema": {
+                "userId": {
+                    "allowNull": false,
+                    "autoIncrement": true,
+                    "unique": true,
+                    "primaryKey": true,
+                    "field": "userId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "email": {
+                    "allowNull": false,
+                    "unique": true,
+                    "isEmail": true,
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "allowNull": false,
+                    "field": "password",
+                    "seqType": "Sequelize.STRING"
+                },
+                "name": {
+                    "len": [
+                        2,
+                        15
+                    ],
+                    "allowNull": false,
+                    "field": "name",
+                    "seqType": "Sequelize.STRING"
+                },
+                "address": {
+                    "defaultValue": {
+                        "value": ""
+                    },
+                    "field": "address",
+                    "seqType": "Sequelize.STRING"
+                },
+                "tel": {
+                    "allowNull": false,
+                    "field": "tel",
+                    "seqType": "Sequelize.BIGINT(10)"
+                },
+                "birthday": {
+                    "allowNull": false,
+                    "field": "birthday",
+                    "seqType": "Sequelize.DATE"
+                },
+                "userType": {
+                    "defaultValue": {
+                        "value": "trainee"
+                    },
+                    "field": "userType",
+                    "seqType": "Sequelize.ENUM('trainee', 'supervisor', 'admin')"
+                },
+                "createdAt": {
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}
