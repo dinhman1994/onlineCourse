@@ -11,12 +11,12 @@ module.exports.createCourse = async function(req,res) {
 	if(!req.session.user){
 		return res.redirect('/');
 	}
-	res.render('yourCourses',{ user:req.session.user });
+	res.render('createCourse',{ user:req.session.user });
 }
 
 module.exports.profile = async function(req,res) {
 	if(!req.session.user){
 		return res.redirect('/');
 	}
-	res.render('profile',{ user:req.session.user });
+	res.render('adminProfile',{ user:req.session.user });
 }
