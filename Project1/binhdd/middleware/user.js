@@ -4,8 +4,6 @@ const userService = require('../services/userService');
 
 module.exports.checkToken =  async function(req, res, next) {
   if (req.cookies.token) {
-    if(!req.session.user)
-    {
       const token = req.cookies.token;  
       const data = await jwt.verify(token,jwtSecret);
       const user = await userService.findUser(data);
@@ -14,7 +12,6 @@ module.exports.checkToken =  async function(req, res, next) {
       ...user,
       password: ''
       }
-    }
     return next();    
   }
 

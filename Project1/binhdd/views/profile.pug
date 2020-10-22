@@ -14,11 +14,22 @@ block pageLinks
 
 block contentPage
 	#Profile.active.tab-pane
-		form.form-horizontal
+		form.form-horizontal(action="/trainee/profile" method="post")
+			if message
+				h3 #{message}
+			if error
+				h3 #{error.message}
+			if errs
+				each err in errs
+					h3 #{err.msg}
 			.form-group.row
 				label.col-sm-2.col-form-label(for='Email') Email
 				.col-sm-10
-					input#Email.form-control(type='email', placeholder=user.email, name='email')
+					input#Email.form-control(type='email', value=user.email, name='email')
+			.form-group.row
+				label.col-sm-2.col-form-label(for='oldPassword') Old Password
+				.col-sm-10
+					input#oldPassword.form-control(type='password', placeholder='Old Password', name='oldPassword')
 			.form-group.row
 				label.col-sm-2.col-form-label(for='Password') Password
 				.col-sm-10
@@ -30,15 +41,15 @@ block contentPage
 			.form-group.row
 				label.col-sm-2.col-form-label(for='Full name') Full name
 				.col-sm-10
-					input.form-control(type='text', id='Full name', placeholder=user.name, name='name')
+					input.form-control(type='text', id='Full name', value=user.name, name='name')
 			.form-group.row
 				label.col-sm-2.col-form-label(for='Address') Address
 				.col-sm-10
-					input#Address.form-control(type='text', placeholder=user.address, name='address')
+					input#Address.form-control(type='text', value=user.address, name='address')
 			.form-group.row
 				label.col-sm-2.col-form-label(for='Telephone') Telephone
 				.col-sm-10
-					input#Telephone.form-control(type='tel', placeholder=user.tel)
+					input#Telephone.form-control(type='tel', value='0'+user.tel, name='tel')
 			.form-group.row
 				.offset-sm-2.col-sm-10
 					button.btn.btn-danger(type='submit') Submit

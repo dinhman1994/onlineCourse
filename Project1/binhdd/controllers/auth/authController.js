@@ -34,7 +34,7 @@ exports.login = async (req, res, next) => {
 	const result = await bcrypt.compare(req.body.password,user.password);
 	if(result === false){
 		const error = new Error('Wrong password!');
-		return res.render('login',{error:error , page: page});
+		return res.render('auth/login',{error:error , page: page});
 	}
 
 	if(page === 2){
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
 	}
 
 	var payload = { email: user.email };
-	var jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: 60*60*60});
+	var jwtToken = jwt.sign(payload, jwtSecret);
 	res.cookie('token',jwtToken);
 	if(user.userType === 'trainee')
 		return res.redirect('/trainee');
