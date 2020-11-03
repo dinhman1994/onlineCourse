@@ -1,11 +1,11 @@
 const bcrypt = require('bcrypt');
 const moment = require('moment');
-const traineeModel = require('../models/trainee');
-const { sequelize } = require('../models/index');
+
+const db = require('../models/index');
 
 const { saltRounds } = require('../config/constants');
 
-const trainees = traineeModel(sequelize);
+const trainees = db['Trainees'];
 
 exports.createTrainee = async function(data){
   try{
@@ -13,13 +13,13 @@ exports.createTrainee = async function(data){
 	  statusBlock: false,
 	  createdAt: moment(),
 	  updatedAt: moment(),
-	  userId: data.userId 
+	  userId: data.get('userId')
 	});
 	return newTrainee;
   }
   catch(err){
 	console.log(err);
-	return err;
+	return null;
   }
   return null;
 }

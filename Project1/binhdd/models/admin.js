@@ -1,6 +1,9 @@
 const { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 
+const Users = require('../models/user');
+const Supervisors = require('../models/supervisor');
+
 module.exports = (sequelize,DataTypes) => {
   class Admins extends Model {
     /**
@@ -9,6 +12,8 @@ module.exports = (sequelize,DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      this.belongsTo(models.Users,{foreignKey: 'userId'});
+      this.belongsTo(models.Supervisors,{foreignKey: 'supervisorId'});
       // define association here
     }
   }
@@ -20,7 +25,7 @@ module.exports = (sequelize,DataTypes) => {
         autoIncrement: true,
         unique: true,
         primaryKey: true
-      }
+      },
     },
     {
       sequelize,
@@ -28,9 +33,5 @@ module.exports = (sequelize,DataTypes) => {
       freezeTableName: true
     },
   );
-  Admins.associate = models => {
-    // Admins.belongsTo(models.Users,{as: 'user'});
-    // Admins.belongsTo(models.Supervisors,{as: 'supervisor'});
-  };
   return "Admins";
 };

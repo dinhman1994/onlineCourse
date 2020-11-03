@@ -163,7 +163,7 @@ var migrationCommands = function(transaction) {
                     "statusCourse": {
                         "type": Sequelize.ENUM('private', 'public'),
                         "field": "statusCourse",
-                        "defaultValue": "public"
+                        "defaultValue": "private"
                     },
                     "typeOfCourse": {
                         "type": Sequelize.ENUM('free', 'limited'),

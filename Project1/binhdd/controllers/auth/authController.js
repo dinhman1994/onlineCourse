@@ -5,6 +5,7 @@ const {jwtSecret} = require('../../config/constants');
 const userService = require('../../services/userService');
 const traineeService = require('../../services/traineeService');
 const supervisorService = require('../../services/supervisorService');
+const adminService = require('../../services/adminService');
 
 exports.login = async (req, res, next) => {
 	let page;
@@ -114,11 +115,24 @@ exports.register = async(req,res) => {
 	switch(user.userType){
 		case 'supervisor':
 			const supervisor = await supervisorService.createSupervisor(user);
+			if(supervisor === null) return res.render('auth/register',{
+				message: 'Something Wrong !!!',
+				page: page
+			});
 			break;
 		case 'admin':
+			const admin = await adminService.createAdmin(user);
+			if(admin === null) return res.render('auth/register',{
+				message: 'Something Wrong !!!',
+				page: page
+			});
 			break;
 		default:
 			const trainee = await traineeService.createTrainee(user);
+			if(trainee === null) return res.render('auth/register',{
+				message: 'Something Wrong !!!',
+				page: page
+			});
 			break;
 	}
 	

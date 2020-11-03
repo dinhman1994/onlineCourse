@@ -14,116 +14,36 @@ block pageLinks
 
 block contentPage
 	.row
-		.col-md-6
-			// AREA CHART
-			.card.card-primary
-				.card-header
-					h3.card-title Name of Course
-					.card-tools
-						button.btn.btn-tool(type='button', data-card-widget='collapse')
-							i.fas.fa-minus
-						button.btn.btn-tool(type='button', data-card-widget='remove')
-							i.fas.fa-times
-				.card-body
-					.post
-						.user-block
-							span.username
-								a(href='#') Day created
-								a.float-right.btn-tool(href='#')
-									i.fas.fa-times
-							span.description Time of Courses
-						// /.user-block
-						p Course discription
-						p
-							button
-								i.fas.fa-share.mr-1
-								|  Edit Course
-						p Number of people enroll
-						span.float-right Type of Course
-				// /.card-body
-			// /.card
-		.col-md-6
-			// AREA CHART
-			.card.card-primary
-				.card-header
-					h3.card-title Name of Course
-					.card-tools
-						button.btn.btn-tool(type='button', data-card-widget='collapse')
-							i.fas.fa-minus
-						button.btn.btn-tool(type='button', data-card-widget='remove')
-							i.fas.fa-times
-				.card-body
-					.post
-						.user-block
-							span.username
-								a(href='#') Day created
-								a.float-right.btn-tool(href='#')
-									i.fas.fa-times
-							span.description Time of Courses
-						// /.user-block
-						p Course discription
-						p
-							button
-								i.fas.fa-share.mr-1
-								|  Edit Course
-						p Number of people enroll
-						span.float-right Type of Course
-				// /.card-body
-			// /.card
-		.col-md-6
-			// AREA CHART
-			.card.card-primary
-				.card-header
-					h3.card-title Name of Course
-					.card-tools
-						button.btn.btn-tool(type='button', data-card-widget='collapse')
-							i.fas.fa-minus
-						button.btn.btn-tool(type='button', data-card-widget='remove')
-							i.fas.fa-times
-				.card-body
-					.post
-						.user-block
-							span.username
-								a(href='#') Day created
-								a.float-right.btn-tool(href='#')
-									i.fas.fa-times
-							span.description Time of Courses
-						// /.user-block
-						p Course discription
-						p
-							button
-								i.fas.fa-share.mr-1
-								|  Edit Course
-						p Number of people enroll
-						span.float-right Type of Course
-				// /.card-body
-			// /.card
-		.col-md-6
-			// AREA CHART
-			.card.card-primary
-				.card-header
-					h3.card-title Name of Course
-					.card-tools
-						button.btn.btn-tool(type='button', data-card-widget='collapse')
-							i.fas.fa-minus
-						button.btn.btn-tool(type='button', data-card-widget='remove')
-							i.fas.fa-times
-				.card-body
-					.post
-						.user-block
-							span.username
-								a(href='#') Day created
-								a.float-right.btn-tool(href='#')
-									i.fas.fa-times
-							span.description Time of Courses
-						// /.user-block
-						p Course discription
-						p
-							button
-								i.fas.fa-share.mr-1
-								|  Edit Course
-						p Number of people enroll
-						span.float-right Type of Course
-				// /.card-body
-			// /.card
+		each course in courses
+			.col-md-6
+				// AREA CHART
+				.card.card-primary
+					.card-header
+						h3.card-title #{course.name}
+						.card-tools
+							button.btn.btn-tool(type='button', data-card-widget='collapse')
+								i.fas.fa-minus
+							button.btn.btn-tool(type='button', data-card-widget='remove')
+								i.fas.fa-times
+					.card-body
+						.post
+							.user-block
+								span.username
+									a(href='#') #{course.createDay}
+									a.float-right.btn-tool(href='#')
+										i.fas.fa-times
+								span.description #{course.timeOfCourse}
+							// /.user-block
+							p #{course.overView}
+							p
+								button
+									i.fas.fa-share.mr-1
+									|  Edit Course
+							p Number of people enroll
+							each category in course.categories
+								span.float-right #{category}
+					// /.card-body
+				// /.card
+			
+		
 

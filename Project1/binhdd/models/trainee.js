@@ -1,6 +1,8 @@
 const { Model } = require('sequelize');
 const Sequelize = require('sequelize');
 
+const Users = require('../models/user');
+
 module.exports = (sequelize,DataTypes) => {
   class Trainees extends Model {
     /**
@@ -8,8 +10,9 @@ module.exports = (sequelize,DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
+     static associate(models) {
       // define association here
+      this.belongsTo(models.Users,{ foreignKey: 'userId'});
     }
   }
   Trainees.init(
@@ -33,8 +36,5 @@ module.exports = (sequelize,DataTypes) => {
       freezeTableName: true
     },
   );
-  Trainees.associate = models => {
-    // Trainees.belongsTo(models.Users,{ as: 'user'});
-  };
   return Trainees;
 };

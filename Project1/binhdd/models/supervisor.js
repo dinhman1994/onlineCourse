@@ -10,6 +10,7 @@ module.exports = (sequelize,DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Users,{ foreignKey: 'userId'});
     }
   }
   Supervisors.init(
@@ -20,6 +21,10 @@ module.exports = (sequelize,DataTypes) => {
         autoIncrement: true,
         unique: true,
         primaryKey: true
+      },
+      isAdmin: {
+        type: Sequelize.DataTypes.BOOLEAN,
+        defaultValue: false
       }
     },
     {
@@ -28,9 +33,5 @@ module.exports = (sequelize,DataTypes) => {
       freezeTableName: true
     },
   );
-  Supervisors.associate = models => {
-    // Supervisors.belongsTo(models.Users,{ as: 'user'});
-    // Supervisors.belongsTo(models.Courses,{ as: 'course'});
-  };
   return Supervisors;
 };

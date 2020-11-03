@@ -10,6 +10,8 @@ module.exports = (sequelize,DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Courses,{ foreignKey: 'courseId'});
+      this.belongsTo(models.Trainees,{ foreignKey: 'traineeId'});
     }
   }
   ReportHistories.init(
@@ -35,9 +37,5 @@ module.exports = (sequelize,DataTypes) => {
       freezeTableName: true
     },
   );
-  ReportHistories.associate = models => {
-    // ReportHistories.belongsTo(models.Courses,{ as: 'course'});
-    // ReportHistories.belongsTo(models.Trainees,{ as: 'trainee'});
-  };
   return ReportHistories;
 };

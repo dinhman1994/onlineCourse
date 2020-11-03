@@ -120,7 +120,7 @@
                 },
                 "statusCourse": {
                     "defaultValue": {
-                        "value": "public"
+                        "value": "private"
                     },
                     "field": "statusCourse",
                     "seqType": "Sequelize.ENUM('private', 'public')"

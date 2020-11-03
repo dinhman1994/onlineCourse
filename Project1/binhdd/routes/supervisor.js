@@ -16,5 +16,6 @@ router.get('/profile',supervisorController.profile);
 
 
 router.post('/profile',validator.postUpdate,supervisorController.updateProfile);
+router.post('/createCourse',validator.postCreateNewCourse,supervisorController.createNewCourse);
 
 module.exports = router;

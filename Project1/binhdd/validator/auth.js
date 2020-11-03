@@ -105,3 +105,43 @@ exports.postUpdate = [
     return next();
   },
 ];
+
+exports.postCreateNewCourse = [
+  body('name','Name is required field').not().isEmpty().isLength({ min: 2, max: 15 }),
+  body('timeOfCourse','Time Of Course is required field').not().isEmpty(),
+  body('timeOfCourse','Time Of Course must be number from 1 to 10 ').custom(value => {
+    return (+value && +value>=1 && +value<10);
+  }),
+  body('createDay','Create Day is required').not().isEmpty(),
+  body('statusCourse','Status Course is required').not().isEmpty(),
+  body('typeOfCourse','Type Of Course is required').not().isEmpty(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.render('createCourse', { user:req.session.user, errs: errors.errors, categories:req.session.categories});
+    }
+    if (req.body.typeOfCourse === 'limited')
+    {
+      if(req.body.secretKey === '')
+      {
+        const error = new Error('You must have SecretKey in limited Course');
+        return res.render('createCourse', { user:req.session.user, error:error, categories:req.session.categories});
+      }
+    }
+
+    return next();
+  }
+];
+
+exports.postCreateCategory = [
+  body('categoryName','Name of Category is required').not().isEmpty(),
+  body('categoryName','Name of Category is invalid').isLength({ min: 2, max: 40 }),
+  (req,res,next) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      return res.render('createCategory', { user:req.session.user, errs: errors.errors});
+    }
+    return next();
+  }
+];

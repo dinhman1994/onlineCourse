@@ -42,7 +42,7 @@ module.exports = (sequelize,DataTypes) => {
       },
       statusCourse: {
         type: Sequelize.DataTypes.ENUM('private','public'),
-        defaultValue: 'public'
+        defaultValue: 'private'
       },
       typeOfCourse: {
         type: Sequelize.DataTypes.ENUM('free','limited'),

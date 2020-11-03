@@ -1,11 +1,11 @@
 const bcrypt = require('bcrypt');
 const moment = require('moment');
-const usersModel = require('../models/user');
-const { sequelize } = require('../models/index');
+
+const db = require('../models/index');
 
 const { saltRounds } = require('../config/constants');
 
-const users = usersModel(sequelize);
+const users = db['Users'];
 
 exports.createUser = async function(data){
 	let userType = 'trainee';
