@@ -14,74 +14,40 @@ block pageLinks
 
 block contentPage
 	#Courses.active.tab-pane
-		.post
-			.user-block
-				span.username
-					a(href='#') Name of Course
-					a.float-right.btn-tool(href='#')
-						i.fas.fa-times
-				span.description Time of Courses
-			// /.user-block
-			p Course discription
-			p
-				button
-					i.fas.fa-share.mr-1
-					|  Enroll
-			p Number of people enroll
-			span.float-right Type of Course
-			p
-			input.form-control.form-control-sm(type='text', placeholder='Type a comment')
+		form.form-horizontal(action="/trainee" method="post")
+			.form-group.row
+				h3 Category of Course
+				br
+				.col-sm-10
+					each categoryName in categories				
+						input(type='checkbox', name='category', value=categoryName, id=categoryName)
+						label #{categoryName}
+			.form-group.row
+				.col-sm-10
+					label(for='courseName') Course's Name
+					input#courseName.form-control(type='text', name='name', value=courseName)
+			.form-group.row
+				button.btn.btn-danger(type='submit') Search
+		each course in courses
+			.post
+				.user-block
+					span.username
+						a(href='#') #{course.name}
+						a.float-right.btn-tool(href='#')
+							i.fas.fa-times
+					span.description #{course.timeOfCourse}
+				// /.user-block
+				p #{course.overView}
+				p
+					form(action=`/trainee/course/${course.courseId}` method='post')
+						button(name='courseId' value=course.courseId)
+							i.fas.fa-share.mr-1
+							|  Enroll
+				p Number of people enroll
+				each category in course.categories
+					span.float-right #{category}
+				p
+				input.form-control.form-control-sm(type='text', placeholder='Type a comment')
 		// /.post
 		// Post
-		.post
-			.user-block
-				span.username
-					a(href='#') Name of Course
-					a.float-right.btn-tool(href='#')
-						i.fas.fa-times
-				span.description Time of Courses
-			// /.user-block
-			p Course discription
-			p
-				button
-					i.fas.fa-share.mr-1
-					|  Enroll
-			p Number of people enroll
-			span.float-right Type of Course
-			p
-			input.form-control.form-control-sm(type='text', placeholder='Type a comment')
-		// /.post
-		// Post
-		.post
-			.user-block
-				span.username
-					a(href='#') Adam Jones
-					a.float-right.btn-tool(href='#')
-						i.fas.fa-times
-				span.description Posted 5 photos - 5 days ago
-			// /.user-block
-			.row.mb-3
-				.col-sm-6
-				// /.col
-				.col-sm-6
-					.row
-						.col-sm-6
-						// /.col
-						.col-sm-6
-						// /.col
-					// /.row
-				// /.col
-			// /.row
-			p
-				a.link-black.text-sm.mr-2(href='#')
-					i.fas.fa-share.mr-1
-					|  Share
-				a.link-black.text-sm(href='#')
-					i.far.fa-thumbs-up.mr-1
-					|  Like
-				span.float-right
-					a.link-black.text-sm(href='#')
-						i.far.fa-comments.mr-1
-						|  Comments (5)
-			input.form-control.form-control-sm(type='text', placeholder='Type a comment')
-		// /.post
+

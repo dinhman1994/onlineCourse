@@ -71,3 +71,18 @@ exports.getSupervisorCourses = async function(data){
 	
 	return null;
 }
+
+exports.addSupervisorCourse = async function(data,user){
+	const supervisor = supervisors.findOne({
+		where:{
+			userId: user.userId
+		}
+	});
+	const newSupervisorCourse = supervisorCourses.create({
+		courseId: data.courseId,
+		supervisorId: supervisor.dataValues.supervisorId,
+		createdAt: moment(),
+	  	updatedAt: moment()
+	});
+	return null;
+}

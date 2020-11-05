@@ -4,8 +4,14 @@ const moment = require('moment');
 const db = require('../models/index');
 
 const { saltRounds } = require('../config/constants');
+const { doubleclickbidmanager } = require('googleapis/build/src/apis/doubleclickbidmanager');
 
 const trainees = db['Trainees'];
+const courses = db['Courses'];
+const enrollHistories = db['EnrollHistories'];
+const categoriesOfCourse = db['CategoriesOfCourse'];
+const categories = db['Categories'];
+
 
 exports.createTrainee = async function(data){
   try{
@@ -39,4 +45,43 @@ exports.createTrainee = async function(data){
 	return null;
   	}
  	return null;
+}
+
+exports.registerCourse = async function(data){
+	const courseId = data.params.courseId;
+	const courseData = await courses.findOne({ where: {courseId: courseId} });
+	const traineeData = await trainees.findOne({ where: {userId: data.session.user.userId} });
+	if (courseData.dataValues.typeOfCourse==='free' && traineeData.dataValues.statusBlock===false){
+		const newEnrollHistory = await enrollHistories.create({
+			process: parseFloat(0),
+			startDay: moment(),
+			endDay: moment().add(courseData.dataValues.timeOfCourse,'days'),
+			statusEnroll: false,
+			createdAt: moment(),
+			updatedAt: moment(),
+			courseId: courseId,
+			traineeId: traineeData.dataValues.traineeId
+		});
+		return newEnrollHistory;
+	}
+	return null;
+}
+
+exports.getYourCourses = async function(data){
+	let Courses = [];
+	const enrollData = await enrollHistories.findAll({ where: {traineeId: data.session.trainee.traineeId} });
+	for (const data of enrollData){
+		const courseData = await courses.findOne({ where: {courseId:data.dataValues.courseId} });
+		const resultCourse = {...courseData.dataValues};
+		resultCourse.categories = [];
+			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
+			for(const categoryOfCourseData of categoriesOfCourseData){
+				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
+				resultCourse.categories.push(categoryData.dataValues.categoryName);
+			}
+			// push course into Courses array
+		Courses.push(resultCourse);
+	}
+	return Courses;
+	return null;
 }

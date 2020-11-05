@@ -13,8 +13,10 @@ router.use(traineeMiddleware.checkTrainee);
 router.get('/',traineeController.trainee);
 router.get('/yourCourses',traineeController.yourCourses);
 router.get('/profile',traineeController.profile);
+router.get('/course/:courseId',traineeController.seeCourse);
 
-
+router.post('/',traineeController.trainee);
 router.post('/profile',validator.postUpdate,traineeController.updateProfile);
+router.post('/course/:courseId',traineeController.registerCourse);
 
 module.exports = router;

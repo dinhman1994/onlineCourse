@@ -6,7 +6,7 @@ module.exports.checkSupervisor =  async function(req, res, next) {
 
     const supervisor = await supervisors.findOne({ where: { userId: req.session.user.userId }});
     if(supervisor === null) return res.redirect('/');
-
+    req.session.supervisor = supervisor.dataValues;
     return next();    
   
   return res.redirect('/');

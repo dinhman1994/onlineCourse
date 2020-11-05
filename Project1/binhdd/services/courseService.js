@@ -67,3 +67,80 @@ exports.createCourse = async function(data,user){
   }
   return null;
 }
+
+exports.getCourses = async function(data){
+	let Courses = [];
+	if(data.category===undefined && data.name===undefined)
+	{
+		const coursesData = await courses.findAll({
+			where: {
+			},
+			limit: 10
+		});
+		for(courseData of coursesData)
+		{
+			const resultCourse = {...courseData.dataValues};
+			resultCourse.categories = [];
+			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
+			for(const categoryOfCourseData of categoriesOfCourseData){
+				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
+				resultCourse.categories.push(categoryData.dataValues.categoryName);
+			}
+			// push course into Courses array
+			Courses.push(resultCourse);
+		}
+
+		return Courses;
+	}
+	if(typeof data.category === "string"){
+		//filter something ??
+		const categoryData = await categories.findOne({ where: { categoryName: data.category } });
+		const categoryId = categoryData.dataValues.categoryId;
+		const categoriesOfCourseData = await categoriesOfCourse.findAll({
+			where: {
+				categoryId: categoryId
+			},
+			limit: 10
+		});
+		for(const dataValue of categoriesOfCourseData){
+			const courseData = await courses.findOne({ where: { courseId: dataValue.dataValues.courseId} });
+			const resultCourse = {...courseData.dataValues};
+			resultCourse.categories = [];
+			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
+			for(const categoryOfCourseData of categoriesOfCourseData){
+				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
+				resultCourse.categories.push(categoryData.dataValues.categoryName);
+			}
+			// push course into Courses array
+			Courses.push(resultCourse);
+		}
+	}
+	if(data.name!=undefined && Courses.length===0)
+	{
+
+		const coursesData = await courses.findAll({
+			where: {	  
+				name: `%${data.name}%`
+			}
+		});
+		for(courseData of coursesData)
+		{
+			const resultCourse = {...courseData.dataValues};
+			resultCourse.categories = [];
+			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
+			for(const categoryOfCourseData of categoriesOfCourseData){
+				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
+				resultCourse.categories.push(categoryData.dataValues.categoryName);
+			}
+			// push course into Courses array
+			Courses.push(resultCourse);
+		}
+	}
+	if(data.name!=undefined)
+	{
+		Courses = Courses.filter( (course) => {
+			return (course.name.indexOf(data.name)!=-1);
+		});
+	}	  
+	return Courses;
+}

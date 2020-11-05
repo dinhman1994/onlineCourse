@@ -6,7 +6,7 @@ module.exports.checkTrainee =  async function(req, res, next) {
 
     const trainee = await trainees.findOne({ where: { userId: req.session.user.userId }});
     if(trainee === null) return res.redirect('/');
-
+    req.session.trainee = trainee.dataValues;
     return next();    
   
   return res.redirect('/');
