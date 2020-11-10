@@ -10,6 +10,8 @@ const categoriesOfCourse = db['CategoriesOfCourse'];
 const categories = db['Categories'];
 const supervisorCourses = db['SupervisorCourses'];
 const supervisors = db['Supervisors'];
+const tasksOfCourse = db['TasksOfCourse'];
+const documents = db['Documents'];
 
 exports.createCourse = async function(data,user){
   try{
@@ -143,4 +145,39 @@ exports.getCourses = async function(data){
 		});
 	}	  
 	return Courses;
+}
+
+exports.getEditCourse = async function(data){
+	let resultCourse;
+	const courseData = await courses.findOne({
+		where:{
+			courseId: data.courseId
+		}
+	});
+	resultCourse = {
+		...courseData.dataValues
+	};
+
+	resultCourse.tasksOfCourse = [];
+	const tasksOfCourseData = await tasksOfCourse.findAll({
+		where: {
+			courseId: data.courseId
+		}
+	});
+	for(taskOfCourseData of tasksOfCourseData){
+		resultCourse.tasksOfCourse.push(taskOfCourseData.dataValues.question);
+	}
+
+	resultCourse.documents = [];
+	const documentsData = await documents.findAll({
+		where: {
+			courseId: data.courseId
+		}
+	});
+	for(documentData of documentsData){
+		resultCourse.documents.push(documentData.dataValues.path.split('/')[2]);
+	}
+
+	return resultCourse;
+
 }

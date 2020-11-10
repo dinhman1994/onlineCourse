@@ -36,9 +36,10 @@ block contentPage
 							// /.user-block
 							p #{course.overView}
 							p
-								button
-									i.fas.fa-share.mr-1
-									|  Edit Course
+								form(action=`/supervisor/course/${course.courseId}` method='get')
+									button
+										i.fas.fa-share.mr-1
+										|  Edit Course
 							p Number of people enroll
 							each category in course.categories
 								span.float-right #{category}

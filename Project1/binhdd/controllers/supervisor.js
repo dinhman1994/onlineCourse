@@ -6,6 +6,8 @@ const userService = require('../services/userService');
 const courseService = require('../services/courseService');
 const categoryService = require('../services/categoryService');
 const supervisorService = require('../services/supervisorService');
+const taskService = require('../services/taskService');
+const documentService = require('../services/documentService');
 
 module.exports.supervisor = async function(req,res) {
 	if(!req.session.user){
@@ -60,4 +62,19 @@ module.exports.createNewCourse = async function(req,res){
 		return res.render('createCourse',{err : err,user:req.session.user, categories:req.session.categories});
 	}
 	return res.render('createCourse',{message : "Success to create New Course",user:req.session.user, categories:req.session.categories});
+}
+
+module.exports.seeCourse = async function(req,res){
+	const editCourse = await courseService.getEditCourse(req.params);
+	return res.render('editCourse',{user:req.session.user, course:editCourse});
+}
+
+module.exports.createTask = async function(req,res){
+	const newTask = await taskService.createTask(req.body,req.params);
+	return res.redirect(`/supervisor/course/${req.params.courseId}`);
+}
+
+module.exports.uploadDocument = async function(req,res){
+	const newDocument = await documentService.createDocument(req,req.params);
+	return res.redirect(`/supervisor/course/${req.params.courseId}`);
 }

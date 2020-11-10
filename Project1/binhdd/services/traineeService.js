@@ -83,5 +83,11 @@ exports.getYourCourses = async function(data){
 		Courses.push(resultCourse);
 	}
 	return Courses;
-	return null;
+}
+
+exports.seeCourse = async function(data){
+	let Course;
+	const courseData = await courses.findOne({ where: { courseId: data.courseId} });
+	
+	return Course;
 }

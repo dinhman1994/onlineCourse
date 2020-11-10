@@ -14,7 +14,7 @@ module.exports.trainee = async function(req,res) {
 	{
 		req.session.categories = await categoryService.getCatagories();
 	}
-	const coursesData = await courseService.getCourses(req.body);
+	const coursesData = await courseService.getCourses(req.query);
 	res.render('trainee',
 	{ user:req.session.user, 
 		courses: coursesData, 
@@ -27,7 +27,7 @@ module.exports.yourCourses = async function(req,res) {
 		return res.redirect('/');
 	}
 	const yourCourses = await traineeService.getYourCourses(req);
-	res.render('yourCourses',{ user:req.session.user });
+	res.render('yourCourses',{ user:req.session.user, courses: yourCourses });
 }
 
 module.exports.profile = async function(req,res) {
@@ -64,5 +64,6 @@ module.exports.registerCourse = async function(req,res){
 }
 
 module.exports.seeCourse = async function(req,res){
-	console.log('test some thing');
+	const traineeCourse = await traineeService.seeCourse(req.params);
+	return res.render('seeCourse',{user: req.session.user});
 }

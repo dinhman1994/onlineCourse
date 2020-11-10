@@ -1,4 +1,15 @@
 const { body, validationResult } = require('express-validator');
+const fs = require('fs');
+
+const courseService = require('../services/courseService');
+
+var changeNameFile = (oldPath,newPath) => new Promise(function(resolve,reject){
+  fs.rename(oldPath, newPath, (err) => {
+    if(err)
+      reject(oldPath);
+    resolve(newPath);
+  }); 
+});
 
 exports.postLogin = [
   body('email','Email is required field').isEmail(),
@@ -145,3 +156,30 @@ exports.postCreateCategory = [
     return next();
   }
 ];
+
+exports.postCreateTask = [
+  body('question','Question is required').not().isEmpty(),
+  body('question','Question is invalid').isLength({ min: 5, max: 1000 }),
+  async (req,res,next) => {
+    const editCourse = await courseService.getEditCourse(req.params);
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+      return res.render('editCourse', { user:req.session.user, errs: errors.errors, course:editCourse});
+    }
+    return next(); 
+  }
+];
+
+exports.postUploadDocument =  async (req,res,next) => {
+    if(req.file === undefined || req.file.mimetype.split('/')[1]!='pdf')
+    {
+      const error = new Error('Document file is required or invalid');
+      const editCourse = await courseService.getEditCourse(req.params);
+      return res.render('editCourse', { user:req.session.user, error: error, course:editCourse });
+    }
+    const oldPath = req.file.path;
+    const newPath = './public/documents/'+ req.file.originalname;
+    const namefile = await changeNameFile(oldPath,newPath);
+    req.file.path = namefile;
+    return next();
+}
