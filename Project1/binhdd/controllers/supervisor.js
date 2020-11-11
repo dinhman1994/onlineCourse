@@ -8,6 +8,7 @@ const categoryService = require('../services/categoryService');
 const supervisorService = require('../services/supervisorService');
 const taskService = require('../services/taskService');
 const documentService = require('../services/documentService');
+const traineeService = require('../services/traineeService');
 
 module.exports.supervisor = async function(req,res) {
 	if(!req.session.user){
@@ -77,4 +78,9 @@ module.exports.createTask = async function(req,res){
 module.exports.uploadDocument = async function(req,res){
 	const newDocument = await documentService.createDocument(req,req.params);
 	return res.redirect(`/supervisor/course/${req.params.courseId}`);
+}
+
+module.exports.seeTrainees = async function(req,res){
+	const traineesInCourse = await traineeService.getTraineesInCourse(req.params);
+	return res.json({traineesInCourse});
 }

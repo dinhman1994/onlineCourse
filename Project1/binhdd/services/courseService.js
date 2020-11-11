@@ -165,7 +165,7 @@ exports.getEditCourse = async function(data){
 		}
 	});
 	for(taskOfCourseData of tasksOfCourseData){
-		resultCourse.tasksOfCourse.push(taskOfCourseData.dataValues.question);
+		resultCourse.tasksOfCourse.push(taskOfCourseData.dataValues);
 	}
 
 	resultCourse.documents = [];
@@ -175,7 +175,7 @@ exports.getEditCourse = async function(data){
 		}
 	});
 	for(documentData of documentsData){
-		resultCourse.documents.push(documentData.dataValues.path.split('/')[2]);
+		resultCourse.documents.push(documentData.dataValues);
 	}
 
 	return resultCourse;

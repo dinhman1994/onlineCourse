@@ -23,3 +23,19 @@ exports.createDocument = async function(data,courseData){
   }
   return null;
 }
+
+exports.findDocument = async function(data){
+  try{
+    const documentData = await documents.findOne({
+      where:{
+        documentId: data.documentId
+      }
+    });
+    return documentData.dataValues;
+  } catch(err){
+    console.log(err);
+    return null;
+  }
+  return null;
+  
+}

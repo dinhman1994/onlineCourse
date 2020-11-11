@@ -15,6 +15,7 @@ router.get('/',supervisorController.supervisor);
 router.get('/createCourse',supervisorController.createCourse);
 router.get('/profile',supervisorController.profile);
 router.get('/course/:courseId',supervisorController.seeCourse);
+router.get('/course/:courseId/trainees',supervisorController.seeTrainees);
 
 router.post('/profile',validator.postUpdate,supervisorController.updateProfile);
 router.post('/createCourse',validator.postCreateNewCourse,supervisorController.createNewCourse);

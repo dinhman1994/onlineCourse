@@ -12,13 +12,15 @@ const fs = require('fs');
 const rfs = require('rotating-file-stream');
 const moment = require('moment');
 const generator = require('./util/generator');
+const defaultMiddleware = require('./middleware/default');
+const staticSetting = require('./statics/index');
+const { sequelize } = require('./models/index');
+
 const indexRouter = require('./routes/index');
 const traineeRouter = require('./routes/trainee');
 const supervisorRouter = require('./routes/supervisor');
 const adminRouter = require('./routes/admin');
-const defaultMiddleware = require('./middleware/default');
-const staticSetting = require('./statics/index');
-const { sequelize } = require('./models/index');
+const publicRouter = require('./routes/public');
 
 dotenv.config();
 const app = express();
@@ -76,6 +78,7 @@ app.use('/', indexRouter);
 app.use('/trainee', traineeRouter);
 app.use('/supervisor',supervisorRouter);
 app.use('/admin',adminRouter);
+app.use('/download',publicRouter);
 
 
 // catch 404 and forward to error handler

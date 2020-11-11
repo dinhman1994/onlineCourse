@@ -91,3 +91,16 @@ exports.seeCourse = async function(data){
 	
 	return Course;
 }
+
+exports.getTraineesInCourse = async function(data){
+	let Trainees = [];
+	cars = await db.sequelize.query(`select
+	users.userId,users.name
+	from users
+	join trainees on trainees.userId = users.userId
+	join enrollhistories on enrollhistories.traineeId = trainees.traineeId
+	where enrollhistories.courseId = ${data.courseId}`,{
+		type: db.sequelize.QueryTypes.SELECT
+	});
+	return cars;
+}
