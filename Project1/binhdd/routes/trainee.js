@@ -17,5 +17,7 @@ router.get('/yourCourses/:courseId',traineeController.seeCourse);
 
 router.post('/profile',validator.postUpdate,traineeController.updateProfile);
 router.post('/course/:courseId',traineeController.registerCourse);
+router.post('/answerTask/:courseId/:taskId',traineeController.answerTask);
+
 
 module.exports = router;

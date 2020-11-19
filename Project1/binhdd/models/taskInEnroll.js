@@ -11,7 +11,7 @@ module.exports = (sequelize,DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.TasksOfCourse,{ foreignKey: 'taskId'});
-      this.belongsTo(models.EnrollHistories,{ foreignKey: 'enrollId'});
+      this.belongsTo(models.EnrollHistories,{ foreignKey: 'enrollHistoryId'});
     }
   }
   TasksInEnroll.init(
@@ -27,6 +27,10 @@ module.exports = (sequelize,DataTypes) => {
         type: Sequelize.DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: false
+      },
+      answer: {
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false
       },
       result: {
         type: Sequelize.DataTypes.BOOLEAN,

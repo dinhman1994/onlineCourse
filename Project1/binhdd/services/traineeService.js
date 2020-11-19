@@ -3,14 +3,15 @@ const moment = require('moment');
 
 const db = require('../models/index');
 
-const { saltRounds } = require('../config/constants');
-const { doubleclickbidmanager } = require('googleapis/build/src/apis/doubleclickbidmanager');
+const courseService = require('./courseService');
 
 const trainees = db['Trainees'];
 const courses = db['Courses'];
 const enrollHistories = db['EnrollHistories'];
 const categoriesOfCourse = db['CategoriesOfCourse'];
 const categories = db['Categories'];
+const tasksInEnroll = db['TasksInEnroll'];
+
 
 
 exports.createTrainee = async function(data){
@@ -85,22 +86,79 @@ exports.getYourCourses = async function(data){
 	return Courses;
 }
 
-exports.seeCourse = async function(data){
-	let Course;
-	const courseData = await courses.findOne({ where: { courseId: data.courseId} });
-	
-	return Course;
-}
-
 exports.getTraineesInCourse = async function(data){
-	let Trainees = [];
-	cars = await db.sequelize.query(`select
-	users.userId,users.name
+	const traineesData = await db.sequelize.query(`select
+	users.userId,users.name,trainees.traineeId
 	from users
 	join trainees on trainees.userId = users.userId
 	join enrollhistories on enrollhistories.traineeId = trainees.traineeId
 	where enrollhistories.courseId = ${data.courseId}`,{
 		type: db.sequelize.QueryTypes.SELECT
 	});
-	return cars;
+	return traineesData;
+}
+
+exports.postAnswer = async function(data){
+	const enrollHistoriesData = await db.sequelize.query(`select *
+	from enrollhistories
+    join trainees on enrollhistories.traineeId = trainees.traineeId
+	join users on trainees.userId = users.userId
+    join courses on enrollhistories.courseId = courses.courseId
+	where enrollhistories.courseId = ${data.params.courseId} And users.userId = ${data.session.user.userId}`,{
+		type: db.sequelize.QueryTypes.SELECT
+	});
+
+	try{
+		const newTaskInEnroll = await tasksInEnroll.create({
+			status: false,
+			createdAt: moment(),
+			updatedAt: moment(),
+			taskId: data.params.taskId,
+			enrollHistoryId: enrollHistoriesData[0].enrollHistoryId,
+			answer: data.body.answer
+		});
+		return newTaskInEnroll;
+	} catch (err){
+		console.log(err);
+		return null;
+	}
+	return null;
+}
+
+exports.getTraineeCourse = async function(data){
+	let traineeCourse={};
+	const courseData = await courseService.getEditCourse(data.params);
+	traineeCourse = { ...courseData};
+	const answeredTasksData = await db.sequelize.query(`select tasksinenroll.*,tasksofcourse.taskId,tasksofcourse.question
+	from tasksinenroll
+    join tasksofcourse on tasksofcourse.taskId = tasksinenroll.taskId
+    join enrollhistories on enrollhistories.enrollhistoryId = tasksinenroll.enrollhistoryId
+	join trainees on trainees.traineeId = enrollhistories.traineeId
+    join users on users.userId = trainees.userId
+    join courses on courses.courseId = enrollhistories.courseId
+	where courses.courseId = ${data.params.courseId} And users.userId = ${data.session.user.userId}`,{
+		type: db.sequelize.QueryTypes.SELECT
+	});
+	traineeCourse.answeredTasks = [];
+	for( answeredTaskData of answeredTasksData){
+		traineeCourse.answeredTasks.push({...answeredTaskData});
+		traineeCourse.tasksOfCourse = traineeCourse.tasksOfCourse.filter((task) => {
+			return task.taskId != answeredTaskData.taskId
+		});
+	}
+	return traineeCourse;
+}
+
+exports.seeAnswers = async function(data){
+	const traineeAnswers = await db.sequelize.query(`select tasksinenroll.*,tasksofcourse.taskId,tasksofcourse.question,users.name
+	from tasksinenroll
+    join tasksofcourse on tasksofcourse.taskId = tasksinenroll.taskId
+    join enrollhistories on enrollhistories.enrollhistoryId = tasksinenroll.enrollhistoryId
+	join trainees on trainees.traineeId = enrollhistories.traineeId
+	join users on users.userId = trainees.userId
+    join courses on courses.courseId = enrollhistories.courseId
+	where courses.courseId = ${data.params.courseId} And trainees.traineeId = ${data.params.traineeId}`,{
+		type: db.sequelize.QueryTypes.SELECT
+	});
+	return traineeAnswers;
 }

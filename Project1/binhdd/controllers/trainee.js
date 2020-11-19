@@ -64,6 +64,12 @@ module.exports.registerCourse = async function(req,res){
 }
 
 module.exports.seeCourse = async function(req,res){
-	const traineeCourse = await traineeService.seeCourse(req.params);
-	return res.render('seeCourse',{user: req.session.user});
+	const traineeCourse = await traineeService.getTraineeCourse(req);
+
+	return res.render('seeCourse',{user: req.session.user, course: traineeCourse});
+}
+
+module.exports.answerTask = async function(req,res){
+	const traineeAnswer = await traineeService.postAnswer(req);
+	res.json(traineeAnswer);
 }

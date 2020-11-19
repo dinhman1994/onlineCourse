@@ -82,5 +82,16 @@ module.exports.uploadDocument = async function(req,res){
 
 module.exports.seeTrainees = async function(req,res){
 	const traineesInCourse = await traineeService.getTraineesInCourse(req.params);
-	return res.json({traineesInCourse});
+	const editCourse = await courseService.getEditCourse(req.params);
+	return res.render('seeTrainees',{user:req.session.user, course:editCourse, trainees: traineesInCourse});
+}
+
+module.exports.seeAnswers = async function(req,res){
+	const traineeAnswers = await traineeService.seeAnswers(req);
+	const traineeName = traineeAnswers[0].name
+	return res.render('seeAnswers',{user:req.session.user, answers: traineeAnswers, traineeName: traineeName});
+}
+
+module.exports.checkAnswer = function(req,res){
+	console.log(req);
 }
