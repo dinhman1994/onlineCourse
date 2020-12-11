@@ -1,17 +1,20 @@
 extends ./home
 
 block pageHead
-	h1 Supervisor
+	h1 #{user.userType}
 
 block pageLinks
 	ul.nav.nav-pills
 		li.nav-item
-			a.nav-link.active(href='/supervisor', data-toggle='tab') Courses
+			a.nav-link.active(href='/supervisor') Courses
 		li.nav-item
-			a.nav-link(href='/supervisor/createCourse', data-toggle='tab') Create Courses
+			a.nav-link(href='/supervisor/createCourse') Create Courses
 		li.nav-item
-			a.nav-link(href='/supervisor/profile', data-toggle='tab') Edit Profile
-
+			a.nav-link(href='/supervisor/profile') Edit Profile
+		li.nav-item
+			a.nav-link(href='/supervisor/createCategory') Create Category
+		li.nav-item
+			a.nav-link(href='/admin/manage') Manage 
 block contentPage
 	.row
 		each course in courses
@@ -41,6 +44,8 @@ block contentPage
 										button
 											i.fas.fa-share.mr-1
 											|  Edit Course
+									form(action=`/supervisor/course/${course.courseId}/makePublicCourse` method='post')
+										button Public Course
 								p Number of people enroll
 								each category in course.categories
 									span.float-right #{category}

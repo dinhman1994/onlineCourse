@@ -6,16 +6,15 @@ const adminController = require('../controllers/admin');
 const userMiddleware = require('../middleware/user');
 const adminMiddleware = require('../middleware/admin');
 const validator = require('../validator/auth');
+const supervisorController = require('../controllers/supervisor');
+
 
 router.use(userMiddleware.checkToken);
 router.use(adminMiddleware.checkAdmin);
 
-router.get('/',adminController.admin);
-router.get('/createCourse',adminController.createCourse);
-router.get('/profile',adminController.profile);
-router.get('/createCategory',adminController.category);
+router.get('/manage',adminController.manage);
 
-
-router.post('/createCategory',validator.postCreateCategory,adminController.createCategory);
+router.post('/deleteTrainee/:traineeId',adminController.deleteTrainee);
+router.post('/unblockTrainee/:traineeId',adminController.unblockTrainee);
 
 module.exports = router;

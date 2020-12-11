@@ -21,8 +21,8 @@ exports.createCourse = async function(data,user){
 	  updatedAt: moment()
 	});
 
-	if(typeof data.category === "string"){
-		const category = await categories.findOne({ where:{categoryName: data.category} });
+	if(typeof data.categoryName === "string"){
+		const category = await categories.findOne({ where:{categoryName: data.categoryName} });
 		const newCategoriesOfCourse = await categoriesOfCourse.create(
 			{
 				createdAt: moment(),
@@ -33,10 +33,10 @@ exports.createCourse = async function(data,user){
 		);
 		console.log(newCategoriesOfCourse);	
 	}
-	if(typeof data.category === 'object'){
+	if(typeof data.categoryName === 'object'){
 		// Need something here
-		for(const categoryName of data.category){
-			const category = await categories.findOne({ where:{categoryName: categoryName} });
+		for(const categoryNameItem of data.categoryName){
+			const category = await categories.findOne({ where:{categoryName: categoryNameItem} });
 			const newCategoriesOfCourse = await categoriesOfCourse.create(
 				{
 					createdAt: moment(),
@@ -70,80 +70,80 @@ exports.createCourse = async function(data,user){
   return null;
 }
 
-exports.getCourses = async function(data){
+exports.getCourses = async function(req){
 	let Courses = [];
-	if(data.category===undefined && data.name===undefined)
-	{
-		const coursesData = await courses.findAll({
-			where: {
-			},
-			limit: 10
-		});
-		for(courseData of coursesData)
-		{
-			const resultCourse = {...courseData.dataValues};
-			resultCourse.categories = [];
-			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
-			for(const categoryOfCourseData of categoriesOfCourseData){
-				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
-				resultCourse.categories.push(categoryData.dataValues.categoryName);
-			}
-			// push course into Courses array
-			Courses.push(resultCourse);
+	let coursesData = await db.sequelize.query(`Select courses.* from
+		courses
+		left outer join enrollhistories
+		on courses.courseId = enrollhistories.courseId and enrollhistories.traineeId = ${req.session.trainee.traineeId}
+		where  enrollhistories.enrollhistoryId is null`,{
+			type: db.sequelize.QueryTypes.SELECT
 		}
+	);
 
-		return Courses;
-	}
-	if(typeof data.category === "string"){
-		//filter something ??
-		const categoryData = await categories.findOne({ where: { categoryName: data.category } });
+	if(typeof req.query.category === "string"){
+		const categoryData = await categories.findOne({ where: { categoryName: req.query.category } });
 		const categoryId = categoryData.dataValues.categoryId;
 		const categoriesOfCourseData = await categoriesOfCourse.findAll({
 			where: {
 				categoryId: categoryId
-			},
-			limit: 10
-		});
-		for(const dataValue of categoriesOfCourseData){
-			const courseData = await courses.findOne({ where: { courseId: dataValue.dataValues.courseId} });
-			const resultCourse = {...courseData.dataValues};
-			resultCourse.categories = [];
-			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
-			for(const categoryOfCourseData of categoriesOfCourseData){
-				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
-				resultCourse.categories.push(categoryData.dataValues.categoryName);
 			}
-			// push course into Courses array
-			Courses.push(resultCourse);
+		});
+	
+		for (courseData of coursesData){
+			const index = categoriesOfCourseData.indexOf(categoriesOfCourseData.find((categoryOfCourseData) => categoryOfCourseData.dataValues.courseId === courseData.courseId));
+			if(index === -1) {
+				const deleteIndex = coursesData.indexOf(courseData);
+				coursesData = [...coursesData.slice(0,deleteIndex),...coursesData.slice(deleteIndex+1,coursesData.length)]; 
+			}	
 		}
 	}
-	if(data.name!=undefined && Courses.length===0)
-	{
 
-		const coursesData = await courses.findAll({
-			where: {	  
-				name: `%${data.name}%`
+
+	if(typeof req.query.category === 'object'){
+		for(categoryName of req.query.category){
+			const categoryData = await categories.findOne({ where: { categoryName: categoryName }});
+			const categoryId = categoryData.dataValues.categoryId;
+			const categoriesOfCourseData = await categoriesOfCourse.findAll({
+				where: {
+					categoryId: categoryId
+				}
+			});
+			for (courseData of coursesData){
+				const index = categoriesOfCourseData.indexOf(categoriesOfCourseData.find((categoryOfCourseData) => categoryOfCourseData.dataValues.courseId === courseData.courseId));
+				if(index === -1) {
+					const deleteIndex = coursesData.indexOf(courseData);
+					coursesData = [...coursesData.slice(0,deleteIndex),...coursesData.slice(deleteIndex+1,coursesData.length)]; 
+				}	
 			}
+		}
+	}
+
+	if(req.query.name!="" && req.query.name!= undefined){
+		coursesData = coursesData.filter((course) => {
+			return (course.name.indexOf(req.query.name)!=-1);
 		});
-		for(courseData of coursesData)
-		{
-			const resultCourse = {...courseData.dataValues};
+	}
+
+	if(req.query.overView!="" && req.query.overView!= undefined){
+		coursesData = coursesData.filter((course) => {
+			return (course.overView.indexOf(req.query.overView)!=-1);
+		});
+	}
+
+	const resultCourses = coursesData.slice(0,10);
+	for(courseData of resultCourses)
+	{
+			const resultCourse = {...courseData};
 			resultCourse.categories = [];
-			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
+			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.courseId } });
 			for(const categoryOfCourseData of categoriesOfCourseData){
 				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
 				resultCourse.categories.push(categoryData.dataValues.categoryName);
 			}
 			// push course into Courses array
 			Courses.push(resultCourse);
-		}
 	}
-	if(data.name!=undefined)
-	{
-		Courses = Courses.filter( (course) => {
-			return (course.name.indexOf(data.name)!=-1);
-		});
-	}	  
 	return Courses;
 }
 
@@ -180,4 +180,28 @@ exports.getEditCourse = async function(data){
 
 	return resultCourse;
 
+}
+
+exports.getCourseFromTaskInEnroll = async function(req){
+	let courseFromTaskInEnroll = await db.sequelize.query(`select courses.*
+	from tasksinenroll
+	join enrollhistories on tasksinenroll.enrollhistoryId = enrollhistories.enrollhistoryId
+	join courses on enrollhistories.courseId = courses.courseId
+	where tasksinenroll.taskinenrollId = ${req.params.taskInEnrollId}`,{
+		type: db.sequelize.QueryTypes.SELECT
+	});
+	return courseFromTaskInEnroll[0];
+}
+
+exports.makePublicCourse = async function(req){
+	try{
+		const upDateCourse = await courses.update(
+			{statusCourse: 'public'},
+			{returning: true, where: {courseId: req.params.courseId}}
+		);
+		return upDateCourse;
+	} catch (err){
+		console.log(err);
+		return null;
+	}
 }

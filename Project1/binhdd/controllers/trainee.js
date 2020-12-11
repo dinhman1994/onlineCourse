@@ -14,7 +14,7 @@ module.exports.trainee = async function(req,res) {
 	{
 		req.session.categories = await categoryService.getCatagories();
 	}
-	const coursesData = await courseService.getCourses(req.query);
+	const coursesData = await courseService.getCourses(req);
 	res.render('trainee',
 	{ user:req.session.user, 
 		courses: coursesData, 
@@ -71,5 +71,29 @@ module.exports.seeCourse = async function(req,res){
 
 module.exports.answerTask = async function(req,res){
 	const traineeAnswer = await traineeService.postAnswer(req);
-	res.json(traineeAnswer);
+	res.redirect(`/trainee/yourCourses/${traineeAnswer.courseId}`);
+}
+
+module.exports.seeTrainees = async function(req,res){
+	const traineesInCourse = await traineeService.getTraineesInCourse(req.params);
+	const editCourse = await courseService.getEditCourse(req.params);
+	return res.render('traineeSeeTrainees',{user:req.session.user, course:editCourse, trainees: traineesInCourse});
+}
+
+module.exports.seeTrainee = async function(req,res){
+	const traineeData = await traineeService.getTraineeInfor(req);
+	const trainee = traineeData[0];
+	trainee.birthday = trainee.birthday.toLocaleString().split(',')[0];
+	return res.render('traineeSeeTrainee',{user:req.session.user, trainee:trainee});
+}
+
+module.exports.answerAgain = async function(req,res){
+	const traineeAnswer = await traineeService.answerAgain(req);
+	const courseFromTaskInEnroll = await courseService.getCourseFromTaskInEnroll(req);
+	return res.redirect(`/trainee/yourCourses/${courseFromTaskInEnroll.courseId}`);
+}
+
+module.exports.makeReport = async function(req,res){
+	const newReport = await traineeService.makeReport(req);
+	return res.redirect(`/trainee/yourCourses/${req.params.courseId}`);
 }

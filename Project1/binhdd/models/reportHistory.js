@@ -24,7 +24,7 @@ module.exports = (sequelize,DataTypes) => {
         primaryKey: true
       },
       reportContent: {
-        type: Sequelize.DataTypes.STRING(80),
+        type: Sequelize.DataTypes.STRING(450),
       },
       timeWrite: {
         type: Sequelize.DataTypes.DATE,

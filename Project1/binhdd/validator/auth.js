@@ -96,7 +96,7 @@ exports.postUpdate = [
   body('email','Email is required field').isEmail(),
   body('password','Password is required field').not().isEmpty(),
   body('retype_password','Retype password is required field').not().isEmpty(),
-  body('name','Name is required field').not().isEmpty().isLength({ min: 2, max: 15 }),
+  body('name','Name is required field').not().isEmpty().isLength({ min: 2, max: 30 }),
   body('tel','Telephone is required field').not().isEmpty(),
   body('tel','Telephone is invalid').custom(value => {
     return (+value && value.length === 10);
@@ -105,12 +105,16 @@ exports.postUpdate = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.render('profile', { user:req.session.user, errs: errors.errors});
+      if(req.session.user.userType === 'trainee')
+        return res.render('profile', { user:req.session.user, errs: errors.errors});
+      return res.render('supervisorProfile', { user:req.session.user, errs: errors.errors});
     }
 
     if(req.body.password != req.body.retype_password){
       const error = new Error('You must type password and retype_password the same !');
-      return res.render('profile', { user:req.session.user, error:error });
+      if(req.session.user.userType === 'trainee')
+        return res.render('profile', { user:req.session.user, error:error });
+      return res.render('supervisorProfile', { user:req.session.user, error:error });
     }
 
     return next();
@@ -131,6 +135,10 @@ exports.postCreateNewCourse = [
 
     if (!errors.isEmpty()) {
       return res.render('createCourse', { user:req.session.user, errs: errors.errors, categories:req.session.categories});
+    }
+    if (req.body.categoryName === undefined){
+      const error = new Error('You must have choose category for the Course');
+      return res.render('createCourse', { user:req.session.user, error:error, categories:req.session.categories});
     }
     if (req.body.typeOfCourse === 'limited')
     {

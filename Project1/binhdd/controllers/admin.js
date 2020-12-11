@@ -1,40 +1,27 @@
 const userService = require('../services/userService');
+const supervisorService = require('../services/supervisorService');
+const traineeService = require('../services/traineeService');
 const categoryService = require('../services/categoryService');
 
-module.exports.admin = async function(req,res) {
-	if(!req.session.user){
-		return res.redirect('/');
-	}
-	res.render('admin',{ user:req.session.user });
+module.exports.manage = async function(req,res){
+	const supervisors = await supervisorService.getAllSupervisor(req);
+	const searchedTrainee = await traineeService.getSearchedTraineesNotBlock(req);
+	const traineesIsBlocked = await  traineeService.getTraineesIsBlocked();
+	return res.render('manage',{
+		user : req.session.user, 
+		supervisors : supervisors,
+		trainees : searchedTrainee,
+		traineesIsBlocked : traineesIsBlocked
+	 });
 }
 
-module.exports.createCourse = async function(req,res) {
-	if(!req.session.user){
-		return res.redirect('/');
-	}
-	res.render('adminCreateCourse',{ user:req.session.user });
+module.exports.deleteTrainee = async function(req,res){
+	const deletedTrainee = await traineeService.deleteTrainee(req);
+	return res.redirect('/admin/manage');
 }
 
-module.exports.profile = async function(req,res) {
-	if(!req.session.user){
-		return res.redirect('/');
-	}
-	res.render('adminProfile',{ user:req.session.user });
+module.exports.unblockTrainee = async function(req,res){
+	const unblockedTrainee = await traineeService.unblockTrainee(req);
+	return res.redirect('/admin/manage');
 }
-
-module.exports.category = function(req,res) {
-	if(!req.session.user){
-		return res.redirect('/');
-	}
-	res.render('createCategory',{ user:req.session.user });
-}
-
-module.exports.createCategory = async function(req,res) {
-	if(!req.session.user){
-		return res.redirect('/');
-	}
-	const newCategory = await categoryService.createCategory(req.body);
-	if(newCategory === null)
-		return res.render('createCategory',{ user:req.session.user, message: 'Something Wrong !' });
-	return res.render('createCategory',{ user:req.session.user, message: 'Success create New Category !' });
-}
+	

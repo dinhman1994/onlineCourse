@@ -22,12 +22,15 @@ const supervisorRouter = require('./routes/supervisor');
 const adminRouter = require('./routes/admin');
 const publicRouter = require('./routes/public');
 
+const cronJobs = require('./cronJobs');
+
 dotenv.config();
 const app = express();
 
 // use cors for api
 app.use(cors());
 
+cronJobs.checkFailTime.start();
 // store logs
 const accessLogStream = rfs.createStream(generator.logFileGenerator(), {
   interval: '1d', // rotate daily

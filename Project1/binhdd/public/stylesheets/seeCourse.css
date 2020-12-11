@@ -1,0 +1,10 @@
+.left {
+  float: right;
+}
+.report-area {
+  display: flex;
+}
+.report-area input {
+  width: 100%;
+  color: red;
+}

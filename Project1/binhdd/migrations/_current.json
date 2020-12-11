@@ -251,7 +251,7 @@
                 },
                 "reportContent": {
                     "field": "reportContent",
-                    "seqType": "Sequelize.STRING(80)"
+                    "seqType": "Sequelize.STRING(450)"
                 },
                 "timeWrite": {
                     "allowNull": false,

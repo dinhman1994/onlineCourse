@@ -42,7 +42,7 @@ var migrationCommands = function(transaction) {
                         "allowNull": false
                     },
                     "reportContent": {
-                        "type": Sequelize.STRING(80),
+                        "type": Sequelize.STRING(450),
                         "field": "reportContent"
                     },
                     "timeWrite": {

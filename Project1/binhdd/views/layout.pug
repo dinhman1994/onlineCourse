@@ -1,6 +1,7 @@
 doctype html
 html
   head
+  block styles
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     meta(charset='utf-8')
@@ -17,26 +18,20 @@ html
     link(href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700", rel="stylesheet")
     link(rel="stylesheet", href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css")
     block scripts
-    block styles
-  block body
     script(src='https://use.fontawesome.com/0d5dfd265a.js')
-    script(src="/admin-lte/plugins/jquery/jquery.min.js")
-    script(src="/admin-lte/plugins/jquery-ui/jquery-ui.min.js")
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js')
     script(type='text/javascript').
       $.widget.bridge('uibutton', $.ui.button)
     script(src="/admin-lte/plugins/bootstrap/js/bootstrap.bundle.min.js")
     script(src="/admin-lte/plugins/chart.js/Chart.min.js")
     script(src="/admin-lte/plugins/sparklines/sparkline.js")
-    script(src="/admin-lte/plugins/jqvmap/jquery.vmap.min.js")
-    script(src="/admin-lte/plugins/jqvmap/maps/jquery.vmap.usa.js")
-    script(src="/admin-lte/plugins/jquery-knob/jquery.knob.min.js")
     script(src="/admin-lte/plugins/moment/moment.min.js")
     script(src="/admin-lte/plugins/daterangepicker/daterangepicker.js")
     script(src="/admin-lte/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js")
     script(src="/admin-lte/plugins/summernote/summernote-bs4.min.js")
-    script(src="/admin-lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js")
     script(src="/admin-lte/dist/js/adminlte.js")
     script(src="/admin-lte/dist/js/pages/dashboard.js")
     script(src="/admin-lte/dist/js/demo.js")
-
+    
+  block body
   block footer

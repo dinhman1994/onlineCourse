@@ -29,6 +29,13 @@ module.exports = (sequelize,DataTypes) => {
         allowNull: false,
         defaultValue: false
       },
+      timeOfFail: {
+        type: Sequelize.DataTypes.INTEGER,
+        defaultValue: 0
+      },
+      deletedAt: {
+        type: Sequelize.DataTypes.DATE
+      }
     },
     {
       sequelize,

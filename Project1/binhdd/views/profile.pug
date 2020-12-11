@@ -1,16 +1,16 @@
 extends ./home
 
 block pageHead
-	h1 Trainee
+	h1 #{user.userType}
 
 block pageLinks
 	ul.nav.nav-pills
 		li.nav-item
-			a.nav-link(href='/trainee', data-toggle='tab') Courses
+			a.nav-link(href='/trainee') Courses
 		li.nav-item
-			a.nav-link(href='/trainee/yourCourses', data-toggle='tab') YourCourses
+			a.nav-link(href='/trainee/yourCourses') YourCourses
 		li.nav-item
-			a.nav-link.active(href='/trainee/profile', data-toggle='tab') Edit Profile
+			a.nav-link.active(href='/trainee/profile') Edit Profile
 
 block contentPage
 	#Profile.active.tab-pane

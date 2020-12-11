@@ -27,7 +27,7 @@ exports.getCatagories = async function(){
 		const ListCategories = await categories.findAll();
 		let categoriesName = [];
 		for(const Category of ListCategories){
-			categoriesName.push(Category.dataValues.categoryName);
+			categoriesName.push(Category.dataValues);
 		}
 		return categoriesName;
 	} catch(err)

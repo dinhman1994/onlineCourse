@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 
 const {jwtSecret} = require('../../config/constants');
 const userService = require('../../services/userService');
@@ -39,7 +40,7 @@ exports.login = async (req, res, next) => {
 	}
 
 	if(page === 2){
-		if(user.userType != 'supervisor') {
+		if(user.userType === 'trainee') {
 			const error = new Error('You do not have Supervisor account!');
 			return res.render('auth/login',{error:error, page:page});
 		}	
@@ -60,7 +61,7 @@ exports.login = async (req, res, next) => {
 	if(user.userType === 'supervisor')
 		return res.redirect('/supervisor');
 	if(user.userType === 'admin')
-		return res.redirect('/admin');
+		return res.redirect('/supervisor');
 };
 
 exports.register = async(req,res) => {
