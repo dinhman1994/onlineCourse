@@ -13,6 +13,7 @@ var config = require('./configurations/config');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var authRouter = require('./routes/auth');
+var testRouter = require('./routes/test');
 
 var compression = require('compression');
 var helmet = require('helmet');
@@ -54,6 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/authenticate', authRouter);
+app.use('/test', testRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

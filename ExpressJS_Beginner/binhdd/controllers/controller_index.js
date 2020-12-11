@@ -162,7 +162,7 @@ exports.doneSignup = function(errors,req,res,next){
 
 exports.checkUser = async(req,res) => {
   var results = await User.find({}).populate('user').exec();
-  console.log(results);
+  console.log(results);   
   res.render('index');  
 }
 
