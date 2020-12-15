@@ -10,15 +10,14 @@ module.exports.trainee = async function(req,res) {
 	if(!req.session.user){
 		return res.redirect('/');
 	}
-	if(!req.session.categories)
-	{
-		req.session.categories = await categoryService.getCatagories();
-	}
-	const coursesData = await courseService.getCourses(req);
+	const [categoriesInCourse,coursesData] = await Promise.all([
+												 categoryService.getCatagories(),
+												 courseService.getCourses(req)			
+											]);
 	res.render('trainee',
 	{ user:req.session.user, 
 		courses: coursesData, 
-		categories:req.session.categories
+		categories:categoriesInCourse
 	});
 }
 
@@ -65,7 +64,6 @@ module.exports.registerCourse = async function(req,res){
 
 module.exports.seeCourse = async function(req,res){
 	const traineeCourse = await traineeService.getTraineeCourse(req);
-
 	return res.render('seeCourse',{user: req.session.user, course: traineeCourse});
 }
 
@@ -75,8 +73,10 @@ module.exports.answerTask = async function(req,res){
 }
 
 module.exports.seeTrainees = async function(req,res){
-	const traineesInCourse = await traineeService.getTraineesInCourse(req.params);
-	const editCourse = await courseService.getEditCourse(req.params);
+	const [traineesInCourse,editCourse] = await Promise.all([
+											traineeService.getTraineesInCourse(req.params),
+											courseService.getEditCourse(req.params)
+											]);
 	return res.render('traineeSeeTrainees',{user:req.session.user, course:editCourse, trainees: traineesInCourse});
 }
 
@@ -96,4 +96,9 @@ module.exports.answerAgain = async function(req,res){
 module.exports.makeReport = async function(req,res){
 	const newReport = await traineeService.makeReport(req);
 	return res.redirect(`/trainee/yourCourses/${req.params.courseId}`);
+}
+
+module.exports.seeSearchTrainee = async function(req,res){
+	const trainees = await traineeService.getSearchedTrainees(req);
+	return res.render('traineeSearch',{user:req.session.user, trainees:trainees});
 }

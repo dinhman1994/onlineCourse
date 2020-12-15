@@ -32,8 +32,12 @@ block body
 											li.list-group-item
 												b DoingCourses
 												a.float-right 13,287
-										a.btn.btn-primary.btn-block(href='/trainee/profile')
-											b Edit Profile
+										if user.userType == 'trainee'
+											a.btn.btn-primary.btn-block(href='/trainee/profile')
+												b Edit Profile
+										else
+											a.btn.btn-primary.btn-block(href='/supervisor/profile')
+												b Edit Profile
 									// /.card-body
 								// /.card
 								// About Me Box

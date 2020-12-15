@@ -12,6 +12,7 @@ const supervisorCourses = db['SupervisorCourses'];
 const supervisors = db['Supervisors'];
 const tasksOfCourse = db['TasksOfCourse'];
 const documents = db['Documents'];
+const reportHistories = db['ReportHistories'];
 
 exports.createCourse = async function(data,user){
   try{
@@ -147,11 +148,11 @@ exports.getCourses = async function(req){
 	return Courses;
 }
 
-exports.getEditCourse = async function(data){
+exports.getEditCourse = async function(req){
 	let resultCourse;
 	const courseData = await courses.findOne({
 		where:{
-			courseId: data.courseId
+			courseId: req.params.courseId
 		}
 	});
 	resultCourse = {
@@ -161,7 +162,7 @@ exports.getEditCourse = async function(data){
 	resultCourse.tasksOfCourse = [];
 	const tasksOfCourseData = await tasksOfCourse.findAll({
 		where: {
-			courseId: data.courseId
+			courseId: req.params.courseId
 		}
 	});
 	for(taskOfCourseData of tasksOfCourseData){
@@ -171,12 +172,25 @@ exports.getEditCourse = async function(data){
 	resultCourse.documents = [];
 	const documentsData = await documents.findAll({
 		where: {
-			courseId: data.courseId
+			courseId: req.params.courseId
 		}
 	});
 	for(documentData of documentsData){
 		resultCourse.documents.push(documentData.dataValues);
 	}
+	resultCourse.reports = [];
+	let startDay = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss'); 
+	let endDay = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss'); 
+	resultCourse.reports = await db.sequelize.query(`select * from reporthistories 
+	join trainees on reporthistories.traineeId = trainees.traineeId
+	join users on trainees.userId = users.userId
+	where
+	  reporthistories.courseId = ${req.params.courseId}
+	  and reporthistories.createdAt > '${startDay}'
+	  and reporthistories.createdAt < '${endDay}'
+	`,{
+			type: db.sequelize.QueryTypes.SELECT
+	});
 
 	return resultCourse;
 

@@ -30,7 +30,8 @@ const app = express();
 // use cors for api
 app.use(cors());
 
-cronJobs.checkFailTime.start();
+//cronJobs
+// cronJobs.checkFailTime.start();
 // store logs
 const accessLogStream = rfs.createStream(generator.logFileGenerator(), {
   interval: '1d', // rotate daily

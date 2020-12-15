@@ -61,13 +61,13 @@ module.exports.createNewCourse = async function(req,res){
 		const newCourse = await courseService.createCourse(req.body,req.session.user);	
 	} catch (err)
 	{
-		return res.render('createCourse',{err : err,user:req.session.user, categories:categories});
+		return res.render('createCourse',{err : err,user:req.session.user, categories:categories, oldInfor:req.body});
 	}
 	return res.render('createCourse',{message : "Success to create New Course",user:req.session.user, categories:categories});
 }
 
 module.exports.seeCourse = async function(req,res){
-	const editCourse = await courseService.getEditCourse(req.params);
+	const editCourse = await courseService.getEditCourse(req);
 	return res.render('editCourse',{user:req.session.user, course:editCourse});
 }
 
@@ -84,7 +84,7 @@ module.exports.uploadDocument = async function(req,res){
 module.exports.seeTrainees = async function(req,res){
 	const traineesInCourse = await traineeService.getTraineesInCourse(req.params);
 	const searchedTrainees = await traineeService.getSearchedTrainees(req);
-	const editCourse = await courseService.getEditCourse(req.params);
+	const editCourse = await courseService.getEditCourse(req);
 	return res.render('seeTrainees',
 	{user:req.session.user, 
 		course:editCourse, 
@@ -114,7 +114,7 @@ module.exports.checkAnswer = async function(req,res){
 }
 
 module.exports.seeSupervisors = async function(req,res){
-	const editCourse = await courseService.getEditCourse(req.params);
+	const editCourse = await courseService.getEditCourse(req);
 	const searchedSupervisors = await supervisorService.getSupervisors(req);
 	const supervisorsInCourse = await supervisorService.supervisorsInCourse(req);
 	return res.render('seeSupervisors',{
@@ -156,4 +156,12 @@ module.exports.createCategory = async function(req,res){
 module.exports.makePublicCourse = async function(req,res){
 	const upDateCourse = await courseService.makePublicCourse(req);
 	return res.redirect(`/supervisor`);
+}
+
+module.exports.updateCategory = async function(req,res){
+	const updateCategory = await categoryService.updateCategory(req.body);
+	const categories = await categoryService.getCatagories();
+	if(updateCategory === null)
+		return res.render('createCategory',{ user:req.session.user, message: 'Something Wrong !',categories: categories });
+	return res.render('createCategory',{ user:req.session.user, message: 'Success update New Category !',categories: categories});
 }

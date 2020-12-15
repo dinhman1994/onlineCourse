@@ -2,6 +2,7 @@ const { body, validationResult } = require('express-validator');
 const fs = require('fs');
 
 const courseService = require('../services/courseService');
+const categoryService = require('../services/categoryService');
 
 var changeNameFile = (oldPath,newPath) => new Promise(function(resolve,reject){
   fs.rename(oldPath, newPath, (err) => {
@@ -33,7 +34,7 @@ exports.postLogin = [
 
     if (!errors.isEmpty()) {
     	console.log(errors);
-      return res.render('auth/login', { errs: errors.errors, page:page});
+      return res.render('auth/login', { errs: errors.errors, page:page, oldInfor: req.body});
     }
 
     next();
@@ -79,12 +80,12 @@ exports.postRegister = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.render('auth/register', { errs: errors.errors,page: page });
+      return res.render('auth/register', { errs: errors.errors,page: page,oldInfor: req.body });
     }
 
     if(req.body.password != req.body.retype_password){
       const error = new Error('You must type password and retype_password the same !');
-      return res.render('auth/register', { error:error, page: page });
+      return res.render('auth/register', { error:error, page: page,oldInfor: req.body });
     }
 
     return next();
@@ -134,18 +135,18 @@ exports.postCreateNewCourse = [
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-      return res.render('createCourse', { user:req.session.user, errs: errors.errors, categories:req.session.categories});
+      return res.render('createCourse', { user:req.session.user, errs: errors.errors, categories:req.session.categories, oldInfor:req.body});
     }
     if (req.body.categoryName === undefined){
       const error = new Error('You must have choose category for the Course');
-      return res.render('createCourse', { user:req.session.user, error:error, categories:req.session.categories});
+      return res.render('createCourse', { user:req.session.user, error:error, categories:req.session.categories, oldInfor:req.body });
     }
     if (req.body.typeOfCourse === 'limited')
     {
       if(req.body.secretKey === '')
       {
         const error = new Error('You must have SecretKey in limited Course');
-        return res.render('createCourse', { user:req.session.user, error:error, categories:req.session.categories});
+        return res.render('createCourse', { user:req.session.user, error:error, categories:req.session.categories, oldInfor:req.body});
       }
     }
 
@@ -156,10 +157,11 @@ exports.postCreateNewCourse = [
 exports.postCreateCategory = [
   body('categoryName','Name of Category is required').not().isEmpty(),
   body('categoryName','Name of Category is invalid').isLength({ min: 2, max: 40 }),
-  (req,res,next) => {
+  async (req,res,next) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
-      return res.render('createCategory', { user:req.session.user, errs: errors.errors});
+      const categories = await categoryService.getCatagories();
+      return res.render('createCategory', { user:req.session.user, errs: errors.errors, categories: categories});
     }
     return next();
   }

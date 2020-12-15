@@ -37,3 +37,21 @@ exports.getCatagories = async function(){
 	}
 	return null;
 }
+
+exports.updateCategory = async function(data){
+	try{
+		const updatedCategory = await categories.update({
+		  ...data,
+		},{
+			where: {
+				categoryName: data.categoryName
+			}
+		});
+		return updatedCategory;
+	}
+	catch(err){
+		console.log(err);
+		return null;
+	}
+	return null;
+}

@@ -89,23 +89,29 @@ exports.registerCourse = async function(data){
 }
 
 exports.getYourCourses = async function(data){
-	let Courses = [];
 	const enrollData = await enrollHistories.findAll({ where: {traineeId: data.session.trainee.traineeId} });
-	for (const data of enrollData){
-		const courseData = await courses.findOne({ where: {courseId:data.dataValues.courseId} });
-		const resultCourse = {...courseData.dataValues};
-		resultCourse.process = parseInt(data.dataValues.process*100);
-		resultCourse.statusEnroll = data.dataValues.statusEnroll;
-		resultCourse.categories = [];
-			const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
-			for(const categoryOfCourseData of categoriesOfCourseData){
-				const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
-				resultCourse.categories.push(categoryData.dataValues.categoryName);
-			}
-			// push course into Courses array
-		Courses.push(resultCourse);
+	const coursesData = (
+		await Promise.all( 
+			enrollData.map((data) => this.getYourCourse(data)) 	
+		)
+	);
+	return coursesData;
+}
+
+exports.getYourCourse = async function(data){
+	const courseData = await courses.findOne({ where: {courseId:data.dataValues.courseId} });
+	const resultCourse = {...courseData.dataValues};
+	resultCourse.process = parseInt(data.dataValues.process*100);
+	resultCourse.statusEnroll = data.dataValues.statusEnroll;
+	resultCourse.categories = [];
+	resultCourse.timeLeft = Math.round(((new Date(data.dataValues.endDay)).getTime() - (new Date(moment())).getTime())/(1000 * 3600 * 24));
+	if (resultCourse.timeLeft < 0) resultCourse.timeLeft = 0;
+	const categoriesOfCourseData = await categoriesOfCourse.findAll({ where:{ courseId:courseData.dataValues.courseId } });
+	for(const categoryOfCourseData of categoriesOfCourseData){
+		const categoryData = await categories.findOne({ where:{categoryId: categoryOfCourseData.dataValues.categoryId} });
+		resultCourse.categories.push(categoryData.dataValues.categoryName);
 	}
-	return Courses;
+	return resultCourse;
 }
 
 exports.getTraineesInCourse = async function(data){
@@ -130,13 +136,15 @@ exports.getSearchedTrainees = async function(req){
 		type: db.sequelize.QueryTypes.SELECT
 	});
 
-	const traineesData = await this.getTraineesInCourse(req.params);
-
-	for(traineeData of traineesData){
-		searchedTrainees = searchedTrainees.filter((searchedTrainee) => {
-			return searchedTrainee.traineeId != traineeData.traineeId
-		});
+	if(req.params.courseId){
+		const traineesData = await this.getTraineesInCourse(req.params);
+		for(traineeData of traineesData){
+			searchedTrainees = searchedTrainees.filter((searchedTrainee) => {
+				return searchedTrainee.traineeId != traineeData.traineeId
+			});
+		}
 	}
+	
 
 	return searchedTrainees;
 
@@ -215,9 +223,9 @@ exports.postAnswer = async function(data){
 	return null;
 }
 
-exports.getTraineeCourse = async function(data){
+exports.getTraineeCourse = async function(req){
 	let traineeCourse={};
-	const courseData = await courseService.getEditCourse(data.params);
+	const courseData = await courseService.getEditCourse(req);
 	const enrollHistoryData = await enrollHistories.findOne({
 		where: {
 			courseId: courseData.courseId
@@ -234,7 +242,7 @@ exports.getTraineeCourse = async function(data){
 	join trainees on trainees.traineeId = enrollhistories.traineeId
     join users on users.userId = trainees.userId
     join courses on courses.courseId = enrollhistories.courseId
-	where courses.courseId = ${data.params.courseId} And users.userId = ${data.session.user.userId}`,{
+	where courses.courseId = ${req.params.courseId} And users.userId = ${req.session.user.userId}`,{
 		type: db.sequelize.QueryTypes.SELECT
 	});
 	traineeCourse.answeredTasks = [];
@@ -244,7 +252,7 @@ exports.getTraineeCourse = async function(data){
 			return task.taskId != answeredTaskData.taskId
 		});
 	}
-	const report = await this.checkReport(data);
+	const report = await this.checkReport(req);
 	traineeCourse.report = {...report};
 	return traineeCourse;
 }

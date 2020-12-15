@@ -39,9 +39,6 @@ router.get('/dashboard', (req, res, next) => {
 
 router.get('/logout',authController.logout);
 
-router.get('/test',authController.test);
-
-
 
 router.post('/login', authValidator.postLogin, authController.login);
 router.post('/register', authValidator.postRegister, authController.register);

@@ -29,6 +29,8 @@ router.post('/uploadDocument/:courseId',upFile.loadDocument,validator.postUpload
 router.post('/checkAnswer/:taskInEnrollId',supervisorController.checkAnswer);
 router.post('/addTrainee/:courseId/:traineeId',supervisorController.addTrainee);
 router.post('/addSupervisor/:courseId/:supervisorId',supervisorController.addSupervisor);
-router.post('/createCategory',supervisorController.createCategory);
+router.post('/createCategory',validator.postCreateCategory,supervisorController.createCategory);
 router.post('/course/:courseId/makePublicCourse',supervisorController.makePublicCourse);
+
+router.post('/updateCategory',validator.postCreateCategory,supervisorController.updateCategory);
 module.exports = router;

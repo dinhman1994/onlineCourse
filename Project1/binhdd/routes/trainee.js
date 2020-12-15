@@ -16,6 +16,7 @@ router.get('/profile',traineeController.profile);
 router.get('/yourCourses/:courseId',traineeController.seeCourse);
 router.get('/course/:courseId/trainees',traineeController.seeTrainees);
 router.get('/seeTrainee/:traineeId',traineeController.seeTrainee);
+router.get('/search',traineeController.seeSearchTrainee);
 
 router.post('/profile',validator.postUpdate,traineeController.updateProfile);
 router.post('/course/:courseId',traineeMiddleware.checkSecretKey,traineeController.registerCourse);

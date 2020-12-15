@@ -19,7 +19,7 @@ prepend body
             when 1
               <form action="/register" method="post">
                 <div class="input-group mb-3">
-                  <input type="email" class="form-control" placeholder="Email" name="email">
+                  <input type="email" class="form-control" placeholder="Email" name="email" value=#{oldInfor && oldInfor.email}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-envelope"></span>
@@ -27,7 +27,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" placeholder="Password" name="password">
+                  <input type="password" class="form-control" placeholder="Password" name="password" value=#{oldInfor && oldInfor.password}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -35,7 +35,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" placeholder="Retype password" name="retype_password">
+                  <input type="password" class="form-control" placeholder="Retype password" name="retype_password" value=#{oldInfor && oldInfor.retype_password}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -43,7 +43,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Full name" name="name">
+                  <input type="text" class="form-control" placeholder="Full name" name="name" value=#{oldInfor && oldInfor.name}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-user"></span>
@@ -51,7 +51,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Address" name="address">
+                  <input type="text" class="form-control" placeholder="Address" name="address" value=#{oldInfor && oldInfor.address}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-map-marker-alt"></span>
@@ -59,7 +59,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="tel" class="form-control" placeholder="Telephone" name="tel">
+                  <input type="tel" class="form-control" placeholder="Telephone" name="tel" value=#{oldInfor && oldInfor.tel}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-phone-square"></span>
@@ -67,7 +67,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="date" class="form-control" placeholder="Birthday" name="birthday">
+                  <input type="date" class="form-control" placeholder="Birthday" name="birthday" value=#{oldInfor && oldInfor.birthday}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-birthday-cake"></span>
@@ -93,7 +93,7 @@ prepend body
             when 2
               <form action="/supervisor_register" method="post">
                 <div class="input-group mb-3">
-                  <input type="email" class="form-control" placeholder="Email" name="email">
+                  <input type="email" class="form-control" placeholder="Email" name="email" value=#{oldInfor && oldInfor.email}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-envelope"></span>
@@ -101,7 +101,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" placeholder="Password" name="password">
+                  <input type="password" class="form-control" placeholder="Password" name="password" value=#{oldInfor && oldInfor.password}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -109,7 +109,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="password" class="form-control" placeholder="Retype password" name="retype_password">
+                  <input type="password" class="form-control" placeholder="Retype password" name="retype_password" value=#{oldInfor && oldInfor.retype_password}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -117,7 +117,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Full name" name="name">
+                  <input type="text" class="form-control" placeholder="Full name" name="name" value=#{oldInfor && oldInfor.name}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-user"></span>
@@ -125,7 +125,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Address" name="address">
+                  <input type="text" class="form-control" placeholder="Address" name="address" value=#{oldInfor && oldInfor.address}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-lock"></span>
@@ -133,7 +133,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="tel" class="form-control" placeholder="Telephone" name="tel">
+                  <input type="tel" class="form-control" placeholder="Telephone" name="tel" value=#{oldInfor && oldInfor.tel}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-phone-square"></span>
@@ -141,7 +141,7 @@ prepend body
                   </div>
                 </div>
                 <div class="input-group mb-3">
-                  <input type="date" class="form-control" placeholder="Birthday" name="birthday">
+                  <input type="date" class="form-control" placeholder="Birthday" name="birthday" value=#{oldInfor && oldInfor.birthday}>
                   <div class="input-group-append">
                     <div class="input-group-text">
                       <span class="fas fa-birthday-cake"></span>

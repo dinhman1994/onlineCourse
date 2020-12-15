@@ -30,26 +30,26 @@ exports.login = async (req, res, next) => {
 
 	if (!user) {
 		const error = new Error('Email is not exited!');
-		return res.render('auth/login',{error:error, page: page});
+		return res.render('auth/login',{error:error, page: page, oldInfor: req.body});
 	}
 
 	const result = await bcrypt.compare(req.body.password,user.password);
 	if(result === false){
 		const error = new Error('Wrong password!');
-		return res.render('auth/login',{error:error , page: page});
+		return res.render('auth/login',{error:error , page: page, oldInfor: req.body});
 	}
 
 	if(page === 2){
 		if(user.userType === 'trainee') {
 			const error = new Error('You do not have Supervisor account!');
-			return res.render('auth/login',{error:error, page:page});
+			return res.render('auth/login',{error:error, page:page, oldInfor: req.body});
 		}	
 	}
 
 	if(page === 3){
 		if(user.userType != 'admin') {
 			const error = new Error('You do not have Admin account!');
-			return res.render('auth/login',{error:error, page:page});
+			return res.render('auth/login',{error:error, page:page, oldInfor: req.body});
 		}
 	}
 
@@ -101,14 +101,16 @@ exports.register = async(req,res) => {
 			let error = new Error('Email is used !!!');
 			return res.render('auth/register',{
 				error: error,
-				page: page
+				page: page,
+				oldInfor: req.body
 			});
 		}		
 
 	} catch (err){
 		return res.render('auth/register',{
 			errs: err,
-			page: page
+			page: page,
+			oldInfor: req.body
 		});
 	}
 	// check type of user
@@ -118,21 +120,24 @@ exports.register = async(req,res) => {
 			const supervisor = await supervisorService.createSupervisor(user);
 			if(supervisor === null) return res.render('auth/register',{
 				message: 'Something Wrong !!!',
-				page: page
+				page: page,
+				oldInfor: req.body
 			});
 			break;
 		case 'admin':
 			const admin = await adminService.createAdmin(user);
 			if(admin === null) return res.render('auth/register',{
 				message: 'Something Wrong !!!',
-				page: page
+				page: page,
+				oldInfor: req.body
 			});
 			break;
 		default:
 			const trainee = await traineeService.createTrainee(user);
 			if(trainee === null) return res.render('auth/register',{
 				message: 'Something Wrong !!!',
-				page: page
+				page: page,
+				oldInfor: req.body
 			});
 			break;
 	}
@@ -151,15 +156,4 @@ exports.register = async(req,res) => {
 exports.logout = (req,res) => {
 	res.clearCookie('token');
 	res.redirect('/');
-};
-
-exports.test = async(req,res) => {
-	try{
-		let test = await testService.createTest();
-	}	catch(err){
-		console.log(err);
-		res.render('/auth/register',{errs:err});
-	}
-
-	return res.redirect('/login');
 };
