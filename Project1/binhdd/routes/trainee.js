@@ -5,7 +5,7 @@ const router = express.Router();
 const traineeController = require('../controllers/trainee');
 const userMiddleware = require('../middleware/user');
 const traineeMiddleware = require('../middleware/trainee');
-const validator = require('../validator/auth');
+const authValidator = require('../validator/auth');
 
 router.use(userMiddleware.checkToken);
 router.use(traineeMiddleware.checkTrainee);
@@ -18,7 +18,7 @@ router.get('/course/:courseId/trainees',traineeController.seeTrainees);
 router.get('/seeTrainee/:traineeId',traineeController.seeTrainee);
 router.get('/search',traineeController.seeSearchTrainee);
 
-router.post('/profile',validator.postUpdate,traineeController.updateProfile);
+router.post('/profile',authValidator.postUpdate,traineeController.updateProfile);
 router.post('/course/:courseId',traineeMiddleware.checkSecretKey,traineeController.registerCourse);
 router.post('/answerTask/:courseId/:taskId',traineeController.answerTask);
 router.post('/answerTask/:taskInEnrollId',traineeController.answerAgain);

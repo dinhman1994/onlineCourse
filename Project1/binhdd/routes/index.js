@@ -47,6 +47,5 @@ router.post('/supervisor_login', authValidator.postLogin, authController.login);
 router.post('/supervisor_register', authValidator.postRegister, authController.register);
 
 router.post('/admin_login', authValidator.postLogin, authController.login);
-router.post('/admin_register', authValidator.postRegister, authController.register);
 
 module.exports = router;

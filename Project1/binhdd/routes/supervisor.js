@@ -5,7 +5,8 @@ const router = express.Router();
 const supervisorController = require('../controllers/supervisor');
 const userMiddleware = require('../middleware/user');
 const supervisorMiddleware = require('../middleware/supervisor');
-const validator = require('../validator/auth');
+const authValidator = require('../validator/auth');
+const courseValidator = require('../validator/course');
 const upFile = require('../middleware/upfile');
 
 router.use(userMiddleware.checkToken);
@@ -22,15 +23,14 @@ router.get('/seeSupervisor/:supervisorId',supervisorController.seeSupervisor);
 router.get('/course/:courseId/addSupervisor',supervisorController.seeSupervisors);
 router.get('/createCategory',supervisorController.category);
 
-router.post('/profile',validator.postUpdate,supervisorController.updateProfile);
-router.post('/createCourse',validator.postCreateNewCourse,supervisorController.createNewCourse);
-router.post('/createTask/:courseId',validator.postCreateTask,supervisorController.createTask);
-router.post('/uploadDocument/:courseId',upFile.loadDocument,validator.postUploadDocument,supervisorController.uploadDocument);
+router.post('/profile',authValidator.postUpdate,supervisorController.updateProfile);
+router.post('/createCourse',courseValidator.postCreateNewCourse,supervisorController.createNewCourse);
+router.post('/createTask/:courseId',courseValidator.postCreateTask,supervisorController.createTask);
+router.post('/uploadDocument/:courseId',upFile.loadDocument,courseValidator.postUploadDocument,supervisorController.uploadDocument);
 router.post('/checkAnswer/:taskInEnrollId',supervisorController.checkAnswer);
 router.post('/addTrainee/:courseId/:traineeId',supervisorController.addTrainee);
 router.post('/addSupervisor/:courseId/:supervisorId',supervisorController.addSupervisor);
-router.post('/createCategory',validator.postCreateCategory,supervisorController.createCategory);
+router.post('/createCategory',courseValidator.postCreateCategory,supervisorController.createCategory);
 router.post('/course/:courseId/makePublicCourse',supervisorController.makePublicCourse);
-
-router.post('/updateCategory',validator.postCreateCategory,supervisorController.updateCategory);
+router.post('/updateCategory',courseValidator.postCreateCategory,supervisorController.updateCategory);
 module.exports = router;
