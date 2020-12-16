@@ -1,52 +1,52 @@
 extends layout
 
 block body
-	body
-		h1= title
-		p Welcome to #{title}
-		<div class="container-fluid">
-			<div class="row">
-				<form class="col-md-4 col-sm-6 col-12" action="/login" method="get">
-					<button>
-						<div class="info-box">
-							<span class="info-box-icon bg-info"><i class="fas fa-user-graduate"></i></span>
+  body
+    h1= title
+    p Welcome to #{title}
+    <div class="container-fluid">
+      <div class="row">
+        <form class="col-md-4 col-sm-6 col-12" action="/login" method="get">
+          <button>
+            <div class="info-box">
+              <span class="info-box-icon bg-info"><i class="fas fa-user-graduate"></i></span>
 
-							<div class="info-box-content">
-								<h3>Trainee</h3>
-							</div>
-							<!-- /.info-box-content -->
-						</div>
-					<!-- /.info-box -->
-					</button>
-				</form>
-				<!-- /.col -->
-				<form class="col-md-4 col-sm-6 col-12" action="/supervisor_login" method="get">
-					<button>
-						<div class="info-box">
-							<span class="info-box-icon bg-success"><i class="fas fa-chalkboard-teacher"></i></span>
+              <div class="info-box-content">
+                <h3>Trainee</h3>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+          <!-- /.info-box -->
+          </button>
+        </form>
+        <!-- /.col -->
+        <form class="col-md-4 col-sm-6 col-12" action="/supervisor_login" method="get">
+          <button>
+            <div class="info-box">
+              <span class="info-box-icon bg-success"><i class="fas fa-chalkboard-teacher"></i></span>
 
-							<div class="info-box-content">
-								<h3>Supervisor</h3>
-							</div>
-							<!-- /.info-box-content -->
-						</div>
-					</button>	
-					<!-- /.info-box -->
-				</form>
-				<!-- /.col -->
-				<form class="col-md-4 col-sm-6 col-12" action="/admin_login" method="get">
-					<button>
-						<div class="info-box">
-							<span class="info-box-icon bg-success"><i class="fas fa-user-lock"></i></span>
+              <div class="info-box-content">
+                <h3>Supervisor</h3>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+          </button>	
+          <!-- /.info-box -->
+        </form>
+        <!-- /.col -->
+        <form class="col-md-4 col-sm-6 col-12" action="/admin_login" method="get">
+          <button>
+            <div class="info-box">
+              <span class="info-box-icon bg-success"><i class="fas fa-user-lock"></i></span>
 
-							<div class="info-box-content">
-								<h3>Admin</h3>
-							</div>
-							<!-- /.info-box-content -->
-						</div>
-					</button>	
-					<!-- /.info-box -->
-				</form>
-				<!-- /.col -->
-			</div>
-		</div>
+              <div class="info-box-content">
+                <h3>Admin</h3>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+          </button>	
+          <!-- /.info-box -->
+        </form>
+        <!-- /.col -->
+      </div>
+    </div>

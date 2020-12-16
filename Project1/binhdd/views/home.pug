@@ -1,104 +1,104 @@
 extends layout
 
 block body
-	body.hold-transition.sidebar-mini
-		.wrapper
-			// Navbar
-			.content-wrapper
-				// Content Header (Page header)
-				section.content-header
-					.container-fluid
-						.row.mb-2
-							.col-sm-6
-								block pageHead
-					// /.container-fluid
-				// Main content
-				section.content
-					.container-fluid
-						.row
-							.col-md-3
-								// Profile Image
-								.card.card-primary.card-outline
-									.card-body.box-profile
-										h3.profile-username.text-center #{user.name}
-										p.text-muted.text-center #{user.birthday}
-										ul.list-group.list-group-unbordered.mb-3
-											li.list-group-item
-												b Courses
-												a.float-right 1,322
-											li.list-group-item
-												b DoneCourses
-												a.float-right 543
-											li.list-group-item
-												b DoingCourses
-												a.float-right 13,287
-										if user.userType == 'trainee'
-											a.btn.btn-primary.btn-block(href='/trainee/profile')
-												b Edit Profile
-										else
-											a.btn.btn-primary.btn-block(href='/supervisor/profile')
-												b Edit Profile
-									// /.card-body
-								// /.card
-								// About Me Box
-								.card.card-primary
-									.card-header
-										h3.card-title About Me
-									// /.card-header
-									.card-body
-										strong
-											i.fas.fa-envelope.mr-1
-											|  Email
-										p.text-muted #{user.email}
-										hr
-										strong
-											i.fas.fa-map-marker-alt.mr-1
-											|  Address
-										p.text-muted #{user.address}
-										hr
-										strong
-											i.fas.fa-phone.mr-1
-											|  Phone
-										p.text-muted #{user.tel}
-										hr
-										strong
-											i.far.fa-file-alt.mr-1
-											|  Notes
-										p.text-muted
-											| Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.
-									// /.card-body
-								// /.card
-							// /.col
-							.col-md-9
-								.card
-									.card-header.p-2
-										block pageLinks
-										form(action='/logout',method='get')
-											button LOGOUT
-		
-									// /.card-header
-									.card-body
-										.tab-content
-										block contentPage
-											// /.tab-pane
-										// /.tab-content
-									// /.card-body
-								// /.nav-tabs-custom
-							// /.col
-						// /.row
-					// /.container-fluid
-				// /.content
-			// /.content-wrapper
-			footer.main-footer
-				.float-right.d-none.d-sm-block
-					b Version
-					|  3.0.5
-				strong
-					| Copyright &copy; 2014-2019 
-					a(href='http://adminlte.io') AdminLTE.io
-					| .
-				|  All rights &#x9;&#x9;&#x9;&#x9;reserved.
-			// Control Sidebar
-			aside.control-sidebar.control-sidebar-dark
-				// Control sidebar content goes here
-			// /.control-sidebar
+  body.hold-transition.sidebar-mini
+    .wrapper
+      // Navbar
+      .content-wrapper
+        // Content Header (Page header)
+        section.content-header
+          .container-fluid
+            .row.mb-2
+              .col-sm-6
+                block pageHead
+          // /.container-fluid
+        // Main content
+        section.content
+          .container-fluid
+            .row
+              .col-md-3
+                // Profile Image
+                .card.card-primary.card-outline
+                  .card-body.box-profile
+                    h3.profile-username.text-center #{user.name}
+                    p.text-muted.text-center #{user.birthday}
+                    ul.list-group.list-group-unbordered.mb-3
+                      li.list-group-item
+                        b Courses
+                        a.float-right 1,322
+                      li.list-group-item
+                        b DoneCourses
+                        a.float-right 543
+                      li.list-group-item
+                        b DoingCourses
+                        a.float-right 13,287
+                    if user.userType == 'trainee'
+                      a.btn.btn-primary.btn-block(href='/trainee/profile')
+                        b Edit Profile
+                    else
+                      a.btn.btn-primary.btn-block(href='/supervisor/profile')
+                        b Edit Profile
+                  // /.card-body
+                // /.card
+                // About Me Box
+                .card.card-primary
+                  .card-header
+                    h3.card-title About Me
+                  // /.card-header
+                  .card-body
+                    strong
+                      i.fas.fa-envelope.mr-1
+                      |  Email
+                    p.text-muted #{user.email}
+                    hr
+                    strong
+                      i.fas.fa-map-marker-alt.mr-1
+                      |  Address
+                    p.text-muted #{user.address}
+                    hr
+                    strong
+                      i.fas.fa-phone.mr-1
+                      |  Phone
+                    p.text-muted #{user.tel}
+                    hr
+                    strong
+                      i.far.fa-file-alt.mr-1
+                      |  Notes
+                    p.text-muted
+                      | Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.
+                  // /.card-body
+                // /.card
+              // /.col
+              .col-md-9
+                .card
+                  .card-header.p-2
+                    block pageLinks
+                    form(action='/logout',method='get')
+                      button LOGOUT
+    
+                  // /.card-header
+                  .card-body
+                    .tab-content
+                    block contentPage
+                      // /.tab-pane
+                    // /.tab-content
+                  // /.card-body
+                // /.nav-tabs-custom
+              // /.col
+            // /.row
+          // /.container-fluid
+        // /.content
+      // /.content-wrapper
+      footer.main-footer
+        .float-right.d-none.d-sm-block
+          b Version
+          |  3.0.5
+        strong
+          | Copyright &copy; 2014-2019 
+          a(href='http://adminlte.io') AdminLTE.io
+          | .
+        |  All rights &#x9;&#x9;&#x9;&#x9;reserved.
+      // Control Sidebar
+      aside.control-sidebar.control-sidebar-dark
+        // Control sidebar content goes here
+      // /.control-sidebar
