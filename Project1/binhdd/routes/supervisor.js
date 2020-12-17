@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const methodOverride = require('method-override');
 
 const supervisorController = require('../controllers/supervisor');
 const userMiddleware = require('../middleware/user');
@@ -8,6 +8,15 @@ const supervisorMiddleware = require('../middleware/supervisor');
 const authValidator = require('../validator/auth');
 const courseValidator = require('../validator/course');
 const upFile = require('../middleware/upfile');
+
+router.use(methodOverride(function (req, res) {
+    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        // look in urlencoded POST bodies and delete it
+        var method = req.body._method;
+        delete req.body._method;
+        return method;
+    }
+}));
 
 router.use(userMiddleware.checkToken);
 router.use(supervisorMiddleware.checkSupervisor);
@@ -23,7 +32,7 @@ router.get('/seeSupervisor/:supervisorId',supervisorController.seeSupervisor);
 router.get('/course/:courseId/addSupervisor',supervisorController.seeSupervisors);
 router.get('/createCategory',supervisorController.category);
 
-router.post('/profile',authValidator.postUpdate,supervisorController.updateProfile);
+router.put('/profile',authValidator.postUpdate,supervisorController.updateProfile);
 router.post('/createCourse',courseValidator.postCreateNewCourse,supervisorController.createNewCourse);
 router.post('/createTask/:courseId',courseValidator.postCreateTask,supervisorController.createTask);
 router.post('/uploadDocument/:courseId',upFile.loadDocument,courseValidator.postUploadDocument,supervisorController.uploadDocument);

@@ -11,6 +11,7 @@ const cors = require('cors');
 const fs = require('fs');
 const rfs = require('rotating-file-stream');
 const moment = require('moment');
+const methodOverride = require('method-override');
 const generator = require('./util/generator');
 const defaultMiddleware = require('./middleware/default');
 const staticSetting = require('./statics/index');
@@ -30,8 +31,19 @@ const app = express();
 // use cors for api
 app.use(cors());
 
+// overide methods
+// app.use(methodOverride(function (req, res) {
+//   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+//     // look in urlencoded POST bodies and delete it
+//     var method = req.body._method;
+//     delete req.body._method;
+//     return method;
+//   }
+// }));
+
 //cronJobs
 // cronJobs.checkFailTime.start();
+
 // store logs
 const accessLogStream = rfs.createStream(generator.logFileGenerator(), {
   interval: '1d', // rotate daily

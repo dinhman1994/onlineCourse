@@ -83,8 +83,7 @@ exports.postRegister = [
 
 exports.postUpdate = [
   body('email','Email is required field').isEmail(),
-  body('password','Password is required field').not().isEmpty(),
-  body('retype_password','Retype password is required field').not().isEmpty(),
+  body('oldPassword','Password is required field to update Profile').not().isEmpty(),
   body('name','Name is required field').not().isEmpty().isLength({ min: 2, max: 30 }),
   body('tel','Telephone is required field').not().isEmpty(),
   body('tel','Telephone is invalid').custom(value => {
@@ -95,15 +94,17 @@ exports.postUpdate = [
 
     if (!errors.isEmpty()) {
       if(req.session.user.userType === 'trainee')
-        return res.render('profile', { user:req.session.user, errs: errors.errors});
-      return res.render('supervisorProfile', { user:req.session.user, errs: errors.errors});
+        return res.render('profile', { user:req.session.user, errs: errors.errors, oldInfor: req.body});
+      return res.render('supervisorProfile', { user:req.session.user, errs: errors.errors, oldInfor: req.body});
     }
 
-    if(req.body.password != req.body.retype_password){
-      const error = new Error('You must type password and retype_password the same !');
-      if(req.session.user.userType === 'trainee')
-        return res.render('profile', { user:req.session.user, error:error });
-      return res.render('supervisorProfile', { user:req.session.user, error:error });
+    if(req.body.password != ""){
+      if(req.body.password != req.body.retype_password){
+        const error = new Error('You must type password and retype_password the same !');
+        if(req.session.user.userType === 'trainee')
+          return res.render('profile', { user:req.session.user, error:error, oldInfor: req.body });
+        return res.render('supervisorProfile', { user:req.session.user, error:error, oldInfor: req.body });
+      }
     }
 
     return next();

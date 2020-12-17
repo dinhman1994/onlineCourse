@@ -1,9 +1,11 @@
 const bcrypt = require('bcrypt');
 const moment = require('moment');
+const jwt = require('jsonwebtoken');
 
 const db = require('../models/index');
 
 const { saltRounds } = require('../config/constants');
+const {jwtSecret} = require('../config/constants');
 
 const users = db['Users'];
 
@@ -67,19 +69,26 @@ exports.updateProfile = async function(data,oldUser){
     console.log(err);
     return err;
   }
-  
-  data.password = await bcrypt.hash(data.password, saltRounds);
-
-  if(data.email != user.email){
-    try{
-      const newUser = await users.update(
-         {...data},
-         {returning: true, where: {email: user.email}}
-      );
-      return newUser;	
-    } catch(err){
-      return err;
-    }	
+  let newUserData = {...data};
+  for(element in newUserData){
+    if (newUserData[element] == "" || newUserData[element] == "null" || newUserData[element] == undefined || newUserData[element] == null || newUserData[element] == 'undefined')
+      delete newUserData[element];
   }
+  if(newUserData.password)
+    newUserData.password = await bcrypt.hash(newUserData.password, saltRounds);
+  try{
+    const update = await users.update(
+        {...newUserData},
+        {returning: true, where: {email: user.email}}
+    );
+    
+    const newUser = (await users.findOne({ where: { userId: oldUser.userId }})).dataValues;
+    var payload = { email: newUser.email };
+    let jwtToken = jwt.sign(payload, jwtSecret);
+    return jwtToken;
+  } catch(err){
+    return err;
+  }	
+  
   return null;
 }

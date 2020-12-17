@@ -46,12 +46,10 @@ module.exports.updateProfile = async function(req,res){
   }
   if(result.message)
   {
-    return res.render('profile',{user:req.session.user,message: result.message});
+    return res.render('profile',{user:req.session.user,message: result.message, oldInfor: req.body});
   }
-  var payload = { email: req.body.email };
-  var jwtToken = jwt.sign(payload, jwtSecret);
-  res.cookie('token',jwtToken);
-  res.redirect('/trainee/profile');
+  res.cookie('token',result);
+  return res.redirect('/trainee/profile');
 }
 
 module.exports.registerCourse = async function(req,res){

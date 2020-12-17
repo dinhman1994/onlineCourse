@@ -24,20 +24,21 @@ block contentPage
       if errs
         each err in errs
           h3 #{err.msg}
+      input#hidden(type='hidden', name='_method', value='put')
       .form-group.row
         label.col-sm-2.col-form-label(for='Email') Email
         .col-sm-10
           input#Email.form-control(type='email', value=user.email, name='email')
       .form-group.row
-        label.col-sm-2.col-form-label(for='oldPassword') Old Password
+        label.col-sm-2.col-form-label(for='oldPassword') Password
         .col-sm-10
-          input#oldPassword.form-control(type='password', placeholder='Old Password', name='oldPassword')
+          input#oldPassword.form-control(type='password', placeholder='Password', name='oldPassword')
       .form-group.row
-        label.col-sm-2.col-form-label(for='Password') Password
+        label.col-sm-2.col-form-label(for='Password') New Password
         .col-sm-10
-          input#Password.form-control(type='password', placeholder='Password', name='password')
+          input#Password.form-control(type='password', placeholder='New Password', name='password')
       .form-group.row
-        label.col-sm-2.col-form-label(for='Retype password') Retype password
+        label.col-sm-2.col-form-label(for='Retype new password') Retype New Password
         .col-sm-10
           input.form-control(type='password', id='Retype password', placeholder='Retype password', name='retype_password')
       .form-group.row

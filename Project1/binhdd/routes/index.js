@@ -33,10 +33,6 @@ router.get('/admin_register',(req,res,next) => {
 	res.render('auth/register', {title: 'Admin Register page', page: 3});
 });
 
-router.get('/dashboard', (req, res, next) => {
-  res.render('dashboard', { title: 'Admin dashboard' });
-});
-
 router.get('/logout',authController.logout);
 
 
