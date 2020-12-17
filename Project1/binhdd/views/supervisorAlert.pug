@@ -1,0 +1,16 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+block pageLinks
+  ul.nav.nav-pills
+      li.nav-item
+        a.nav-link(href='/trainee') Courses
+      li.nav-item
+        a.nav-link(href='/trainee/yourCourses') YourCourses
+      li.nav-item
+        a.nav-link(href='/trainee/profile') Edit Profile
+      li.nav-item
+        a.nav-link(href='/trainee/search') Search
+block contentPage
+  h2 YOU MUST HAVE SUPERVISOR ACCOUNT TO USE THIS

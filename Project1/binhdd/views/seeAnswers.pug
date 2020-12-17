@@ -1,0 +1,41 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link.active(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+block contentPage
+  .answers
+    h2 Answer of #{trainee.name}
+    if answers.length > 0
+      table(style="width:100%;")
+        tr
+          th Question 
+          th #{trainee.name}'s Answer
+          th Result
+          th Status
+        each answer in answers		
+          tr
+            td #{answer.question}
+            td #{answer.answer}
+            td 
+              form.form-horizontal(action=`/supervisor/checkAnswer/${answer.taskInEnrollId}` method="post")
+                button(type="submit",value="true",name="result") TRUE
+                button(type="submit",value="false",name="result") FALSE
+            if answer.result == 0
+              td FALSE
+            if answer.result == 1
+              td TRUE
+            if answer.result == null
+              td NOT GRADED

@@ -1,0 +1,60 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link.active(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+block contentPage
+  .Nav
+    span
+      h1 #{course.name}
+    form.form-horizontal(action=`/supervisor/course/${course.courseId}` method="get")
+      button.ml-3(type='submit') EDIT COURSES 
+  h3 OverView
+  p #{course.overView}
+  if message
+    h3 #{message}
+  if error
+    h3 #{error.message}
+  if err
+    h3 #{err.msg}
+  if errs
+    each err in errs
+      h3 #{err.msg}
+  .tasks 
+    form.form-horizontal(action=`/supervisor/course/${course.courseId}/addSupervisor` method="get")
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Name') Email of Supervisor
+        .col-sm-10
+          input#Name.form-control(type='text', placeholder='Email of Supervisor', name='email')
+      .form-group.row
+          .offset-sm-2.col-sm-10
+            button.btn.btn-danger(type='submit') SEARCH SUPERVISOR
+
+    each searchedSupervisor in searchedSupervisors
+      .form-group.row
+        form.form-horizontal(action=`/supervisor/addSupervisor/${course.courseId}/${searchedSupervisor.supervisorId}` method="post")
+          span.mr-3 #{searchedSupervisor.name} 
+          span.mr-3 #{searchedSupervisor.email}
+          button.btn.btn-danger(type='submit') ADD SUPERVISOR
+        a.ml-2(href=`/supervisor/seeSupervisor/${searchedSupervisor.supervisorId}`)
+          button SEE PROFILE
+    h2 SUPERVISORS IN COURSE
+    each supervisorInCourse in supervisorsInCourse
+      .form-group.row
+        span.mr-3 #{supervisorInCourse.name} 
+        span.mr-3 #{supervisorInCourse.email}
+        a.ml-2(href=`/supervisor/seeSupervisor/${supervisorInCourse.supervisorId}`)
+          button SEE PROFILE
+    

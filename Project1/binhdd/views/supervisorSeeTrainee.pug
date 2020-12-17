@@ -1,0 +1,47 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link.active(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+
+block contentPage
+  #Profile.active.tab-pane
+    if message
+      h3 #{message}
+    if error
+      h3 #{error.message}
+    if errs
+      each err in errs
+        h3 #{err.msg}
+    .form-group.row
+      .col-sm-2 Email
+      .col-sm-10
+        span #{trainee.email}
+    .form-group.row
+      .col-sm-2 Full Name
+      .col-sm-10
+        span #{trainee.name}
+    .form-group.row
+      .col-sm-2 Address
+      .col-sm-10
+        span #{trainee.address}
+    .form-group.row
+      .col-sm-2 Telephone
+      .col-sm-10
+        span #{trainee.tel}
+    .form-group.row
+      .col-sm-2 Date of Birth
+      .col-sm-10
+        span #{trainee.birthday}

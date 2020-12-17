@@ -1,0 +1,82 @@
+extends ./home
+
+block scripts
+  link(rel='stylesheet', href='/stylesheets/seeCourse.css')
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link.active(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+block contentPage
+  .Nav
+    span
+      h1 #{course.name}
+    form.form-horizontal(action=`/supervisor/course/${course.courseId}/trainees` method="get")
+      button.ml-3(type='submit') SEE TRAINEES
+  .left
+    h3 SUPERVISORS IN COURSE
+    form.form-horizontal(action=`/supervisor/course/${course.courseId}/addSupervisor` method="get")
+      button.ml-3(type='submit') ADD SUPERVISOR
+
+  h3 OverView
+  p #{course.overView}
+  if message
+    h3 #{message}
+  if error
+    h3 #{error.message}
+  if err
+    h3 #{err.msg}
+  if errs
+    each err in errs
+      h3 #{err.msg}
+  .tasks
+    h2 TASKS
+    form.form-horizontal(action=`/supervisor/createTask/${course.courseId}` method="post")
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Name') Task question
+        .col-sm-10
+          input#Name.form-control(type='text', placeholder='Task question', name='question')
+      .form-group.row
+        .offset-sm-2.col-sm-10
+          button.btn.btn-danger(type='submit') Create Task
+    if course.tasksOfCourse.length > 0
+      each task in course.tasksOfCourse
+        .task
+          h3 Task
+          p
+            span.mr-2 Question: #{task.question}
+            button.btn.btn-danger(type='submit') Edit Task
+  .documents
+    h2 DOCUMENTS	
+    form.form-horizontal(action=`/supervisor/uploadDocument/${course.courseId}` method="post" enctype='multipart/form-data')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Name') Document link
+        .col-sm-10
+          input#Name.form-control(type='file', placeholder='Choose file', name='path')
+      .form-group.row
+        .offset-sm-2.col-sm-10
+          button.btn.btn-danger(type='submit') Upload document
+    if course.documents.length > 0
+      each document in course.documents
+        .documentData
+          form.form-horizontal(action=`/download/${document.documentId}` method="get")
+            .icon
+              i.fas.fa-file-pdf
+            p #{document.path.split('/')[2]}
+            button.btn.btn-danger(type='submit') Download
+  .reports
+    h2 REPORTS
+      each report in course.reports
+        .report
+          span.mr-3  Report Content #{report.reportContent}
+          span By #{report.email}

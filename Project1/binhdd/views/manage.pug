@@ -1,0 +1,56 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link.active(href='/admin/manage') Manage 
+block contentPage
+  .supervisors
+    h2 Supervisors in System
+    each supervisor in supervisors
+      .supervisor 
+        span.mr-3 #{supervisor.name} 
+        span.mr-3 #{supervisor.email}
+        a.ml-2(href=`/supervisor/seeSupervisor/${supervisor.supervisorId}`)
+          button SEE PROFILE 
+  .trainees
+    h2 Trainees
+    form.form-horizontal(action=`` method="get")
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Name') Email or Name of Trainee
+        .col-sm-10
+          input#Name.form-control(type='text', placeholder='Email or Name of Trainee', name='email')
+      .form-group.row
+          .offset-sm-2.col-sm-10
+            button.btn.btn-danger(type='submit') Search
+    each trainee in trainees
+      .form-group.row
+        span.mr-3 #{trainee.name}
+        span.mr-3 #{trainee.email}
+        a.ml-2(href=`/supervisor/seeTrainee/${trainee.traineeId}`) 
+          button See Profile
+        form.form-horizontal(action=`/admin/deleteTrainee/${trainee.traineeId}` method="post")
+          button(type='submit') DELETE
+    h2 Trainee is Blocked
+    each traineeIsBlocked in traineesIsBlocked
+      .form-group.row
+        span.mr-3 #{traineeIsBlocked.name}
+        span.mr-3 #{traineeIsBlocked.email}
+        a.ml-2(href=`/supervisor/seeTrainee/${traineeIsBlocked.traineeId}`) 
+          button See Profile
+        form.form-horizontal(action=`/admin/deleteTrainee/${traineeIsBlocked.traineeId}` method="post")
+          button(type='submit') DELETE
+        form.form-horizontal(action=`/admin/unblockTrainee/${traineeIsBlocked.traineeId}` method="post")
+          button(type='submit') UNBLOCK
+    

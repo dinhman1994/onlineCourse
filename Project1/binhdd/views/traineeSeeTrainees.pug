@@ -1,0 +1,42 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link(href='/trainee') Courses
+    li.nav-item
+      a.nav-link.active(href='/trainee/yourCourses') YourCourses
+    li.nav-item
+      a.nav-link(href='/trainee/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/trainee/search') Search
+block contentPage
+  .Nav
+    span
+      h1 #{course.name}
+    form.form-horizontal(action=`/trainee/yourCourses/${course.courseId}` method="get")
+      button.m-1
+        i.fas.fa-share.mr-1
+        | 	ViewCourse 
+  h3 OverView
+  p #{course.overView}
+  if message
+    h3 #{message}
+  if error
+    h3 #{error.message}
+  if err
+    h3 #{err.msg}
+  if errs
+    each err in errs
+      h3 #{err.msg}
+  .tasks
+    h2 Trainees In Course
+    each trainee in trainees
+      .form-group.row
+        span.mr-3 #{trainee.name}
+        a.ml-2(href=`/trainee/seeTrainee/${trainee.traineeId}`) 
+          button See Profile
+    

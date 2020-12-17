@@ -1,0 +1,64 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link.active(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+block contentPage
+  .Nav
+    span
+      h1 #{course.name}
+    form.form-horizontal(action=`/supervisor/course/${course.courseId}` method="get")
+      button.ml-3(type='submit') EDIT COURSES 
+  h3 OverView
+  p #{course.overView}
+  if message
+    h3 #{message}
+  if error
+    h3 #{error.message}
+  if err
+    h3 #{err.msg}
+  if errs
+    each err in errs
+      h3 #{err.msg}
+  .tasks
+    h2 Trainees 
+    form.form-horizontal(action=`/supervisor/course/${course.courseId}/trainees` method="get")
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Name') Email of Trainee
+        .col-sm-10
+          input#Name.form-control(type='text', placeholder='Email of Trainee', name='email')
+      .form-group.row
+          .offset-sm-2.col-sm-10
+            button.btn.btn-danger(type='submit') SEARCH TRAINEE
+    each searchedTrainee in searchedTrainees
+      .form-group.row
+        form.form-horizontal(action=`/supervisor/addTrainee/${course.courseId}/${searchedTrainee.traineeId}` method="post")
+          span.mr-3 #{searchedTrainee.name} 
+          span.mr-3 #{searchedTrainee.email}
+          button.btn.btn-danger(type='submit') ADD TRAINEE
+        a.ml-2(href=`/supervisor/seeTrainee/${searchedTrainee.traineeId}`) 
+          button SEE PROFILE
+    
+      
+    h2 Trainees IN COURSE
+    each trainee in trainees
+      .form-group.row
+        form.form-horizontal(action=`/supervisor/seeAnswers/${course.courseId}/${trainee.traineeId}` method="get")
+          span.mr-3 #{trainee.name}
+          span.mr-3 #{trainee.email}
+          button.btn.btn-danger(type='submit') See Trainee Answers
+        a.ml-2(href=`/supervisor/seeTrainee/${trainee.traineeId}`) 
+          button SEE PROFILE
+    

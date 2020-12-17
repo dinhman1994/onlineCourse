@@ -1,0 +1,95 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link.active(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+block contentPage
+  #Profile.active.tab-pane
+    form.form-horizontal(action="/supervisor/createCourse" method="post")
+      if message
+        h3 #{message}
+      if error
+        h3 #{error.message}
+      if err
+        h3 #{err.msg}
+      if errs
+        each err in errs
+          h3 #{err.msg}
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Name') Name
+        .col-sm-10
+          if oldInfor
+            input#Name.form-control(type='text', placeholder=Name of Course, name='name', value=oldInfor.name)
+          else
+            input#Name.form-control(type='text', placeholder=Name of Course, name='name')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='timeOfCourse') Time Of Course
+        .col-sm-10
+          if oldInfor
+            input#timeOfCourse.form-control(placeholder='Time Of Course', name='timeOfCourse',list='times', value= oldInfor.timeOfCourse)
+          else
+            input#timeOfCourse.form-control(placeholder='Time Of Course', name='timeOfCourse',list='times')
+          datalist#times
+            option(value='1')
+            option(value='3')
+            option(value='5')
+            option(value='7')
+            option(value='10')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='overView') Over View
+        .col-sm-10
+          if oldInfor
+            input#overView.form-control(type='text', placeholder=Over View, name='overView', value= oldInfor.overView )
+          else 
+            input#overView.form-control(type='text', placeholder=Over View, name='overView' )
+      .form-group.row
+        label.col-sm-2.col-form-label(for='createDay') Create Day
+        .col-sm-10
+          if oldInfor
+            input#createDay.form-control(type='date', placeholder=Create Day, name='createDay', value= oldInfor.createDay)
+          else
+            input#createDay.form-control(type='date', placeholder=Create Day, name='createDay')
+      .form-group.row
+        h3 Category of Course
+        br
+        .col-sm-10
+          each category in categories				
+            input(type='checkbox', name='categoryName', value=category.categoryName, id=categoryName)
+            label #{category.categoryName}
+      .form-group.row
+        label.col-sm-2.col-form-label(for='statusCourse') Status Course
+        .col-sm-10
+          input#public.form-control(type='radio', value='public', name='statusCourse' )
+          label(for='public') Public
+          br
+          input#private.form-control(type='radio', value='private', name='statusCourse' selected)
+          label(for='private') Private
+          br
+      .form-group.row
+        label.col-sm-2.col-form-label(for='typeOfCourse') Type Of Course
+        .col-sm-10
+          select#typeOfCourse(name='typeOfCourse')
+            option(value='free') free
+            option(value='limited') limited
+      .form-group.row
+        label.col-sm-2.col-form-label(for='secretKey') SecretKey
+        .col-sm-10
+          if oldInfor
+            input#secretKey.form-control(type='text', placeholder=SecretKey, name='secretKey', value= oldInfor.secretKey)
+          else
+            input#secretKey.form-control(type='text', placeholder=SecretKey, name='secretKey')
+      .form-group.row
+        .offset-sm-2.col-sm-10
+          button.btn.btn-danger(type='submit') Create

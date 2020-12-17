@@ -1,0 +1,108 @@
+extends ./home
+
+block scripts
+  link(rel='stylesheet', href='/stylesheets/seeCourse.css')
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link(href='/trainee') Courses
+    li.nav-item
+      a.nav-link.active(href='/trainee/yourCourses') YourCourses
+    li.nav-item
+      a.nav-link(href='/trainee/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/trainee/search') Search
+
+block contentPage
+  .Nav
+    span
+      h1 #{course.name}
+    form.form-horizontal(action=`/trainee/course/${course.courseId}/trainees` method="get")
+      button.ml-3(type='submit') SEE TRAINEES
+  .left
+    if course.statusEnroll == 0
+      span Status NOT DONE
+    if course.statusEnroll == 1
+      span Status DONE
+    span.ml-2 Progess #{course.process} %
+  h3 OverView
+  p #{course.overView}
+  if message
+    h3 #{message}
+  if error
+    h3 #{error.message}
+  if err
+    h3 #{err.msg}
+  if errs
+    each err in errs
+      h3 #{err.msg}
+  .tasks
+    h2 TASKS
+    if course.tasksOfCourse.length > 0
+      each task in course.tasksOfCourse
+        .task
+          form.form-horizontal(action=`/trainee/answerTask/${course.courseId}/${task.taskId}` method="post")
+            .form-group.row
+              label.col-sm-2.col-form-label(for='Name') Task question
+              .col-sm-10
+                p #{task.question}
+              .col-sm-10
+                input#Name.form-control(type='text', placeholder='Answer of Task', name='answer')
+                button.btn.btn-danger(type='submit') Answer
+  .doneTasks
+    h2 DONE TASKS
+    if course.answeredTasks.length > 0
+      table(style="width:100%;")
+        tr
+          th Question 
+          th Your Answer
+          th Result
+        each answeredTask in course.answeredTasks
+          if answeredTask.status == false 
+            tr
+              td #{answeredTask.question}
+              td #{answeredTask.answer}
+              td Not Graded
+          if answeredTask.status == true && answeredTask.result == false
+             
+            tr
+              td #{answeredTask.question}
+              td #{answeredTask.answer}
+              td FAILED
+                button REWORK !
+            tr
+              form.form-horizontal(action=`/trainee/answerTask/${answeredTask.taskInEnrollId}` method="post")
+                td(colspan='2') 
+                  input#Name.form-control(type='text', placeholder='Answer', name='answer')
+                td 
+                  button.btn.btn-danger(type='submit') Try Again! 
+          if answeredTask.status == true && answeredTask.result == true 
+            tr
+              td #{answeredTask.question}
+              td #{answeredTask.answer}
+              td PASSED						
+
+  .documents
+    h2 DOCUMENTS	
+    if course.documents.length > 0
+      each document in course.documents
+        .documentData
+          form.form-horizontal(action=`/download/${document.documentId}` method="get")
+            .icon
+              i.fas.fa-file-pdf
+            p #{document.path.split('/')[2]}
+            button.btn.btn-danger(type='submit') Download
+  if(course.report.isReported == false)
+    .report-area
+      form.form-horizontal(action=`/trainee/report/${course.courseId}` method="post")
+        label(for='Name') Make report today
+        input#Name.form-control(type='text', placeholder='Report about the course', name='reportContent')
+        button.btn.btn-danger(type='submit') REPORT
+  if(course.report.isReported == true)
+    .report-area
+      p YOUR REPORT
+      h3 #{course.report.reportContent}
+

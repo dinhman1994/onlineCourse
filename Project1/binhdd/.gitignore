@@ -37,8 +37,6 @@ node_modules/
 jspm_packages/
 
 
-views/**
-*.pug
 
 # Typescript v1 declaration files
 typings/

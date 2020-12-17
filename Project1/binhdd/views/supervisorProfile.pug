@@ -1,0 +1,60 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  ul.nav.nav-pills
+    li.nav-item
+      a.nav-link(href='/supervisor') Courses
+    li.nav-item
+      a.nav-link(href='/supervisor/createCourse') Create Courses
+    li.nav-item
+      a.nav-link.active(href='/supervisor/profile') Edit Profile
+    li.nav-item
+      a.nav-link(href='/supervisor/createCategory') Create Category
+    li.nav-item
+      a.nav-link(href='/admin/manage') Manage
+
+block contentPage
+  #Profile.active.tab-pane
+    form.form-horizontal(action="/supervisor/profile" method="post")
+      if message
+        h3 #{message}
+      if error
+        h3 #{error.message}
+      if errs
+        each err in errs
+          h3 #{err.msg}
+      input#hidden(type='hidden', name='_method', value='put')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Email') Email
+        .col-sm-10
+          input#Email.form-control(type='email', value=user.email, name='email')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='oldPassword') Password
+        .col-sm-10
+          input#oldPassword.form-control(type='password', placeholder='Password', name='oldPassword')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Password') New Password
+        .col-sm-10
+          input#Password.form-control(type='password', placeholder='New Password', name='password')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Retype new password') Retype new password
+        .col-sm-10
+          input.form-control(type='password', id='Retype password', placeholder='Retype password', name='retype_password')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Full name') Full name
+        .col-sm-10
+          input.form-control(type='text', id='Full name', value=user.name, name='name')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Address') Address
+        .col-sm-10
+          input#Address.form-control(type='text', value=user.address, name='address')
+      .form-group.row
+        label.col-sm-2.col-form-label(for='Telephone') Telephone
+        .col-sm-10
+          input#Telephone.form-control(type='tel', value='0'+user.tel, name='tel')
+      .form-group.row
+        .offset-sm-2.col-sm-10
+          button.btn.btn-danger(type='submit') Submit

@@ -1,0 +1,30 @@
+extends ./home
+
+block pageHead
+  h1 #{user.userType}
+
+block pageLinks
+  if user.userType === 'supervisor'
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link(href='/supervisor') Courses
+      li.nav-item
+        a.nav-link(href='/supervisor/createCourse') Create Courses
+      li.nav-item
+        a.nav-link(href='/supervisor/profile') Edit Profile
+      li.nav-item
+        a.nav-link(href='/supervisor/createCategory') Create Category
+      li.nav-item
+        a.nav-link(href='/admin/manage') Manage
+  if user.userType === 'trainee'
+    ul.nav.nav-pills
+      li.nav-item
+        a.nav-link(href='/trainee') Courses
+      li.nav-item
+        a.nav-link(href='/trainee/yourCourses') YourCourses
+      li.nav-item
+        a.nav-link(href='/trainee/profile') Edit Profile
+      li.nav-item
+        a.nav-link(href='/trainee/search') Search
+block contentPage
+  h2 YOU MUST HAVE ADMIN ACCOUNT TO USE THIS
