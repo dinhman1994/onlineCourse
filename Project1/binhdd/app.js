@@ -41,8 +41,8 @@ app.use(cors());
 //   }
 // }));
 
-//cronJobs
-// cronJobs.checkFailTime.start();
+//cronJobs check trainee fail time
+cronJobs.checkFailTime.start();
 
 // store logs
 const accessLogStream = rfs.createStream(generator.logFileGenerator(), {
